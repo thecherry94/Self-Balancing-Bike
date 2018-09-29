@@ -13,7 +13,8 @@ enum EStatusLogEntryType
 	NOTIFICATION,
 	WARNING,
 	ERROR,
-	FATAL_ERROR
+	FATAL_ERROR,
+	NONE
 };
 
 
