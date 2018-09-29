@@ -14,6 +14,7 @@ void setup()
 
 void loop() 
 {
-    Serial.println("Tesdsdt");
-    Serial.println("Test2");
+    Serial.println("gregaaaaaaar");
+    Serial.println("ssss");
+	Serial.println("zzzzz");
 }
