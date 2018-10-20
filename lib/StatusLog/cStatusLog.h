@@ -6,17 +6,28 @@
 #include "HTML/HTML.h"
 #include "cSingleton.h"
 
-#define MODULE_STATUSLOGGER "STATUSLOGGER"
+// Define um schneller auf die Statuslog-Instanz zuzugrefen
+#define LOG cStatusLog::instance()
 
+// Modulname für Statuslogger-Meldungen
+#define MODULE_STATUSLOG "STATUSLOGGER"
+
+// Enum um Statusmeldungstypen zu bestimmen
+//
 enum EStatusLogEntryType
 {
 	NOTIFICATION,
+	SUCCESS,
 	WARNING,
 	ERROR,
 	FATAL_ERROR
 };
 
 
+// Basisklasse für Statuseinträge
+// Kann direkt benutzt oder vererbt werden
+// exprt Funktion muss überschrieben werden
+//
 class cStatusLogEntry
 {
 	protected:
@@ -38,7 +49,8 @@ class cStatusLogEntry
 };
 
 
-
+// Beispiel für eine eigene Statuslog-Klasse
+//
 class cMyStatusLogEntry : public cStatusLogEntry
 {
 	private:
@@ -57,6 +69,9 @@ class cMyStatusLogEntry : public cStatusLogEntry
 
 
 
+// Die Statuslog-Klasse
+// Wird als Singleton implementiert
+//
 class cStatusLog : public cSingleton<cStatusLog>
 {
 	friend class cSingleton<cStatusLog>;

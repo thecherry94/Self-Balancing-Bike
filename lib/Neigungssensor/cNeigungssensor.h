@@ -1,7 +1,7 @@
 #include "Adafruit_Sensor.h"
 #include "Adafruit_BNO055.h"
 #include "Wire.h"
-#include "cKommunikation.h"
+#include "cWiFiKommunikation.h"
 
 #ifndef NEIGUNG_H
 #define NEIGUNG_H
@@ -23,7 +23,6 @@ class cNeigungssensor
         // Zusätzliches Variablen
         //
         Adafruit_BNO055 _bno;
-        cWiFiKommunikation _com;
 
     public:
         cNeigungssensor(int bno_addr);

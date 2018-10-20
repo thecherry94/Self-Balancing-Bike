@@ -1,7 +1,13 @@
  #ifndef SINGLETON_H
  #define SINGLETON_H
  
- 
+/*
+ * Ein Singleton sorgt dafür, dass es von einer Klasse, die das Singleton erbt, nur eine Instanz
+ * existieren darf.
+ * Muss von der zu betreffenden Klasse geerbt werden und einen privaten Konstruktor besitzen
+ */
+
+
  template <typename C>
  class cSingleton
  {

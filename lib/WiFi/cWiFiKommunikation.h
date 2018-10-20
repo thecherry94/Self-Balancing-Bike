@@ -5,6 +5,8 @@
 
 #define WIFI_COM cWiFiKommunikation::instance()
 
+#pragma once
+
 class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
 {
   friend class cSingleton<cWiFiKommunikation>;
