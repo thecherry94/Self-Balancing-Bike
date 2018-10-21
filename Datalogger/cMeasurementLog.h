@@ -5,7 +5,6 @@
 
 #include <random>
 
-#define PI 3.1415
 
 
 template <class ... Ts>
@@ -77,15 +76,13 @@ class cMeasurementLog
 // https://stackoverflow.com/questions/26902633/how-to-iterate-over-a-stdtuple-in-c-11
 
 template<class F, class...Ts, std::size_t...Is>
-void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func, std::index_sequence<Is...>) {
-	using expander = int[];
-	(void)expander {
-		0, ((void)func(std::get<Is>(tuple)), 0)...
-	};
+void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func, std::index_sequence<Is...>){
+    using expander = int[];
+    (void)expander { 0, ((void)func(std::get<Is>(tuple)), 0)... };
 }
 
 template<class F, class...Ts>
-void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func) {
-	for_each_in_tuple(tuple, func, std::make_index_sequence<sizeof...(Ts)>());
+void for_each_in_tuple(const std::tuple<Ts...> & tuple, F func){
+    for_each_in_tuple(tuple, func, std::make_index_sequence<sizeof...(Ts)>());
 }
 

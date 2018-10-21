@@ -9,29 +9,29 @@ void make_example_sinus(cMeasurementLog<float, float>& pLog, float amplitude, fl
 
 
 int main()
-	{	
-	
+{	
+
 
 
 	// Wir geben jeder Messreihe einen Namen
 	//
 	std::vector<std::string> column_header;
-	column_header.push_back("Zeit[sec]");
-	column_header.push_back("Spannung [mV]");
+	column_header.push_back("Zeit [sec]");
+	column_header.push_back("Neigung [Â°]");
 
 
 	// in den <> werden die Anzahl und der jeweilige Datentyp der Messreihen angegeben
 	// Im Beispiel: 1. Zeit, 2. Wert
 	cMeasurementLog<float, float> example_measurements(column_header);
 
-	// Fülle Beispiel mit sinus
+	// Fï¿½lle Beispiel mit sinus
 	make_example_sinus(example_measurements, 5.0f, 1.0f, 5.0f, 0.05f);
 
-	// Gewünschtes Format exportieren
+	// Gewï¿½nschtes Format exportieren
 	std::string mes = example_measurements.exprt("");
 
 	// In Datei speichern
-	// Auf esp per wifi herunterladbar zukünftig
+	// Auf esp per wifi herunterladbar zukï¿½nftig
 	//
 	std::ofstream out("example_measurement.txt");
 	out << mes;
@@ -40,7 +40,7 @@ int main()
 
 
 
-	// --> Beliebige Datentypen möglich! <--
+	// --> Beliebige Datentypen mï¿½glich! <--
 
 	/*
 	cMeasurementLog<std::string, float> mes;
@@ -58,7 +58,7 @@ int main()
 
 
 
-// Fülle Messblatt mit test sinus
+// Fï¿½lle Messblatt mit test sinus
 //
 void make_example_sinus(
 	cMeasurementLog<float, float>& pLog, 
