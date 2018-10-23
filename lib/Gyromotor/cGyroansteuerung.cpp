@@ -49,7 +49,7 @@ cGyroansteuerung::cGyroansteuerung(char GyroPWMPin)
   pinMode(GyroPWMPin, OUTPUT);
     Gyro.attach(GyroPWMPin);
 }
-  //???Hier attachen des PINS?
+  //???Hier attachen des PINS? Test
 
 bool cGyroansteuerung::setLeistung(char pSollLeistung)
 {
