@@ -1,6 +1,6 @@
 ////////////// global h //////////////
 
-const unsigned char pinPoti = 4;
+const unsigned char pinPoti = 4;                // Pin Definition
 struct lenkerDaten
 {
   float lenkwinkel; // [°]
