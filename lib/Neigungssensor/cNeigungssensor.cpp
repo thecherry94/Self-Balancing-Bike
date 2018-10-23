@@ -15,7 +15,7 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	: _bno(Adafruit_BNO055(bno_addr)), _calibRestored(false), _refreshRate(100)
 {
 	//_bno = Adafruit_BNO055(bno_addr);
-
+	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
 	if (!_bno.begin())
 	{

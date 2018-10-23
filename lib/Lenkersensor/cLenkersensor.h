@@ -1,5 +1,7 @@
 ////////////// global h //////////////
 
+#pragma once
+
 const byte pinPoti = 10;
 
 
@@ -9,7 +11,6 @@ struct lenkerDaten
   float lenkgeschwindigkeit; // [°/s]
   float lenkbeschleunigung; // [°/s²]
 };
-
 
 ///////// cLenkersensor.h /////////////////
 class cLenkersensor
