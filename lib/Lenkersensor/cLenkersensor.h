@@ -1,5 +1,7 @@
 ////////////// global h //////////////
 
+#pragma once
+
 const byte pinPoti = 10;
 
 
@@ -9,7 +11,6 @@ struct lenkerDaten
   float lenkgeschwindigkeit; // [°/s]
   float lenkbeschleunigung; // [°/s²]
 };
-
 
 ///////// cLenkersensor.h /////////////////
 class cLenkersensor
@@ -46,7 +47,7 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
 
 cLenkersensor Lenkersensor;
 lenkerDaten lDaten;
-void setup() {
+/*void setup() {
   // put your setup code here, to run once:
   pinMode(pinPoti, INPUT);
   
@@ -59,3 +60,4 @@ void loop() {
   Lenkersensor.getData(lDaten);
   Serial.printf("Winkel: %f grad \t Winkelgeschwindigkeit %f grad/s \t  Winkelbeschleunigung %f grad/s*s \n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung);
 }
+*/

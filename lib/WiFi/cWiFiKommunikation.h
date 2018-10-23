@@ -1,6 +1,11 @@
 #include "WiFi.h"
 #include "ESPAsyncWebServer.h"
 #include "cSingleton.h"
+#include "../StatusLog/cStatusLog.h"
+
+#define WIFI_COM cWiFiKommunikation::instance()
+
+#pragma once
 
 class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
 {
