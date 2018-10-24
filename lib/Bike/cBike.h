@@ -1,7 +1,14 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
-#include "precomp.h"
+#include "cWiFiKommunikation.h"
+#include "cNeigungssensor.h"
+#include "cStatusLog.h"
+#include "cMeasurementLog.h"
+#include "cGyroansteuerung.h"
+#include "cLenkermotoransteuerung.h"
+#include "cLenkersensor.h"
+
 
 
 #define WIFI_SSID       "HIT-FRITZBOX-7490"
@@ -17,11 +24,11 @@ enum EBikeState
 {
     STARTING,
     INITIALIZATION,
-    GYRO_SPINUP,
+    STARTING,
     RUNNING,
-    GYRO_SPINDOWN,
+    STOPPING,
     STOPPED
-}
+};
 
 
 static int task_core = 0;
@@ -46,9 +53,6 @@ class cBike
          ************************************************
          */ 
 
-        cWiFiKommunikation*     _wifi;
-        cStatusLog*             _log;
-
         EBikeState              _state;
 
     public:
@@ -56,4 +60,4 @@ class cBike
 
         void run();     // Hier sitzt die Startlogik
 
-}
+};
