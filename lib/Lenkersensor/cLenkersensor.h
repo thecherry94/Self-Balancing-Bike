@@ -1,6 +1,12 @@
 ////////////// global h //////////////
 
+#pragma once
+
+
 const unsigned char pinPoti = 4;                // Pin Definition
+
+
+
 struct lenkerDaten
 {
   float lenkwinkel; // [°]
@@ -34,7 +40,6 @@ void quickSort(float  arr[], int left, int right) {         // Quelle: http://ww
   if (i < right)
     quickSort(arr, i, right);
 }
-
 
 
 ///////// cLenkersensor.h /////////////////
