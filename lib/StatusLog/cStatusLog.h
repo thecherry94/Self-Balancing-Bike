@@ -92,7 +92,7 @@ class cStatusLog : public cSingleton<cStatusLog>
 		HTML::Document exprt();
 
 
-		void addEntry(cStatusLogEntry entry)
+		void write(cStatusLogEntry entry)
 		{
 			_entries.push_back(entry);
 		}
