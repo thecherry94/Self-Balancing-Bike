@@ -4,66 +4,177 @@
 
 
         <style>
-
-        body
-        {
-            background-color:lightyellow;
-            font-family: sans-serif;
-
-        
-        }
-
-        h1
-        {
-            font-size: 2.2em;
-        }
-
-        h2
-        {
-            font-size: 1em;
-        }
-
-        #containerContainer
-        {
-            width: 75%;
-
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .subjectContainer
-        {
-            border: 2px solid black;
-            padding: 1.5em;
-            margin-top: 0.5em;
-        }
-
-        #titleContainer
-        {
-            background-color: yellow;
-        }
-
-        #statusContainer
-        {
-            background-color: lightgray;
-        }
-
-        #sliderContainer
-        {
-            background-color: rgb(219, 219, 20);
-        }
-
-        #neigungContainer
-        {
-            background-color: rgb(219, 219, 20);
-        }
-
-        #sliderRevsSlider
-        {
-            width: 100%;
-            background-color: rgb(219, 219, 20);
-        }
+		
+            *
+            {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0;
+                margin: 0;
+                letter-spacing: 2px;
+                
+            }
+            
+            h1
+            {
+                   font-size: 5vmin;
+                margin-bottom: 20px;
+            }
+    
+            h2
+            {
+                font-size: 3vmin;
+            }
+    
+            #containerContainer
+            {
+                width: 80%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-left: auto;
+                margin-right: auto;
+                justify-content: center;
+                color: #3c3c3c;
+            }
+            
+            /********************* Mobile GerÃ¤te***************/
+            @media (max-width: 1000px) {
+                #containerContainer{
+                    width: 100%;
+                }
+            }	
+    
+            .subjectContainer
+            {
+                height: 25%;
+                text-align: center;
+                    display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: white;
+                font-size: 3vmin;
+            }
+    
+            #titleContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #statusContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #sliderContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #neigungContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #sliderRevsSlider
+            {
+                    width: 95%;
+                    margin-left: auto;
+                    margin-right: auto;
+            }
+            input[type=range] {
+              -webkit-appearance: none;
+              width: 100%;
+              margin: 22.75px 0;
+            }
+            input[type=range]:focus {
+              outline: none;
+            }
+            input[type=range]::-webkit-slider-runnable-track {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: #003366;
+              border-radius: 2px;
+              border: 0.2px solid #010101;
+            }
+            input[type=range]::-webkit-slider-thumb {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+              -webkit-appearance: none;
+              margin-top: -22.95px;
+            }
+            input[type=range]:focus::-webkit-slider-runnable-track {
+              background: #004080;
+            }
+            input[type=range]::-moz-range-track {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: #003366;
+              border-radius: 2px;
+              border: 0.2px solid #010101;
+            }
+            input[type=range]::-moz-range-thumb {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+            }
+            input[type=range]::-ms-track {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              background: transparent;
+              border-color: transparent;
+              color: transparent;
+            }
+            input[type=range]::-ms-fill-lower {
+              background: #00264d;
+              border: 0.2px solid #010101;
+              border-radius: 4px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+            input[type=range]::-ms-fill-upper {
+              background: #003366;
+              border: 0.2px solid #010101;
+              border-radius: 4px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+            input[type=range]::-ms-thumb {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+              height: 4.5px;
+            }
+            input[type=range]:focus::-ms-fill-lower {
+              background: #003366;
+            }
+            input[type=range]:focus::-ms-fill-upper {
+              background: #004080;
+            }
+    
         </style>
 
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -82,31 +193,32 @@
 
     </head>
     <body>
-    <div id="containerContainer">
-        <div id="titleContainer" class="subjectContainer">
-            <h1>Gyroansteuerung - Demo</h1>
-            <h2>Selbststabilisierendes Fahrrad</h2>
-        </div>
-
-        <div id="statusContainer" class="subjectContainer">
-            Status: <font id="fontStatus" color="red">nicht verbunden</font>
-        </div>
-
-        <div id="sliderContainer" class="subjectContainer">
-            Drehzahl [u/min]
-            <br />
-            <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_change(this.value)">
-            <br />
-            <div id="sliderRevSliderPerc">0%</div>
-        </div>
-
-        <div id="neigungContainer" class="subjectContainer">
-            Neigung [deg]
-            <br />
-            <div id="neigungValueContainer">
-                ###
+        <div id="containerContainer">
+            <div id="titleContainer" class="subjectContainer">
+                <h1>Gyroansteuerung - Demo</h1>
+                <h2>Selbststabilisierendes Fahrrad</h2>
+            </div>
+    
+            <div id="statusContainer" class="subjectContainer">
+                Status: <br><br><font id="fontStatus" color="red">nicht verbunden</font>
+            </div>
+    
+            <div id="sliderContainer" class="subjectContainer">
+                Drehzahl [%]<br>
+                <br />
+                <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_change(this.value)">
+                <br />
+                <div id="sliderRevSliderPerc">0%</div>
+            </div>
+    
+            <div id="neigungContainer" class="subjectContainer">
+                Neigung [deg]
+                <br>
+                <br />
+                <div id="neigungValueContainer">
+                    ###
+                </div>
             </div>
         </div>
-    </div>
     </body>
 </html>
