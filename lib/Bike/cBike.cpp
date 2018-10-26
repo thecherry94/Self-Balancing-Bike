@@ -63,8 +63,15 @@ void cBike::run()
             int power_percent = atoi(p->value().c_str());
 
             _gyro.setMotorfreigabe(true);
-            _gyro.setLeistung(0); // ???
+            _gyro.setLeistung(power_percent); 
         }
+    });
+
+    // Überprüft den Fahrradstatus
+    // Bei genauerer Überlegung eigentlich unnötig und bescheuert
+    WIFI_COM->attachEvent("/status", [&](AsyncWebServerRequest* req)
+    {
+        req->send(200, "text", "");
     });
 
 
