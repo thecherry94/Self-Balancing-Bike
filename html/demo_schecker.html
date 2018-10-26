@@ -16,7 +16,7 @@
             
             h1
             {
-                   font-size: 5vmin;
+                font-size: 5vmin;
                 margin-bottom: 20px;
             }
     
@@ -180,14 +180,36 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script>
+            var send_change = false;
+            var sending_interval;
+            var sending_interval_timeout = 10;
+
             $(function() 
             {
                 $('#sliderRevSlider').val(0);
+
+                sending_interval = setInterval(function() 
+                {
+                    if (!send_change)
+                        return;
+                    
+                    $.ajax({
+                        method: "GET",
+                        url: "/control/gyro/",
+                        data: { "power": power }
+                    });
+
+                    send_change = false;
+
+                }, sending_interval_timeout);
             });
 
             function on_slider_change(value)
             {
-                $('#sliderRevSliderPerc').html(parseInt((value/1300)*100) + "%");
+                var power = parseInt((value/1300)*100);
+                $('#sliderRevSliderPerc').html(power + "%"); 
+
+                send_change = true;
             }
         </script>
 
