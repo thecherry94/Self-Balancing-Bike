@@ -16,7 +16,7 @@
             
             h1
             {
-                   font-size: 5vmin;
+                font-size: 5vmin;
                 margin-bottom: 20px;
             }
     
@@ -48,7 +48,7 @@
             {
                 height: 25%;
                 text-align: center;
-                    display: flex;
+                display: flex;
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
@@ -85,19 +85,25 @@
     
             #sliderRevsSlider
             {
-                    width: 95%;
-                    margin-left: auto;
-                    margin-right: auto;
+                width: 95%;
+                margin-left: auto;
+                margin-right: auto;
             }
-            input[type=range] {
+
+            input[type=range] 
+            {
               -webkit-appearance: none;
               width: 100%;
               margin: 22.75px 0;
             }
-            input[type=range]:focus {
+
+            input[type=range]:focus 
+            {
               outline: none;
             }
-            input[type=range]::-webkit-slider-runnable-track {
+
+            input[type=range]::-webkit-slider-runnable-track 
+            {
               width: 100%;
               height: 4.5px;
               cursor: pointer;
@@ -106,7 +112,9 @@
               border-radius: 2px;
               border: 0.2px solid #010101;
             }
-            input[type=range]::-webkit-slider-thumb {
+
+            input[type=range]::-webkit-slider-thumb
+            {
               box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
               border: 1px solid #3c3c3c;
               height: 50px;
@@ -117,10 +125,14 @@
               -webkit-appearance: none;
               margin-top: -22.95px;
             }
-            input[type=range]:focus::-webkit-slider-runnable-track {
+
+            input[type=range]:focus::-webkit-slider-runnable-track 
+            {
               background: #004080;
             }
-            input[type=range]::-moz-range-track {
+
+            input[type=range]::-moz-range-track 
+            {
               width: 100%;
               height: 4.5px;
               cursor: pointer;
@@ -129,7 +141,9 @@
               border-radius: 2px;
               border: 0.2px solid #010101;
             }
-            input[type=range]::-moz-range-thumb {
+
+            input[type=range]::-moz-range-thumb 
+            {
               box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
               border: 1px solid #3c3c3c;
               height: 50px;
@@ -138,7 +152,9 @@
               background: #ffffff;
               cursor: pointer;
             }
-            input[type=range]::-ms-track {
+
+            input[type=range]::-ms-track 
+            {
               width: 100%;
               height: 4.5px;
               cursor: pointer;
@@ -146,19 +162,25 @@
               border-color: transparent;
               color: transparent;
             }
-            input[type=range]::-ms-fill-lower {
+
+            input[type=range]::-ms-fill-lower 
+            {
               background: #00264d;
               border: 0.2px solid #010101;
               border-radius: 4px;
               box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
             }
-            input[type=range]::-ms-fill-upper {
+
+            input[type=range]::-ms-fill-upper 
+            {
               background: #003366;
               border: 0.2px solid #010101;
               border-radius: 4px;
               box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
             }
-            input[type=range]::-ms-thumb {
+
+            input[type=range]::-ms-thumb 
+            {
               box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
               border: 1px solid #3c3c3c;
               height: 50px;
@@ -168,10 +190,14 @@
               cursor: pointer;
               height: 4.5px;
             }
-            input[type=range]:focus::-ms-fill-lower {
+
+            input[type=range]:focus::-ms-fill-lower 
+            {
               background: #003366;
             }
-            input[type=range]:focus::-ms-fill-upper {
+
+            input[type=range]:focus::-ms-fill-upper 
+            {
               background: #004080;
             }
     
@@ -180,14 +206,145 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script>
+            /*
+             * Boolean, um das Senden zu kontrollieren
+             * Es soll nicht durchgehend gesendet werden. Nur in definierten Zeitabständen und 
+             * wenn der Wert vom zuletzt gesendeten abweicht.
+             */
+            var has_changed = false;
+
+            /* Variable, in der das Interval gespeichert wird */
+            var sending_interval;
+            var checking_interval;
+
+            /* Timeout des Senden-Intervals in Millisekunden */
+            var sending_interval_timeout = 50;
+            var checking_interval_timeout = 250;
+            
+            /* Maximaler Slider Wert */
+            var power_max = 1300;
+            
+            /* Verbindungsstatus */
+            var connected = false;
+            
+            /* Diese Funktion wird ausgeführt, sobald die Webseite aufgerufen wird */
             $(function() 
             {
-                $('#sliderRevSlider').val(0);
+                /* Erstelle die Intervalfunktion und starte diese
+                 * Die übergebene Funktion wird im definierten Interval aufgerufen
+                 * Überprüft Verbindungsstatus
+                 */
+                checking_interval = setInterval(function()
+                {
+                    check_connection();
+                }, checking_interval_timeout);
+
+                /* Weiterer Interval fürs senden und empfangen von Daten */
+                sending_interval = setInterval(function() 
+                {
+                    /* Keine Verbindung, keine Daten */
+                    if (!connected)
+                        return;
+                    
+                    /* Neigungssensor lesen */
+                    update_neigung();
+
+
+                    /*
+                     * Gibt es eine Änderung?
+                     * Ja   --> Änderung senden
+                     * Nein --> Nichts machen
+                     */
+                    if (!has_changed)
+                        return;
+                    
+                    /* Prozentualen Leistungswert anhand des Sliders ausrechnen */
+                    var power = parseInt(($('#sliderRevSlider').val() / power_max) * 100);
+
+                    /* Ajax-Befehl für das Senden der gewünschten Gyroleistung */
+                    set_gyro_power(power);
+
+                    /* Änderung wurde Übertragen. Flag wieder zurücksetzen */
+                    has_changed = false;
+
+                }, sending_interval_timeout);
             });
 
-            function on_slider_change(value)
+            /* Diese Funktion wird aufgerufen, sobald der Slider bewegt wird */
+            function on_slider_changed(value)
             {
-                $('#sliderRevSliderPerc').html(parseInt((value/1300)*100) + "%");
+                /* Prozentualer Wert in einem Label anzeigen */
+                var power = parseInt((value/power_max)*100);
+                $('#sliderRevSliderPerc').html(power + "%"); 
+                
+                /* Flag für Übertragung setzen */
+                has_changed = true;
+            }
+            
+            /* Sendet ajax-Befehl, um Gyroleistung zu setzen */
+            function set_gyro_power(value)
+            {
+                $.ajax({
+                    method: "GET",
+                    url: "/control/gyro/",
+                    data: { "power": value }
+                });                  
+            }
+            
+            /* Holt den Neigungswinkel vom Fahrrad und updated die UI */
+            function update_neigung()
+            {
+                /* Falls ein Wert zurückommt */
+                var on_success = function(value)
+                {
+                    on_neigung_changed(parseInt(value));
+                }
+                
+                /* Ajax-Befehl */
+                $.ajax({
+                   method: "GET",
+                   url: "/measurements/neigung",
+                   success: on_success
+                });
+            }
+            
+            /* Diese Funktion updated die UI für die Neigung */
+            function on_neigung_changed(neigung)
+            {
+                $('#neigungValueContainer').html(neigung);
+            }
+
+            /* Funktion, um Text und Farbe der Statusmeldung zu setzen */
+            function set_status_message(text, color)
+            {
+                $('#fontStatus').html(text);
+                $('#fontStatus').attr("color", color);
+            }
+            
+            /*
+             * Überprüft den Status der Verbindung zum Fahrrad
+             * und setzt den 'connected' Prüftwert entsprechend
+             */
+            function check_connection()
+            {
+                var on_success = function()
+                {
+                    set_status_message("Verbunden", "green");
+                    connected = true;
+                }
+
+                var on_error = function()
+                {
+                    set_status_message("Nicht verbunden", "red");
+                    connected = false;
+                }
+
+                $.ajax({
+                    method: "GET",
+                    url: "/status",
+                    success: on_success,
+                    error: on_error
+                });
             }
         </script>
 
@@ -206,7 +363,7 @@
             <div id="sliderContainer" class="subjectContainer">
                 Drehzahl [%]<br>
                 <br />
-                <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_change(this.value)">
+                <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_changed(this.value)">
                 <br />
                 <div id="sliderRevSliderPerc">0%</div>
             </div>

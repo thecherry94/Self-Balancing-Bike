@@ -1,14 +1,7 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
-#include "cWiFiKommunikation.h"
-#include "cNeigungssensor.h"
-#include "cStatusLog.h"
-#include "cMeasurementLog.h"
-#include "cGyroansteuerung.h"
-#include "cLenkermotoransteuerung.h"
-#include "cLenkersensor.h"
-
+#include "precomp.h"
 
 
 #define WIFI_SSID       "HIT-FRITZBOX-7490"
@@ -18,7 +11,7 @@
 #define SENSOR_TASK             "sensor-main"
 #define SENSOR_TASK_STACKSIZE   10000
 
-#define MODULE_BIKE     "BIKE_MAIN_MODULE"
+#define MODULE_BIKE     "[BIKE_MAIN_MODULE]"
 
 enum EBikeState
 {
@@ -44,7 +37,7 @@ class cBike
          * cMeineKlase _meineKlasse;                    *
          ************************************************
          */ 
-
+        cGyroansteuerung _gyro;
         
 
         /*
@@ -56,7 +49,7 @@ class cBike
         EBikeState              _state;
 
     public:
-        cBike();        // Hier sollen die Member lediglich mit Standardwerten initialisiert
+        cBike(char);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
 
         void run();     // Hier sitzt die Startlogik
 
