@@ -7,7 +7,8 @@
 #define HTML_SCHECKER_DEMO ""
 
 
-cBike::cBike()
+cBike::cBike(char gyroPWMPin)
+    : _gyro(gyroPWMPin)
 {
     // Hier eure Klassen initialisieren
     // ...
@@ -40,7 +41,37 @@ void cBike::run()
         // Hier soll eine HTML-Seite übertragen werden, um das Gyro währenden der Demo
         // für Schecker steuern zu können
 
+        // Hier kann JULIAN seine website einfügen
+
         req->send(200, "text/html", HTML_SCHECKER_DEMO);
+    });
+
+
+    WIFI_COM->attachEvent("/control/gyro", [&](AsyncWebServerRequest* req)
+    {
+        // Hier wird das gyro angesteuert
+        // ANDIs part
+
+        // Überprüfen, ob parameter überhaupt gesendet wurde
+        if (req->hasParam("power"))
+        {
+            // Parameter holen
+            AsyncWebParameter* p = req->getParam("power");
+            
+            // Wert ist als string hinterlegt. Wir brauchen aber einen integer
+            // Konvertieren
+            int power_percent = atoi(p->value().c_str());
+
+            _gyro.setMotorfreigabe(true);
+            _gyro.setLeistung(power_percent); 
+        }
+    });
+
+    // Überprüft den Fahrradstatus
+    // Bei genauerer Überlegung eigentlich unnötig und bescheuert
+    WIFI_COM->attachEvent("/status", [&](AsyncWebServerRequest* req)
+    {
+        req->send(200, "text", "");
     });
 
 
@@ -55,8 +86,7 @@ void cBike::run()
             break;
 
             case EBikeState::RUNNING:
-            // Hier wird alles gemacht, wenn das gyro auf drehzahl ist
-            // Evtl. hier auf eine abbruchbedingung warten
+                _gyro.anlaufen();
             break;
         }
     }
