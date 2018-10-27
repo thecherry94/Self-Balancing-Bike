@@ -1,8 +1,12 @@
+/*  Autor: Julian Schweizerhof
+    Name: cLenksensor.h */
+
+
+
 ////////////// global h //////////////
 
-#pragma once
+const unsigned char pinPoti = 4;                // Pin Definition
 
-const byte pinPoti = 10;
 
 
 struct lenkerDaten
@@ -11,6 +15,34 @@ struct lenkerDaten
   float lenkgeschwindigkeit; // [°/s]
   float lenkbeschleunigung; // [°/s²]
 };
+const unsigned int lenksensor_anzahl = 1;                 // Anzahl an Messwerten
+const unsigned char lenksensor_anzahl_loeschen = 0;         // Anzahl an Werten die je oben und unten ausgeworfen werden
+
+void quickSort(float  arr[], int left, int right) {         // Quelle: http://www.algolist.net/Algorithms/Sorting/Quicksort
+  int i = left, j = right;
+  float tmp;
+  float pivot = arr[(left + right) / 2];
+  /* partition */
+  while (i <= j) {
+    while (arr[i] < pivot)
+      i++;
+    while (arr[j] > pivot)
+      j--;
+    if (i <= j) {
+      tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+      i++;
+      j--;
+    }
+  };
+  /* recursion */
+  if (left < j)
+    quickSort(arr, left, j);
+  if (i < right)
+    quickSort(arr, i, right);
+}
+
 
 ///////// cLenkersensor.h /////////////////
 class cLenkersensor
@@ -24,40 +56,3 @@ class cLenkersensor
     cLenkersensor();
     bool getData(lenkerDaten &pdaten);
 };
-///////// cLenkersensor.cpp /////////////////
-cLenkersensor::cLenkersensor()
-{
-  lastLenkwinkel = analogRead(pinPoti) * 0.3516;
-  lastZeit = millis();
-}
-bool cLenkersensor::getData(lenkerDaten &pdaten)
-{
-  daten.lenkgeschwindigkeit = ((analogRead(pinPoti) * 0.3516) - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
-  daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
-  daten.lenkwinkel = analogRead(pinPoti) * 0.3516;  // [°]
-  
-  
-  pdaten = daten;
-  lastLenkwinkel = daten.lenkwinkel;
-  lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
-  lastZeit = millis();
-}
-
-///////// main.cpp /////////////////
-
-cLenkersensor Lenkersensor;
-lenkerDaten lDaten;
-/*void setup() {
-  // put your setup code here, to run once:
-  pinMode(pinPoti, INPUT);
-  
-  Serial.begin(115200);
- 
-}
-
-void loop() {
-  // put your main code here, to run repeatedly:
-  Lenkersensor.getData(lDaten);
-  Serial.printf("Winkel: %f grad \t Winkelgeschwindigkeit %f grad/s \t  Winkelbeschleunigung %f grad/s*s \n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung);
-}
-*/
