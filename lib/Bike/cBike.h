@@ -24,9 +24,9 @@ enum EBikeState
 {
     STARTING,
     INITIALIZATION,
-    STARTING,
+    GYRO_SPINUP,
     RUNNING,
-    STOPPING,
+    GYRO_SPINDOWN,
     STOPPED
 };
 
