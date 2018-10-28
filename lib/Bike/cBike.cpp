@@ -8,7 +8,7 @@
 
 
 cBike::cBike(char gyroPWMPin)
-    : _gyro(gyroPWMPin)
+    : _gyro(gyroPWMPin)         //Hier wird die cGyro initialisiert
 {
     // Hier eure Klassen initialisieren
     // ...
