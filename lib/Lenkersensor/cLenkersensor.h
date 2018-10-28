@@ -1,12 +1,12 @@
-<<<<<<< HEAD
-////////////// global h //////////////
 
 #ifndef LENKERSENSOR__H
 #define LENKERSENSOR__H
-=======
-/*  Autor: Julian Schweizerhof
+/*  Autor: Julian Schweizerhof (Till Gostner)
     Name: cLenksensor.h */
->>>>>>> 7c8d698ce3e28b1d1d556cde85e5548d43a3f262
+
+
+
+////////////// global h //////////////
 
 
 
