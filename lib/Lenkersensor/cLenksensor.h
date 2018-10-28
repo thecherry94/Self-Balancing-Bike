@@ -5,7 +5,9 @@
 
 ////////////// global h //////////////
 
-#pragma once
+#ifndef LENKERSENSOR__H
+#define LENKERSENSOR__H
+
 
 
 const unsigned char pinPoti = 4;                // Pin Definition
@@ -63,8 +65,8 @@ class cLenkersensor
 
 ///////// main.cpp /////////////////
 
-cLenkersensor Lenkersensor;
-lenkerDaten lDaten;
+//cLenkersensor Lenkersensor;
+//lenkerDaten lDaten;
 /*void setup() {
   // put your setup code here, to run once:
    pinMode(pinPoti, INPUT);
@@ -83,3 +85,5 @@ void loop() {
   Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
 }
 */
+
+#endif

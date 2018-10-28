@@ -206,69 +206,87 @@
         <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
         <script>
-            /*
-             * Boolean, um das Senden zu kontrollieren
-             * Es soll nicht durchgehend gesendet werden. Nur in definierten Zeitabständen und 
-             * wenn der Wert vom zuletzt gesendeten abweicht.
-             */
-            var has_changed = false;
-
-            /* Variable, in der das Interval gespeichert wird */
-            var sending_interval;
-            var checking_interval;
-
-            /* Timeout des Senden-Intervals in Millisekunden */
-            var sending_interval_timeout = 50;
-            var checking_interval_timeout = 250;
-            
-            /* Maximaler Slider Wert */
-            var power_max = 1300;
-            
-            /* Verbindungsstatus */
+            var ws = null;
+            var pp_tm = null;
+            var pp_time = 1000;
             var connected = false;
+
             
-            /* Diese Funktion wird ausgeführt, sobald die Webseite aufgerufen wird */
-            $(function() 
+
+
+            $(function()
             {
-                /* Erstelle die Intervalfunktion und starte diese
-                 * Die übergebene Funktion wird im definierten Interval aufgerufen
-                 * Überprüft Verbindungsstatus
-                 */
-                checking_interval = setInterval(function()
-                {
-                    check_connection();
-                }, checking_interval_timeout);
-
-                /* Weiterer Interval fürs senden und empfangen von Daten */
-                sending_interval = setInterval(function() 
-                {
-                    /* Keine Verbindung, keine Daten */
-                    if (!connected)
-                        return;
-                    
-                    /* Neigungssensor lesen */
-                    update_neigung();
-
-
-                    /*
-                     * Gibt es eine Änderung?
-                     * Ja   --> Änderung senden
-                     * Nein --> Nichts machen
-                     */
-                    if (!has_changed)
-                        return;
-                    
-                    /* Prozentualen Leistungswert anhand des Sliders ausrechnen */
-                    var power = parseInt(($('#sliderRevSlider').val() / power_max) * 100);
-
-                    /* Ajax-Befehl für das Senden der gewünschten Gyroleistung */
-                    set_gyro_power(power);
-
-                    /* Änderung wurde Übertragen. Flag wieder zurücksetzen */
-                    has_changed = false;
-
-                }, sending_interval_timeout);
+                connect();
             });
+
+
+            function connect()
+            {
+                set_status_message("Connecting...", "darkyellow");
+                ws = new WebSocket("ws://192.168.0.67/ws");        
+
+                ws.onopen = on_open;
+                ws.onmessage = on_msg;
+                ws.onclose = on_close;     
+            }
+
+            function on_connection_lost()
+            {
+                ws = null;
+                setTimeout(connect, 3000);
+                connected = false;
+            }
+
+            var on_open = function() 
+            {
+                set_status_message("Verbunden", "green");
+                setTimeout(ping, 1000);
+
+                connected = true;
+            }
+
+            var on_msg = function(ev)
+            {
+                console.log(ev);
+
+                var msg = ev.data;
+                if(msg == "__pong__")
+                {
+                    pong();
+                    return;
+                }
+            }
+
+            var on_close = function()
+            {
+                set_status_message("Nicht verbunden", "red");
+
+                on_connection_lost();
+            }
+
+            function ping()
+            {
+                ws.send("__ping__");
+                set_status_message("Verbunden", "green");
+
+                pp_tm = setTimeout(function() 
+                {
+                    set_status_message("Nicht verbunden", "red");
+                    on_connection_lost();
+                }, pp_time);
+            }
+
+            function pong()
+            {
+                clearTimeout(pp_tm);
+                pp_tm = null;
+                connected = true;
+
+                ping();
+            }
+
+
+
 
             /* Diese Funktion wird aufgerufen, sobald der Slider bewegt wird */
             function on_slider_changed(value)
@@ -280,34 +298,8 @@
                 /* Flag für Übertragung setzen */
                 has_changed = true;
             }
-            
-            /* Sendet ajax-Befehl, um Gyroleistung zu setzen */
-            function set_gyro_power(value)
-            {
-                $.ajax({
-                    method: "GET",
-                    url: "/control/gyro/",
-                    data: { "power": value }
-                });                  
-            }
-            
-            /* Holt den Neigungswinkel vom Fahrrad und updated die UI */
-            function update_neigung()
-            {
-                /* Falls ein Wert zurückommt */
-                var on_success = function(value)
-                {
-                    on_neigung_changed(parseInt(value));
-                }
-                
-                /* Ajax-Befehl */
-                $.ajax({
-                   method: "GET",
-                   url: "/measurements/neigung",
-                   success: on_success
-                });
-            }
-            
+
+
             /* Diese Funktion updated die UI für die Neigung */
             function on_neigung_changed(neigung)
             {
@@ -319,32 +311,6 @@
             {
                 $('#fontStatus').html(text);
                 $('#fontStatus').attr("color", color);
-            }
-            
-            /*
-             * Überprüft den Status der Verbindung zum Fahrrad
-             * und setzt den 'connected' Prüftwert entsprechend
-             */
-            function check_connection()
-            {
-                var on_success = function()
-                {
-                    set_status_message("Verbunden", "green");
-                    connected = true;
-                }
-
-                var on_error = function()
-                {
-                    set_status_message("Nicht verbunden", "red");
-                    connected = false;
-                }
-
-                $.ajax({
-                    method: "GET",
-                    url: "/status",
-                    success: on_success,
-                    error: on_error
-                });
             }
         </script>
 

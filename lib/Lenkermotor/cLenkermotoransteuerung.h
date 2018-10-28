@@ -15,7 +15,8 @@ D35   CLenkermotoransteuerung    Error 2
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
 *	
 */
-#pragma once
+#ifndef LENKERMOTORANSTEUERUNG__H
+#define LENKERMOTORANSTEUERUNG__H
 
 #define LENKER_LINKS  0
 #define LENKER_RECHTS  1
@@ -48,3 +49,6 @@ private:
 	char 	m_pwmresolution = 8;
 	char 	m_Channel = 0;
 };
+
+
+#endif

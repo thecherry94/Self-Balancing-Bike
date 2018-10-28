@@ -1,6 +1,7 @@
 ////////////// global h //////////////
 
-#pragma once
+#ifndef LENKERSENSOR__H
+#define LENKERSENSOR__H
 
 const byte pinPoti = 10;
 
@@ -61,3 +62,5 @@ void loop() {
   Serial.printf("Winkel: %f grad \t Winkelgeschwindigkeit %f grad/s \t  Winkelbeschleunigung %f grad/s*s \n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung);
 }
 */
+
+#endif
