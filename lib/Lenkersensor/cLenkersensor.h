@@ -1,5 +1,12 @@
+
+#ifndef LENKERSENSOR__H
+#define LENKERSENSOR__H
 /*  Autor: Julian Schweizerhof (Till Gostner)
     Name: cLenksensor.h */
+
+
+
+////////////// global h //////////////
 
 
 
@@ -73,3 +80,5 @@ void loop() {
   Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
 }
 */
+
+#endif

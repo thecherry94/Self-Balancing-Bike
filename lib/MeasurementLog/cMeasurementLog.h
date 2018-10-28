@@ -1,8 +1,10 @@
-#pragma once
+
 
 #include <string>
 #include <vector>
 
+#ifndef MEASUREMENTLOG__H
+#define MEASUREMENTLOG__H
 
 template<typename CharT>
 class DecimalSeparator : public std::numpunct<CharT>
@@ -21,6 +23,7 @@ protected:
 private:
     CharT m_Separator;
 };
+
 
 
 
@@ -108,3 +111,5 @@ class cMeasurementLog
             return ss.str();
         }
 };
+
+#endif

@@ -7,6 +7,9 @@
 #define WIFI_SSID       "HIT-FRITZBOX-7490"
 #define WIFI_PASSWORD   "63601430989011937932"
 
+//#define WIFI_SSID       "BikeAP"
+//#define WIFI_PASSWORD   "1235"
+
 
 #define SENSOR_TASK             "sensor-main"
 #define SENSOR_TASK_STACKSIZE   10000
@@ -38,6 +41,7 @@ class cBike
          ************************************************
          */ 
         cGyroansteuerung _gyro;
+        cNeigungssensor* _sensor_neigung;
         
 
         /*
@@ -48,9 +52,19 @@ class cBike
 
         EBikeState              _state;
 
+        AsyncWebSocket*         _main_socket;
+        
+        /*
+         ************************************************
+         *              Variabelen               *
+         ************************************************
+         */ 
+        byte gyroleistung = 0;
     public:
-        cBike(char);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
+        cBike(byte);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
 
-        void run();     // Hier sitzt die Startlogik
+        void run();         // Hier sitzt die Startlogik
+
+        void update();      // Programmlogik
 
 };
