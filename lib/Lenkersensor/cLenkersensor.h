@@ -1,65 +1,83 @@
+<<<<<<< HEAD
 ////////////// global h //////////////
 
 #ifndef LENKERSENSOR__H
 #define LENKERSENSOR__H
+=======
+/*  Autor: Julian Schweizerhof
+    Name: cLenksensor.h */
+>>>>>>> 7c8d698ce3e28b1d1d556cde85e5548d43a3f262
 
-const byte pinPoti = 10;
 
 
-struct lenkerDaten
+////////////// global h //////////////
+const unsigned char pinPoti = 4;  // Pin Definition
+struct lenkerDaten  // Struct mit Daten für den Lenker
 {
-  float lenkwinkel; // [°]
-  float lenkgeschwindigkeit; // [°/s]
-  float lenkbeschleunigung; // [°/s²]
+  float lenkwinkel; // Winkel des Lenkers in °, in der Mitte: 0, nach links: positv, nach rechts: negativ
+  float lenkgeschwindigkeit;  // Winkelgeschwindigkeit in °/s, nach links: positv, nach rechts: negativ
+  float lenkbeschleunigung; // Winkelbeschleunigung °/s², nach rechts: positv, nach rechts: negativ
 };
+const unsigned int lenksensor_anzahl = 1; // Anzahl an Messwerten für die Glättung
+const unsigned char lenksensor_anzahl_loeschen = 0; // Anzahl an Werten die je oben und unten ausgeworfen werden
+
+void quickSort(float  arr[], int left, int right) { // Quelle: http://www.algolist.net/Algorithms/Sorting/Quicksort
+  int i = left, j = right;
+  float tmp;
+  float pivot = arr[(left + right) / 2];
+  /* partition */
+  while (i <= j) {
+    while (arr[i] < pivot)
+      i++;
+    while (arr[j] > pivot)
+      j--;
+    if (i <= j) {
+      tmp = arr[i];
+      arr[i] = arr[j];
+      arr[j] = tmp;
+      i++;
+      j--;
+    }
+  };
+  /* recursion */
+  if (left < j)
+    quickSort(arr, left, j);
+  if (i < right)
+    quickSort(arr, i, right);
+}
+
 
 ///////// cLenkersensor.h /////////////////
 class cLenkersensor
 {
   private: 
-    lenkerDaten daten;
-    float lastLenkwinkel; // [°] 
-    float lastLenkgeschwindigkeit; // [°/s]
-    unsigned int lastZeit; // in ms
+    lenkerDaten daten;  // Strukt für die Lenkerdaten mit Winkel, Geschwindigkeit, Beschleunigung
+    float lastLenkwinkel; // letzter Lenkwenkel in °, für die Berechnung der Geschwindigkeit 
+    float lastLenkgeschwindigkeit;  // letzter Lenkwenkel in °/s, für die Berechnung der Beschleunigung
+    unsigned int lastZeit;  // letze Zeit des letzen Messwertes in ms
    public:
-    cLenkersensor();
-    bool getData(lenkerDaten &pdaten);
+    cLenkersensor();  // Konstruktur
+    bool getData(lenkerDaten &pdaten);  // Messdaten bekommen, Übergabeparameter: Datenstruct vom Typ lenkerDaten, Rückgabewert: 0: alles okay, 1: außerhalb vom Messbereich
 };
-///////// cLenkersensor.cpp /////////////////
-cLenkersensor::cLenkersensor()
-{
-  lastLenkwinkel = analogRead(pinPoti) * 0.3516;
-  lastZeit = millis();
-}
-bool cLenkersensor::getData(lenkerDaten &pdaten)
-{
-  daten.lenkgeschwindigkeit = ((analogRead(pinPoti) * 0.3516) - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
-  daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
-  daten.lenkwinkel = analogRead(pinPoti) * 0.3516;  // [°]
-  
-  
-  pdaten = daten;
-  lastLenkwinkel = daten.lenkwinkel;
-  lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
-  lastZeit = millis();
-}
 
-///////// main.cpp /////////////////
 
+////// Beispiel Implementierung ////
+/*
 cLenkersensor Lenkersensor;
 lenkerDaten lDaten;
-/*void setup() {
-  // put your setup code here, to run once:
-  pinMode(pinPoti, INPUT);
-  
-  Serial.begin(115200);
- 
-}
 
+void setup() 
+{
+  pinMode(pinPoti, INPUT);
+}
 void loop() {
-  // put your main code here, to run repeatedly:
-  Lenkersensor.getData(lDaten);
-  Serial.printf("Winkel: %f grad \t Winkelgeschwindigkeit %f grad/s \t  Winkelbeschleunigung %f grad/s*s \n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung);
+  if(Lenkersensor.getData(lDaten) == false)
+  {;}
+  else
+  {
+    Serial.printf("außerhalb des Meßbereichs\n");
+  }
+  Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
 }
 */
 
