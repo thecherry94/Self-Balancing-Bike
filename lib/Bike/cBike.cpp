@@ -4,13 +4,14 @@
 #define hz2ms(x)     1000.0f*(1.0f/(float)x)
 
 
-#define HTML_SCHECKER_DEMO ""
+#define HTML_SCHECKER_DEMO "<html><head><title>Selbststabilisierendes Fahrrad - Gyro Demo</title><style>*{font-family:Arial,Helvetica,sans-serif;padding:0;margin:0;letter-spacing:2px}h1{font-size:5vmin;margin-bottom:20px}h2{font-size:3vmin}#containerContainer{width:80%;height:100%;display:flex;flex-direction:column;margin-left:auto;margin-right:auto;justify-content:center;color:#3c3c3c}@media (max-width:1000px){#containerContainer{width:100%}}.subjectContainer{height:25%;text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;background-color:#fff;font-size:3vmin}#titleContainer{border-right:1px solid #3c3c3c;border-bottom:1px solid #3c3c3c;border-left:1px solid #3c3c3c}#statusContainer{border-right:1px solid #3c3c3c;border-bottom:1px solid #3c3c3c;border-left:1px solid #3c3c3c}#sliderContainer{border-right:1px solid #3c3c3c;border-bottom:1px solid #3c3c3c;border-left:1px solid #3c3c3c}#neigungContainer{border-right:1px solid #3c3c3c;border-left:1px solid #3c3c3c}#sliderRevsSlider{width:95%;margin-left:auto;margin-right:auto}input[type=range]{-webkit-appearance:none;width:100%;margin:22.75px 0}input[type=range]:focus{outline:0}input[type=range]::-webkit-slider-runnable-track{width:100%;height:4.5px;cursor:pointer;box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;background:#036;border-radius:2px;border:.2px solid #010101}input[type=range]::-webkit-slider-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #3c3c3c;height:50px;width:50px;border-radius:25px;background:#fff;cursor:pointer;-webkit-appearance:none;margin-top:-22.95px}input[type=range]:focus::-webkit-slider-runnable-track{background:#004080}input[type=range]::-moz-range-track{width:100%;height:4.5px;cursor:pointer;box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;background:#036;border-radius:2px;border:.2px solid #010101}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #3c3c3c;height:50px;width:50px;border-radius:25px;background:#fff;cursor:pointer}input[type=range]::-ms-track{width:100%;height:4.5px;cursor:pointer;background:0 0;border-color:transparent;color:transparent}input[type=range]::-ms-fill-lower{background:#00264d;border:.2px solid #010101;border-radius:4px;box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d}input[type=range]::-ms-fill-upper{background:#036;border:.2px solid #010101;border-radius:4px;box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #3c3c3c;height:50px;width:50px;border-radius:25px;background:#fff;cursor:pointer;height:4.5px}input[type=range]:focus::-ms-fill-lower{background:#036}input[type=range]:focus::-ms-fill-upper{background:#004080}</style><script src=\"https://code.jquery.com/jquery-3.3.1.min.js\"></script><script>function connect(){set_status_message(\"Connecting...\",\"yellow\"),(ws=new WebSocket(\"ws://192.168.0.67/ws\")).onopen=on_open,ws.onmessage=on_msg,ws.onclose=on_close}function on_connection_lost(){ws=null,setTimeout(connect,3e3),connected=!1}function ping(){ws.send(\"__ping__\"),set_status_message(\"Verbunden\",\"green\"),pp_tm=setTimeout(function(){set_status_message(\"Nicht verbunden\",\"red\"),on_connection_lost()},pp_time)}function pong(){clearTimeout(pp_tm),pp_tm=null,connected=!0,ping()}function on_slider_changed(n){var e=parseInt(n/power_max*100);$(\"#sliderRevSliderPerc\").html(e+\"%\"),has_changed=!0}function on_neigung_changed(n){$(\"#neigungValueContainer\").html(n)}function set_status_message(n,e){$(\"#fontStatus\").html(n),$(\"#fontStatus\").attr(\"color\",e)}var ws=null,pp_tm=null,pp_time=1e3,connected=!1;$(function(){connect()});var on_open=function(){set_status_message(\"Verbunden\",\"green\"),setTimeout(ping,1e3),connected=!0},on_msg=function(n){console.log(n);\"__pong__\"!=n.data||pong()},on_close=function(){set_status_message(\"Nicht verbunden\",\"red\"),on_connection_lost()}</script></head><body><div id=\"containerContainer\"><div id=\"titleContainer\" class=\"subjectContainer\"><h1>Gyroansteuerung - Demo</h1><h2>Selbststabilisierendes Fahrrad</h2></div><div id=\"statusContainer\" class=\"subjectContainer\">Status:<br><br><font id=\"fontStatus\" color=\"red\">nicht verbunden</font></div><div id=\"sliderContainer\" class=\"subjectContainer\">Drehzahl [%]<br><br/><input type=\"range\" min=\"1\" max=\"1300\" value=\"0\" id=\"sliderRevsSlider\" oninput=\"on_slider_changed(this.value)\"><br/><div id=\"sliderRevSliderPerc\">0%</div></div><div id=\"neigungContainer\" class=\"subjectContainer\">Neigung [deg]<br><br/><div id=\"neigungValueContainer\">###</div></div></div></body></html>"
 
 
 cBike::cBike(char gyroPWMPin)
     : _gyro(gyroPWMPin)         //Hier wird die cGyro initialisiert
 {
     // Hier eure Klassen initialisieren
+    // Oder oben im Konstruktor
     // ...
 
 
@@ -23,6 +24,9 @@ cBike::cBike(char gyroPWMPin)
 
 void cBike::run()
 {
+    // Anfangsstatus setzen
+    _state = EBikeState::STARTING;
+
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Trying to connect to " + std::string(WIFI_SSID)));
 
     // Verbindung mit AP herstellen
@@ -30,13 +34,14 @@ void cBike::run()
 
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Connection successfull"));
 
-
-    WIFI_COM->attachEvent("/measurements/neigung", [](AsyncWebServerRequest* req)
+    
+    WIFI_COM->attachURL("/measurements/neigung", [](AsyncWebServerRequest* req)
     {
         // Hier wird die Neigung gesendet
     });
 
-    WIFI_COM->attachEvent("/ui/gyro_demo", [](AsyncWebServerRequest* req)
+    
+    WIFI_COM->attachURL("/ui/gyro_demo", [](AsyncWebServerRequest* req)
     {
         // Hier soll eine HTML-Seite übertragen werden, um das Gyro währenden der Demo
         // für Schecker steuern zu können
@@ -46,7 +51,7 @@ void cBike::run()
         req->send(200, "text/html", HTML_SCHECKER_DEMO);
     });
 
-
+    /*
     WIFI_COM->attachEvent("/control/gyro", [&](AsyncWebServerRequest* req)
     {
         // Hier wird das gyro angesteuert
@@ -69,31 +74,58 @@ void cBike::run()
 
     // Überprüft den Fahrradstatus
     // Bei genauerer Überlegung eigentlich unnötig und bescheuert
-    WIFI_COM->attachEvent("/status", [&](AsyncWebServerRequest* req)
+    WIFI_COM->attachEvent("/status", [](AsyncWebServerRequest* req)
     {
-        req->send(200, "text", "");
+        Serial.println("Received status check request");
+        req->send(200, "text/html", "s");
+    });
+    */
+    
+    _main_socket = WIFI_COM->attachWebSocket("/ws");
+    ws->onEvent(
+        [](AsyncWebSocket* server, AsyncWebSocketClient* client, 
+        AwsEventType type, void* arg, 
+        uint8_t* data, size_t len)
+    {
+        if(type == WS_EVT_DATA)
+	    {
+            //data packet
+            AwsFrameInfo* info = (AwsFrameInfo*)arg;
+            if(info->final && info->index == 0 && info->len == len)
+            {
+                //the whole message is in a single frame and we got all of its data
+                //os_printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
+                if(info->opcode == WS_TEXT)
+                {
+                    data[len] = 0;
+                    std::string d = std::string((char*)data);
+
+                    if(d == "__ping__")
+                    {
+                        client->text("__pong__");
+                    }
+                }
+            } 
+	    }
     });
 
 
-    _state = EBikeState::STARTING;
-    while(_state != EBikeState::STOPPED)
-    {
-        switch(_state)
-        {
-            case EBikeState::STARTING:
-            // Hier gyro auf drehzal bringen und überprüfen ob es auf drehzahl ist
-            // Wenn es auf drehzahl ist, dann auf EBikeState::RUNNING wechseln
-            break;
-
-            case EBikeState::RUNNING:
-                _gyro.anlaufen();
-            break;
-        }
-    }
-
-    // Hier beenden
-    
     
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Shutdown"));
 }
 
+
+void cBike::update()
+{
+    switch(_state)
+    {
+        case EBikeState::STARTING:
+        // Hier gyro auf drehzal bringen und überprüfen ob es auf drehzahl ist
+        // Wenn es auf drehzahl ist, dann auf EBikeState::RUNNING wechseln
+        break;
+
+        case EBikeState::RUNNING:
+            _gyro.anlaufen();
+        break;
+    }
+}

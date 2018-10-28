@@ -8,7 +8,8 @@
 *		Headeraufbau designen		JS & ML 		in Bearbeitung
 */	
 
-#pragma once
+#ifndef GYROANSTEUERUNG__H
+#define GYROANSTEUERUNG__H
 
 
 /*************************************
@@ -51,3 +52,6 @@ class cGyroansteuerung
   void setMachNeLookup(int pMessDrehzahl); //1/min
 };
 
+
+
+#endif

@@ -28,14 +28,11 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	// Versuche, falls vorhanden, Kalibierungsdaten vom EEPROM zu laden
 	loadCalibrationFromMemory();
 
-	// Gehört hier nicht hin eigentlich
-	//
-	WIFI_COM->connect("HIT-FRITZBOX-7490", "63601430989011937932");
-
+	/*
 	// Falls die jeweilige URL aufgerufen wird,
 	// werden die Neigungsdaten in ein JSON-Objekt verpackt und gesendet
 	//
-	WIFI_COM->attachEvent("/sensor_data", [&](AsyncWebServerRequest* r) 
+	WIFI_COM->attachURL("/sensor_data", [&](AsyncWebServerRequest* r) 
 	{
 		sensors_vec_t v;
 		v = getEvent().orientation;
@@ -49,6 +46,10 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 
 		r->send(200, "text/plain", ss.str().c_str());
 	});
+	*/
+
+
+	WIFI_COM->attachWebSocket("/ws")
 
 	/*
 	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 

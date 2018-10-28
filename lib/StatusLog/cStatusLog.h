@@ -1,10 +1,13 @@
-#pragma once
-
 #include <string>
 #include <map>
 
 #include "HTML/HTML.h"
 #include "cSingleton.h"
+
+
+
+#ifndef STATUSLOG__H
+#define STATUSLOG__H
 
 // Define um schneller auf die Statuslog-Instanz zuzugrefen
 #define LOG cStatusLog::instance()
@@ -98,3 +101,5 @@ class cStatusLog : public cSingleton<cStatusLog>
 		}
 
 };
+
+#endif
