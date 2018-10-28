@@ -1,4 +1,4 @@
-/*  Autor: Julian Schweizerhof
+/*  Autor: Julian Schweizerhof (Till Gostner)
     Name: cLenksensor.h */
 
 
