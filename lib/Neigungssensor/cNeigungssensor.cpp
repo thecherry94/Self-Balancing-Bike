@@ -15,12 +15,12 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	: _bno(Adafruit_BNO055(bno_addr)), _calibRestored(false), _refreshRate(100)
 {
 	//_bno = Adafruit_BNO055(bno_addr);
-
+	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
 	if (!_bno.begin())
 	{
 		Serial.print("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
-		LOG->addEntry(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
+		LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
 
 		while (1);
 	}
@@ -163,7 +163,7 @@ void cNeigungssensor::displaySensorOffsets(const adafruit_bno055_offsets_t &cali
 //
 bool cNeigungssensor::loadCalibrationFromMemory()
 {
-	LOG->addEntry(cStatusLogEntry(
+	LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"[BNO055] Initialisiere Kalibrierungsroutine..."));
 
@@ -184,7 +184,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	ss << "BNO ID aus Speicher: \t" << bnoID << "\n" << "BNO ID erfasst: \t" << sensor.sensor_id;
 
 	// Logeintrag
-	LOG->addEntry(cStatusLogEntry(
+	LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		ss.str()));
 
@@ -193,14 +193,14 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	if(bnoID != sensor.sensor_id)
 	{
 		//Serial.println("[BNO055] Keine bisherige Kalibrierungskonfiguration im Speicher gefunden.");
-		LOG->addEntry(cStatusLogEntry(
+		LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::WARNING, MODULE_NEIGUNG,
 		"Keine bisherige Kalibrierungskonfiguration im Speicher gefunden."));
 	}
 	else
 	{
 
-		LOG->addEntry(cStatusLogEntry(
+		LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"Kalibrierungskonfiguration im Speicher gefunden. Kalibrierung wird hergestellt."));
 
@@ -229,7 +229,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	//
 	if(_calibRestored)
 	{
-		LOG->addEntry(cStatusLogEntry(
+		LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"BNO055 Kalibrierungskonfiguration gefunden - Magnetometer wird justiert."));
 
@@ -242,7 +242,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	}
 	else
 	{
-		LOG->addEntry(cStatusLogEntry(
+		LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"BNO055 Kalibrierungskonfiguration NICHT gefunden - Sensor wird vollständig kalibiert."));
 		Serial.println("Sensor muss vollstaendig kalibriert werden.");
@@ -277,7 +277,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		}
 	}
 
-	LOG->addEntry(cStatusLogEntry(
+	LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"BNO055 ist nun vollständig kalibiert und einsatzbereit."));
 
@@ -289,7 +289,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	displaySensorOffsets(newCalib);
 
 	//Serial.println("Neue Kalibrierung wird nun gespeichert...");
-	LOG->addEntry(cStatusLogEntry(
+	LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"Kalibierung wird nun in EEPROM gespeichert."));
 
@@ -308,7 +308,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	//displayCalStatus();
 	//delay(3000);
 
-	LOG->addEntry(cStatusLogEntry(
+	LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"Kalibierungskonfiguration wurde erfolgreich in EEPROM gespeichert"));
 
