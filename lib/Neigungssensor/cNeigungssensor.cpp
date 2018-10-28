@@ -49,7 +49,7 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	*/
 
 
-	WIFI_COM->attachWebSocket("/ws")
+	
 
 	/*
 	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 
@@ -164,10 +164,10 @@ void cNeigungssensor::displaySensorOffsets(const adafruit_bno055_offsets_t &cali
 //
 bool cNeigungssensor::loadCalibrationFromMemory()
 {
-	LOG->write(cStatusLogEntry(
+	/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"[BNO055] Initialisiere Kalibrierungsroutine..."));
-
+*/
 	long bnoID = 0;   // Mit dieser Variable wird überprüft, ob eine Kalibrierungskonfiguration existiert?
 	int eeAddr = 0;   // Adresse im EEPROM
 
@@ -185,25 +185,25 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	ss << "BNO ID aus Speicher: \t" << bnoID << "\n" << "BNO ID erfasst: \t" << sensor.sensor_id;
 
 	// Logeintrag
-	LOG->write(cStatusLogEntry(
+	/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		ss.str()));
-
+*/
 	// BNO055 Kalibierungskonfig nicht gefunden
 	//
 	if(bnoID != sensor.sensor_id)
 	{
-		//Serial.println("[BNO055] Keine bisherige Kalibrierungskonfiguration im Speicher gefunden.");
-		LOG->write(cStatusLogEntry(
+		Serial.println("[BNO055] Keine bisherige Kalibrierungskonfiguration im Speicher gefunden.");
+		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::WARNING, MODULE_NEIGUNG,
-		"Keine bisherige Kalibrierungskonfiguration im Speicher gefunden."));
+		"Keine bisherige Kalibrierungskonfiguration im Speicher gefunden."));*/
 	}
 	else
 	{
 
-		LOG->write(cStatusLogEntry(
+		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"Kalibrierungskonfiguration im Speicher gefunden. Kalibrierung wird hergestellt."));
+		"Kalibrierungskonfiguration im Speicher gefunden. Kalibrierung wird hergestellt."));*/
 
 		// Stelle Kalibierung aus Speicher wieder her
 		//
@@ -230,9 +230,9 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	//
 	if(_calibRestored)
 	{
-		LOG->write(cStatusLogEntry(
+		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"BNO055 Kalibrierungskonfiguration gefunden - Magnetometer wird justiert."));
+		"BNO055 Kalibrierungskonfiguration gefunden - Magnetometer wird justiert."));*/
 
 		Serial.println("Sensor leicht bewegen, um Magnetometer zu kalibrieren.");
 		while (!_bno.isFullyCalibrated())
@@ -243,10 +243,10 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	}
 	else
 	{
-		LOG->write(cStatusLogEntry(
+		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"BNO055 Kalibrierungskonfiguration NICHT gefunden - Sensor wird vollständig kalibiert."));
-		Serial.println("Sensor muss vollstaendig kalibriert werden.");
+		Serial.println("Sensor muss vollstaendig kalibriert werden.");*/
 
 		while (!_bno.isFullyCalibrated())
 		{
@@ -278,9 +278,9 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		}
 	}
 
-	LOG->write(cStatusLogEntry(
+	/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"BNO055 ist nun vollständig kalibiert und einsatzbereit."));
+		"BNO055 ist nun vollständig kalibiert und einsatzbereit."));*/
 
 	Serial.println("BNO055 vollständig kalibriert");
 	Serial.println("--------------------------------");
@@ -289,10 +289,10 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	_bno.getSensorOffsets(newCalib);
 	displaySensorOffsets(newCalib);
 
-	//Serial.println("Neue Kalibrierung wird nun gespeichert...");
-	LOG->write(cStatusLogEntry(
+	Serial.println("Neue Kalibrierung wird nun gespeichert...");
+	/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"Kalibierung wird nun in EEPROM gespeichert."));
+		"Kalibierung wird nun in EEPROM gespeichert."));*/
 
 	eeAddr = 0; //(int)EE_ADDRESS_NEIGUNG;
 	_bno.getSensor(&sensor);
@@ -305,13 +305,13 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	EEPROM.put(eeAddr, newCalib);
 	EEPROM.commit();
 	
-	//Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
+	Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
 	//displayCalStatus();
 	//delay(3000);
 
-	LOG->write(cStatusLogEntry(
+	/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"Kalibierungskonfiguration wurde erfolgreich in EEPROM gespeichert"));
+		"Kalibierungskonfiguration wurde erfolgreich in EEPROM gespeichert"));*/
 
 	return true;
 }
