@@ -1,5 +1,5 @@
 #include <Arduino.h>            // damit millis und analogWrite geht.
-#include "cLenksensor.h"
+#include "cLenkersensor.h"
 
 ///////// cLenkersensor.cpp /////////////////
 cLenkersensor::cLenkersensor()
