@@ -23,6 +23,7 @@ class cNeigungssensor
         // Zusätzliches Variablen
         //
         Adafruit_BNO055 _bno;
+        AsyncWebSocket* _ws;
 
     public:
         cNeigungssensor(int bno_addr);
