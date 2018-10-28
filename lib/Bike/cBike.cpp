@@ -9,7 +9,7 @@
 
 cBike::cBike(char gyroPWMPin)
     : _gyro(gyroPWMPin)         //Hier wird die cGyro initialisiert
-{
+{ 
     // Hier eure Klassen initialisieren
     // Oder oben im Konstruktor
     // ...
@@ -24,6 +24,7 @@ cBike::cBike(char gyroPWMPin)
 
 void cBike::run()
 {
+    
     // Anfangsstatus setzen
     _state = EBikeState::STARTING;
 
@@ -80,9 +81,9 @@ void cBike::run()
         req->send(200, "text/html", "s");
     });
     */
-    
+
     _main_socket = WIFI_COM->attachWebSocket("/ws");
-    ws->onEvent(
+    _main_socket->onEvent(
         [](AsyncWebSocket* server, AsyncWebSocketClient* client, 
         AwsEventType type, void* arg, 
         uint8_t* data, size_t len)
@@ -117,6 +118,17 @@ void cBike::run()
 
 void cBike::update()
 {
+    _gyro.setLeistung(50);
+    while(Serial.available()) 
+   {
+       String read = Serial.readStringUntil('\n');
+        if (read.substring(0, 1) == "D")
+        {
+            gyroleistung = read.substring(1, read.length()).toInt();
+            _gyro.setLeistung(gyroleistung);
+            Serial.println(gyroleistung);
+        }
+   }
     switch(_state)
     {
         case EBikeState::STARTING:

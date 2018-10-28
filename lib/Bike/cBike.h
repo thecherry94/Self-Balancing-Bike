@@ -52,7 +52,13 @@ class cBike
         EBikeState              _state;
 
         AsyncWebSocket*         _main_socket;
-
+        
+        /*
+         ************************************************
+         *              Variabelen               *
+         ************************************************
+         */ 
+        int gyroleistung = 0;
     public:
         cBike(char);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
 

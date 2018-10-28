@@ -6,7 +6,7 @@
 #include "cBike.h"
 
 
-#define GYRO_PWM_PIN 0
+#define GYRO_PWM_PIN 23
 
 
 cBike bike(GYRO_PWM_PIN);

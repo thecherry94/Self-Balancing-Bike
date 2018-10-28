@@ -49,7 +49,7 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	*/
 
 
-	WIFI_COM->attachWebSocket("/ws")
+	WIFI_COM->attachWebSocket("/ws");
 
 	/*
 	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 
