@@ -48,9 +48,6 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	});
 	*/
 
-
-	
-
 	/*
 	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 
 	{

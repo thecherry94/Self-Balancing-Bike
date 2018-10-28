@@ -44,18 +44,19 @@ class cGyroansteuerung
 
 #include "cGyroansteuerung.h"
 
-cGyroansteuerung::cGyroansteuerung(char GyroPWMPin)
+cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
 {
   pinMode(GyroPWMPin, OUTPUT);
     Gyro.attach(GyroPWMPin);
 }
-  //???Hier attachen des PINS?
+ 
 
-bool cGyroansteuerung::setLeistung(char pSollLeistung)
+bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 {
-  if (pSollLeistung<maxLeistung&&pSollLeistung>=0)
+  if (pSollLeistung<=maxLeistung&&pSollLeistung>=0)
   {
     sollLeistung=pSollLeistung;
+     Serial.println(sollLeistung);
     return 0;
   }
   return 1;
@@ -78,11 +79,12 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
   else 
 	istLeistung=0;
   //PWM Schalten
-  int Lokal=1000+istLeistung*10; 
+  int Lokal=1000+istLeistung; 
+  Serial.println(Lokal);
   Gyro.writeMicroseconds(Lokal);
   return 0;
 }
-bool cGyroansteuerung::setBeschleunigung(char pBeschleunigung)
+bool cGyroansteuerung::setBeschleunigung(byte pBeschleunigung)
 {
   if (pBeschleunigung<=60&&pBeschleunigung>=0)
   {
