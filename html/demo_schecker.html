@@ -211,7 +211,7 @@
             var pp_time = 1000;
             var connected = false;
 
-            
+
 
 
             $(function()
@@ -249,11 +249,18 @@
             {
                 console.log(ev);
 
-                var msg = ev.data;
-                if(msg == "__pong__")
+                var msg = JSON.parse(ev.data);
+                
+                if(msg.type == "pong")
                 {
                     pong();
                     return;
+                }
+                else if(msg.type == "neigung")
+                {
+                    console.log(msg.data);
+
+                    update_neigung(msg.data);
                 }
             }
 
@@ -299,18 +306,18 @@
                 has_changed = true;
             }
 
-
-            /* Diese Funktion updated die UI für die Neigung */
-            function on_neigung_changed(neigung)
-            {
-                $('#neigungValueContainer').html(neigung);
-            }
-
             /* Funktion, um Text und Farbe der Statusmeldung zu setzen */
             function set_status_message(text, color)
             {
                 $('#fontStatus').html(text);
                 $('#fontStatus').attr("color", color);
+            }
+
+
+            function update_neigung(data)
+            {
+                
+                $('#neigungValueContainer').html(data);
             }
         </script>
 

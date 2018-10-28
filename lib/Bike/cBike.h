@@ -41,6 +41,7 @@ class cBike
          ************************************************
          */ 
         cGyroansteuerung _gyro;
+        cNeigungssensor* _sensor_neigung;
         
 
         /*
