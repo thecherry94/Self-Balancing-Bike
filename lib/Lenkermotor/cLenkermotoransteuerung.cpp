@@ -9,8 +9,6 @@ D25   cLenkersteuerung    PWML
 D26   cLenkersteuerung    PWMH
 D32   cLenkersteuerung    Phase
 D33   cLenkersteuerung    Current Sensor
-D34   cLenkersteuerung    Error 1
-D35   cLenkersteuerung    Error 2
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
 *	
@@ -26,8 +24,6 @@ cLenkermotoransteuerung::cLenkermotoransteuerung()
   pinMode(PHASE_PIN, OUTPUT);
   pinMode(PWML_PIN, OUTPUT);
   pinMode(PWMH_PIN, OUTPUT);
-  pinMode(ERROR1_PIN, INPUT);
-  pinMode(ERROR2_PIN, INPUT);
 };
 
 bool cLenkermotoransteuerung::setLeistung(int pLeistung)
@@ -36,9 +32,9 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
     //Serial.print("setLeistung \n");
   if(m_motorfreigabe == 0)  //Es wird überprüft ob der Motor freigegeben ist
   {
-    return 1;
     Serial.print("Motorgesperrt \n");
     m_istDuty = PWM_MIN;
+    return 1;
   }
   if(m_leistung <-100 || m_leistung >100)
   {
@@ -65,35 +61,11 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
 }
 bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
-  if(fehlererkennung()==0)
-   { 
-      m_motorfreigabe = 1;
-      Serial.print("kein Error \n");
+      m_motorfreigabe = pMotorfreigabe;
+      if(m_motorfreigabe == 0)
+      {
+        m_leistung = 0;
+        ledcWrite(m_Channel, abs(m_leistung));
+      }
       return 0;
-   }
-  else
-  {
-      m_motorfreigabe = 0;
-      Serial.print("Error \n");
-      return 1;
-  }
-}
-bool cLenkermotoransteuerung::fehlererkennung()
-{
-  m_error1 = digitalRead(ERROR1_PIN);
-  m_error2 = digitalRead(ERROR2_PIN);
-  //Serial.print("fehlererkennung \n");
-
-  if(m_error1 != 1&&m_error2 != 1)
-  {
-    m_motorfreigabe = 1;
-    //Serial.print("Motorfrei \n");
-    return 0;
-  }
-  else
-    {
-      //Serial.print("Motorgesperrt \n");
-      ledcWrite(m_Channel, PWM_MIN);
-      return 1;
-    }
-}
+}   

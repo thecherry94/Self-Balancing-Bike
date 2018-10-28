@@ -26,20 +26,17 @@ D35   CLenkermotoransteuerung    Error 2
 #define PHASE_PIN 32
 #define PWML_PIN DAC1
 #define PWMH_PIN DAC2
-#define ERROR1_PIN 34
-#define ERROR2_PIN 35
 
 class cLenkermotoransteuerung
 {
 public:
 	cLenkermotoransteuerung();
-	bool setLeistung(int pLeistung);
-	bool setMotorfreigabe(bool pMotorfreigabe);
-	bool fehlererkennung();
+	bool setLeistung(int pLeistung); //Die Motorleistung in % von -100, Linksdrehen bis 100 Rechtsdrehen, überprüft Motorfreigabe
+	bool setMotorfreigabe(bool pMotorfreigabe); //aufrufen um den Motor freizugeben oder zu sperren, Freigabe = 1, Gesperrt = 0; bei Gesperrten Motor die Funktion setzt Leistung auf 0
 
 private:
 	bool 	m_drehrichtung = 1;
-	bool 	m_motorfreigabe = 1;
+	bool 	m_motorfreigabe = 0;
 	int 	m_leistung = 0;
 	int 	m_istDuty = PWM_MIN;
     bool 	m_error1 = 0;
