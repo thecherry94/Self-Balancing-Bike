@@ -84,59 +84,11 @@ void cBike::run()
     });
     */
 
-    _main_socket = WIFI_COM->attachWebSocket("/ws");
-    _main_socket->onEvent(
-        [&](AsyncWebSocket* server, AsyncWebSocketClient* client, 
-        AwsEventType type, void* arg, 
-        uint8_t* data, size_t len)
-    {
-        if(type == WS_EVT_DATA)
-	    {
-            //data packet
-            AwsFrameInfo* info = (AwsFrameInfo*)arg;
-            if(info->final && info->index == 0 && info->len == len)
-            {
-                //the whole message is in a single frame and we got all of its data
-                //os_printf("ws[%s][%u] %s-message[%llu]: ", server->url(), client->id(), (info->opcode == WS_TEXT)?"text":"binary", info->len);
-                if(info->opcode == WS_TEXT)
-                {
-                    data[len] = 0;
-                    std::string d = std::string((char*)data);
-
-                    if(d == "__ping__")
-                    {
-                        std::stringstream ss;					
-						ss << "{";
-						ss << "\"type\":";
-						ss << "\"pong\"" << ", ";
-						ss << "\"data\":{";
-						ss << "}}";
-
-                        client->text(ss.str().c_str());
-                    }
-                    else if(d == "neigung")
-					{
-						sensors_vec_t v;
-						v = _sensor_neigung->getEvent().orientation;
-
-						std::stringstream ss;					
-						ss << "{";
-						ss << "\"type\":";
-						ss << "\"neigung\"" << ", ";
-						ss << "\"data\":{";
-						ss << "\"x\":" << v.x << ", ";
-						ss << "\"y\":" << v.y << ", ";
-						ss << "\"z\":" << v.z;
-						ss << "}}";
-
-						client->text(ss.str().c_str());
-					}
-                }
-            } 
-	    }
-    });
-
-
+   WIFI_COM->attachEvent("ping", [](AsyncWebSocketClient* client, rapidjson::Value& json) 
+   {
+       client->text("pong");
+       Serial.println("pingpong");
+   });
     
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Shutdown"));
 
@@ -147,17 +99,16 @@ void cBike::run()
 
 void cBike::update()
 {
-   
     while(Serial.available()) 
-   {
-       String read = Serial.readStringUntil('\n');
+    {
+        String read = Serial.readStringUntil('\n');
         if (read.substring(0, 1) == "D")
         {
             gyroleistung = read.substring(1, read.length()).toInt();
             _gyro.setLeistung(gyroleistung);
             Serial.println(gyroleistung);
         }
-   }
+    }
     switch(_state)
     {
         case EBikeState::STARTING:

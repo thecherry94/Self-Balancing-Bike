@@ -273,7 +273,13 @@
 
             function ping()
             {
-                ws.send("__ping__");
+                var packet = 
+                {
+                    "type": "ping",
+                    "data": {}
+                };
+
+                ws.send(JSON.stringify(packet));
                 set_status_message("Verbunden", "green");
 
                 pp_tm = setTimeout(function() 
