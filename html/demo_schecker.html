@@ -2,18 +2,19 @@
     <head>
         <title>Selbststabilisierendes Fahrrad - Gyro Demo</title>
 
-
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>  
         <style>
-		
             *
             {
-                font-family: Arial, Helvetica, sans-serif;
                 padding: 0;
                 margin: 0;
                 letter-spacing: 2px;
                 
             }
-            
+            body
+            {
+                 font-family: 'Raleway';font-size: 22px;
+            }
             h1
             {
                 font-size: 5vmin;
@@ -222,7 +223,7 @@
 
             function connect()
             {
-                set_status_message("Connecting...", "darkyellow");
+                set_status_message("Connecting...", "#e9b000");
                 ws = new WebSocket("ws://192.168.0.67/ws");        
 
                 ws.onopen = on_open;
@@ -239,7 +240,7 @@
 
             var on_open = function() 
             {
-                set_status_message("Verbunden", "green");
+                set_status_message("Verbunden", "#1eaf9e");
                 setTimeout(ping, 1000);
 
                 connected = true;
@@ -266,7 +267,7 @@
 
             var on_close = function()
             {
-                set_status_message("Nicht verbunden", "red");
+                set_status_message("Nicht verbunden", "#E24E42");
 
                 on_connection_lost();
             }
@@ -278,7 +279,7 @@
 
                 pp_tm = setTimeout(function() 
                 {
-                    set_status_message("Nicht verbunden", "red");
+                    set_status_message("Nicht verbunden", "#E24E42");
                     on_connection_lost();
                 }, pp_time);
             }
@@ -335,9 +336,7 @@
     
             <div id="sliderContainer" class="subjectContainer">
                 Drehzahl [%]<br>
-                <br />
                 <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_changed(this.value)">
-                <br />
                 <div id="sliderRevSliderPerc">0%</div>
             </div>
     
