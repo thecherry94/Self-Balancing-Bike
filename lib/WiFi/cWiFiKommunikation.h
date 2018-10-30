@@ -2,6 +2,7 @@
 #define WIFI_COM__H
 
 #include <map>
+#include <functional>
 
 #include "WiFi.h"
 #include "ESPAsyncWebServer.h"
@@ -14,7 +15,8 @@
 
 #define WIFI_COM cWiFiKommunikation::instance()
 
-typedef void (*WiFiEventHandler_t)(AsyncWebSocketClient*, rapidjson::Value&);
+using WiFiEventHandler = std::function<void(AsyncWebSocketClient*, rapidjson::Value&)>;
+
 
 class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
 {
@@ -23,7 +25,9 @@ class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
   private:
     AsyncWebServer* _pserver;
     AsyncWebSocket* _pws;
-    std::map<std::string, WiFiEventHandler_t> _events;
+    std::map<std::string, WiFiEventHandler> _events;
+
+    void handle_data(AsyncWebSocketClient* client, uint8_t* data);
 
     
   protected:
@@ -42,7 +46,7 @@ class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
     bool connect(String, String);
     bool connectSoftAP(String, String);
     void attachURL(String, ArRequestHandlerFunction);
-    void attachEvent(const char* name, WiFiEventHandler_t);
+    void attachEvent(const char* name, WiFiEventHandler);
 };
 
 

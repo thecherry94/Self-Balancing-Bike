@@ -84,12 +84,12 @@ void cBike::run()
     });
     */
 
-   WIFI_COM->attachEvent("ping", [](AsyncWebSocketClient* client, rapidjson::Value& json) 
+   WIFI_COM->attachEvent("ping", [&](AsyncWebSocketClient* client, rapidjson::Value& json) 
    {
        client->text("pong");
        Serial.println("pingpong");
    });
-    
+
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Shutdown"));
 
 
