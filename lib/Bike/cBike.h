@@ -2,6 +2,7 @@
 
 // precomp entählt alle benötigten header Dateien
 #include "precomp.h"
+#include "global.h"
 
 
 #define WIFI_SSID       "HIT-FRITZBOX-7490"

@@ -13,9 +13,12 @@
 #include "writer.h"
 #include "stringbuffer.h"
 
+#include "global.h"
+
+
 #define WIFI_COM cWiFiKommunikation::instance()
 
-using WiFiEventHandler = std::function<void(AsyncWebSocketClient*, rapidjson::Value&)>;
+using WiFiEventHandler_t = std::function<void(AsyncWebSocketClient*, rapidjson::Value&)>;
 
 
 class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
@@ -25,9 +28,9 @@ class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
   private:
     AsyncWebServer* _pserver;
     AsyncWebSocket* _pws;
-    std::map<std::string, WiFiEventHandler> _events;
+    std::map<std::string, WiFiEventHandler_t> _events;
 
-    void handle_data(AsyncWebSocketClient* client, uint8_t* data);
+    void handle_data(AsyncWebSocketClient* client, uint8_t* data, size_t len);
 
     
   protected:
@@ -46,7 +49,7 @@ class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
     bool connect(String, String);
     bool connectSoftAP(String, String);
     void attachURL(String, ArRequestHandlerFunction);
-    void attachEvent(const char* name, WiFiEventHandler);
+    void attachEvent(const char* name, WiFiEventHandler_t);
 };
 
 

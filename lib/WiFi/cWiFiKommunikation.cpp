@@ -172,7 +172,7 @@ void cWiFiKommunikation::attachURL(String url, ArRequestHandlerFunction request_
     _pserver->on(url.c_str(), HTTP_GET, request_handler);
 }
 
-void cWiFiKommunikation::attachEvent(const char* name, WiFiEventHandler func)
+void cWiFiKommunikation::attachEvent(const char* name, WiFiEventHandler_t func)
 {
 	_events[name] = func;
 }
@@ -196,8 +196,8 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
     {
 		//WiFi.close();
 
-        delete _pserver;
-        _pserver = NULL;
+		delete _pserver;
+		_pserver = NULL;
 
 		delete _pws;
 		_pws = NULL;
@@ -235,7 +235,9 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
         AwsEventType type, void* arg, 
         uint8_t* data, size_t len)
     {
-		Serial.print("got");
+		#ifdef __DEBUG__
+			Serial.print("Wifi Message received");
+		#endif
 
         /*if(type == WS_EVT_DATA)
 	    {
@@ -298,62 +300,65 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 	    }
 		*/
 
-		if(type == WS_EVT_DATA){
-    //data packet
-    AwsFrameInfo * info = (AwsFrameInfo*)arg;
-    if(info->final && info->index == 0 && info->len == len)
-	{
-      //the whole message is in a single frame and we got all of it's data
-      if(info->opcode == WS_TEXT)
-	  {
-        data[len] = 0;
-		// EVENT AUSLÖSEN
-      } 
-	  else 
-	  {
-        // BINARY DATA
-      }
-      if(info->opcode == WS_TEXT)
-	  {
-	  	// EVENT AUSLÖSEN
-	  }
-      else
-        client->binary("I got your binary message");
-    } 
-	else 
-	{
-      //message is comprised of multiple frames or the frame is split into multiple packets
-      if(info->index == 0)
-	  {
-
-      }
-
-      if(info->message_opcode == WS_TEXT)
-	  {
-        data[len] = 0;
-
-		// EVENT AUSLÖSEN
-      } 
-	  else 
-	  {
-        // BINARY DATA
-      }
-
-      if((info->index + len) == info->len)
-	  {
-        
-        if(info->final)
+		if(type == WS_EVT_DATA)
 		{
-			// EVENT AUSLÖSEN
+			//data packet
+			AwsFrameInfo* info = (AwsFrameInfo*)arg;
+			if(info->final && info->index == 0 && info->len == len)
+			{
+				//the whole message is in a single frame and we got all of it's data
+				if(info->opcode == WS_TEXT)
+				{
+					// Event auslösen
+					handle_data(client, data, len);
+				} 
+				else 
+				{
+					// BINARY DATA
+				}
+				if(info->opcode == WS_TEXT)
+				{
+					// EVENT AUSLÖSEN
+					handle_data(client, data, len);
+				}
+				else
+					// BINARY DATA
+					client->binary("I got your binary message");
+			} 
+			else 
+			{
+				//message is comprised of multiple frames or the frame is split into multiple packets
+				if(info->index == 0)
+				{
 
-          if(info->message_opcode == WS_TEXT)
-            client->text("I got your text message");
-          else
-            client->binary("I got your binary message");
-        }
-      }
-	}
-    }
+				}
+
+				if(info->message_opcode == WS_TEXT)
+				{
+					data[len] = 0;
+
+					// EVENT AUSLÖSEN
+					handle_data(client, data, len);
+				} 
+				else 
+				{
+					// BINARY DATA
+				}
+
+				if((info->index + len) == info->len)
+				{				
+					if(info->final)
+					{
+						// EVENT AUSLÖSEN					
+						if(info->message_opcode == WS_TEXT)
+							handle_data(client, data, len);
+						else
+							// BINARY DATA
+							client->binary("I got your binary message");
+					}
+				}
+			}
+		}
 	});
 
 	// WebServer erstellen auf Port 80 mit WebSockets Schnittstelle
@@ -368,61 +373,62 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 }
 
 
-void cWiFiKommunikation::handle_data(AsyncWebSocketClient* client, uint8_t* data)
+void cWiFiKommunikation::handle_data(AsyncWebSocketClient* client, uint8_t* data, size_t len)
 {
-				// Daten aufbereiten
-				//
-                data[len] = 0;
-                std::string d = std::string((char*)data);
+	// Daten aufbereiten
+	//
+	data[len] = 0;
+	char* d = (char*)data;
 
-				// JSON parsen
-				rapidjson::Document doc;
-				doc.Parse(d.c_str());
+	// JSON parsen
+	rapidjson::Document doc;
+	doc.Parse(d);
 
-				// Gab es einen Fehler??
-				// Falls ja, erstelle JSON object vom typ "error-parse"
-				// und füge die Fehlermeldung ins Datenobjekt ein
-				// Anschließend Fehler loggen / auf Serial ausgeben und
-				// Funktion beenden
-				if (doc.HasParseError())
-				{
-					rapidjson::Document response;
-					response.SetObject();
+	// Gab es einen Fehler??
+	// Falls ja, erstelle JSON object vom typ "error-parse"
+	// und füge die Fehlermeldung ins Datenobjekt ein
+	// Anschließend Fehler loggen / auf Serial ausgeben und
+	// Funktion beenden
+	if (doc.HasParseError())
+	{
+		rapidjson::Document response;
+		response.SetObject();
 
-					rapidjson::Document::AllocatorType& allocator = response.GetAllocator();
+		rapidjson::Document::AllocatorType& allocator = response.GetAllocator();
 
-					response.AddMember("type", "error-parse", allocator);
+		response.AddMember("type", "error-parse", allocator);
 
-					rapidjson::Value obj_data;
-					obj_data.SetObject();
-					response.AddMember("data", obj_data, allocator);
+		rapidjson::Value obj_data;
+		obj_data.SetObject();
+		response.AddMember("data", obj_data, allocator);
 
-					obj_data.AddMember("message", doc.GetParseError(), allocator);
-				
-					rapidjson::StringBuffer strbuf;
-					rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-					response.Accept(writer);
+		obj_data.AddMember("error-code", doc.GetParseError(), allocator);
+	
+		rapidjson::StringBuffer strbuf;
+		rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+		response.Accept(writer);
 
-					client->text(strbuf.GetString());
+		client->text(strbuf.GetString());
 
-					return;
-				}
+		return;
+	}
 
-				// Event Name
-				std::string type = doc["type"].GetString();
+	// Event Name
+	std::string type = doc["type"].GetString();
 
-				// Suche in der event hashmap, ob dieses Event existiert
-				if (_events.find(type) != _events.end())
-				{
-					// Existiert
-					//
+	// Suche in der event hashmap, ob dieses Event existiert
+	if (_events.find(type) != _events.end())
+	{
+		// Existiert
+		//
 
-					// Event ausführen
-					_events[type](client, doc["data"]);
-				}	
+		// Event ausführen
+		_events[type](client, doc["data"]);
+	}	
 }
 
-
+// Sorgt dafür, dass der ESP einen "Soft Access Point" erstellt
+// Ein Netzwerk/Server ohne Verbindung zum Internet
 bool cWiFiKommunikation::connectSoftAP(String ssid, String pw)
 {
     if (WiFi.status() == WL_CONNECTED)
@@ -433,6 +439,10 @@ bool cWiFiKommunikation::connectSoftAP(String ssid, String pw)
     Serial.print("Erstelle Soft AP: ");
     Serial.println(ssid);
 
+	// Statische IP aus globaler config benutzen
+	//
+	WiFi.mode(WIFI_AP_STA);
+	WiFi.softAPConfig(WiFiConfig::softapIP, WiFiConfig::softapIP, WiFiConfig::softapMASK);
     WiFi.softAP(ssid.c_str(), pw.c_str());
 
     Serial.println("Soft Access Point erstellt");
