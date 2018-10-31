@@ -235,9 +235,6 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
         AwsEventType type, void* arg, 
         uint8_t* data, size_t len)
     {
-		#ifdef __DEBUG__
-			Serial.print("Wifi Message received");
-		#endif
 
         /*if(type == WS_EVT_DATA)
 	    {
@@ -300,6 +297,13 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 	    }
 		*/
 
+		if(type == WS_EVT_CONNECT)
+		{
+			#ifdef __DEBUG__
+				Serial.println("New Connection");
+			#endif
+		}
+
 		if(type == WS_EVT_DATA)
 		{
 			//data packet
@@ -307,15 +311,6 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 			if(info->final && info->index == 0 && info->len == len)
 			{
 				//the whole message is in a single frame and we got all of it's data
-				if(info->opcode == WS_TEXT)
-				{
-					// Event auslösen
-					handle_data(client, data, len);
-				} 
-				else 
-				{
-					// BINARY DATA
-				}
 				if(info->opcode == WS_TEXT)
 				{
 					// EVENT AUSLÖSEN
@@ -335,10 +330,8 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 
 				if(info->message_opcode == WS_TEXT)
 				{
-					data[len] = 0;
-
 					// EVENT AUSLÖSEN
-					handle_data(client, data, len);
+					//handle_data(client, data, len);
 				} 
 				else 
 				{
@@ -351,7 +344,9 @@ bool cWiFiKommunikation::connect(String ssid, String pw)
 					{
 						// EVENT AUSLÖSEN					
 						if(info->message_opcode == WS_TEXT)
-							handle_data(client, data, len);
+						{
+							//handle_data(client, data, len);
+						}
 						else
 							// BINARY DATA
 							client->binary("I got your binary message");

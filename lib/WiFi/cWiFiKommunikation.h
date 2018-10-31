@@ -21,35 +21,49 @@
 using WiFiEventHandler_t = std::function<void(AsyncWebSocketClient*, rapidjson::Value&)>;
 
 
+// In der .cpp sind die Funktionen auch beschrieben
+
+
 class cWiFiKommunikation : public cSingleton<cWiFiKommunikation>
 {
-  friend class cSingleton<cWiFiKommunikation>;
+	// cSingleton muss eine friend class sein, damit es funktioniert
+	friend class cSingleton<cWiFiKommunikation>;
 
-  private:
-    AsyncWebServer* _pserver;
-    AsyncWebSocket* _pws;
-    std::map<std::string, WiFiEventHandler_t> _events;
+	private:
 
-    void handle_data(AsyncWebSocketClient* client, uint8_t* data, size_t len);
+		// Der asynchrone WebServer
+		AsyncWebServer* _pserver;
 
-    
-  protected:
-    cWiFiKommunikation();
+		// Der asynchrone WebScoket
+		AsyncWebSocket* _pws;
 
-  public:
-    ~cWiFiKommunikation()
-    {
-      delete _pserver;
-      _pserver = NULL;
+		// Event hashmap mit Funktionszeigern, die auf alle Events zeigt
+		// Momentan eine Funktion je Event
+		// TODO: Implementiere mehrere Funktionen pro Event (std::vector?)
+		std::map<std::string, WiFiEventHandler_t> _events;
 
-      delete _pws;
-      _pws = NULL;
-    }
+		// Ein Event kann durch mehrere Bedingunen in den WebSockets ausgelöst werden
+		// Diese Funktion wird aufgerufen wenn solch eine Bedingung eintritt
+		void handle_data(AsyncWebSocketClient* client, uint8_t* data, size_t len);
 
-    bool connect(String, String);
-    bool connectSoftAP(String, String);
-    void attachURL(String, ArRequestHandlerFunction);
-    void attachEvent(const char* name, WiFiEventHandler_t);
+
+	protected:
+		cWiFiKommunikation();
+
+	public:
+		~cWiFiKommunikation()
+		{
+			delete _pserver;
+			_pserver = NULL;
+
+			delete _pws;
+			_pws = NULL;
+		}
+
+		bool connect(String, String);
+		bool connectSoftAP(String, String);
+		void attachURL(String, ArRequestHandlerFunction);
+		void attachEvent(const char* name, WiFiEventHandler_t);
 };
 
 

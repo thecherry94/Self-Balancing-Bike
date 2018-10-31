@@ -84,10 +84,14 @@ void cBike::run()
     });
     */
 
-   WIFI_COM->attachEvent("ping", [&](AsyncWebSocketClient* client, rapidjson::Value& json) 
+   WIFI_COM->attachEvent("pp", [&](AsyncWebSocketClient* client, rapidjson::Value& json) 
    {
-       client->text("pong");
-       Serial.println("pingpong");
+        rapidjson::StringBuffer strbuf;
+        rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
+		json.Accept(writer);
+
+        Serial.println(strbuf.GetString());
+		client->text(strbuf.GetString());
    });
 
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Shutdown"));
