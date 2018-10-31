@@ -1,6 +1,6 @@
 
-#ifndef DEBUG__H
-#define DEBUG__H
+#ifndef GLOBAL__H
+#define GLOBAL__H
 
 #include <WiFi.h>
 
@@ -12,15 +12,30 @@
 #define __DEBUG__ 
 
 
+
 /*
  * Dieses namespace enthält alle relevanten Daten, um das WiFi Modul zu initialisieren
+ * Ihr könnt hier gerne auch eigene namespaces für eure Konfigurationen hinzufügen
  * TODO: Mögliche konstanten hier auslagern
  */
 namespace WiFiConfig
 {
-    const IPAddress softapIP(10, 10, 10, 0);
-}
- 
+    // Philipp WLAN
+    //
+    static const char*     apSSID = "Cherry";
+    static const char*     apPASS = "4991Pk1994";
+
+    // Walter WLAN
+    //
+    //const char*     apSSID = "HIT-FRITZBOX-7490";
+    //const char*     apPASS = "63601430989011937932";
+
+    static const IPAddress softapIP(10, 10, 10, 0);
+    static const IPAddress softapMASK(255, 255, 255, 0);
+};
+
+
+
 
 
 
