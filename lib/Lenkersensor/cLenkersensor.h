@@ -51,7 +51,6 @@ void loop() {
     Lenkersensor.readCounter();
     Lenkersensor.getData(lDaten);
     Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
-    
 }
 */
 #endif
