@@ -4,6 +4,8 @@
 
 
 bool lenkerflag = 1;
+pcnt_config_t config_pcnt;
+int16_t counter;
 
 cLenkersensor::cLenkersensor()
 {

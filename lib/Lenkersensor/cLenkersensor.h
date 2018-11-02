@@ -21,8 +21,6 @@ struct lenkerDaten  // Struct mit Daten für den Lenker
 #define ENCODER_MAX_VALUE 512       // max Zählerwert vom Counter
 #define ENCODER_MIN_VALUE -512      // min Zählerwert vom Counter
 void isr_lenkersensor();            // isr beim Nulldurchgang
-pcnt_config_t config_pcnt;
-int16_t counter
 
 class cLenkersensor
 {

@@ -1,5 +1,8 @@
 #include <Arduino.h>            // damit millis und analogWrite geht.
 #include "cLenkersensor_encoder.h"
+
+
+
 cLenkersensor::cLenkersensor()
 {
   setZero();
