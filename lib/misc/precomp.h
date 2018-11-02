@@ -3,6 +3,6 @@
 #include "cWiFiKommunikation.h"
 #include "cGyroansteuerung.h"
 #include "cLenkermotoransteuerung.h"
-#include "cLenkersensor.h"
+#include "cLenkersensor_encoder.h"
 #include "cStatusLog.h"
 #include "cSingleton.h"
