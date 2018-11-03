@@ -14,58 +14,110 @@ D33   cLenkersteuerung    Current Sensor
 *	
 */
 #include "cLenkermotoransteuerung.h"
-#include <Arduino.h>
 
 cLenkermotoransteuerung::cLenkermotoransteuerung()
 {
-  ledcSetup(m_Channel, m_freq, m_pwmresolution);
-  ledcAttachPin(PWML_PIN, m_Channel);
-  ledcAttachPin(PWMH_PIN, m_Channel);
-  pinMode(PHASE_PIN, OUTPUT);
+  ledcSetup(CHANNELL, m_freq, m_pwmresolution);
+  ledcSetup(CHANNELR, m_freq, m_pwmresolution);
+  ledcAttachPin(PWML_PIN, CHANNELL);
+  ledcAttachPin(PWMR_PIN, CHANNELR);
   pinMode(PWML_PIN, OUTPUT);
-  pinMode(PWMH_PIN, OUTPUT);
+  pinMode(PWMR_PIN, OUTPUT);
 };
 
 bool cLenkermotoransteuerung::setLeistung(int pLeistung)
 {
-  m_leistung = pLeistung;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
+  m_sollleistung = pLeistung;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
     //Serial.print("setLeistung \n");
-  if(m_motorfreigabe == 0)  //Es wird überprüft ob der Motor freigegeben ist
+  if(m_motorfreigabe == 0 || Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)  //Es wird überprüft ob der Motor freigegeben ist
   {
     Serial.print("Motorgesperrt \n");
-    m_istDuty = PWM_MIN;
+    ledcWrite(CHANNELL, 0);
+    ledcWrite(CHANNELR, 0);
+    m_istleistung = 0;
+    m_sollleistung = 0;
     return 1;
   }
-  if(m_leistung <-100 || m_leistung >100)
+  if(m_sollleistung <-100 || m_sollleistung >100)
   {
     Serial.print("Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n");
     return 1;
   }
-   
 
-  if(m_leistung <0)
+  if(m_sollleistung <0)
   {
-    m_drehrichtung = LENKER_LINKS;
-    //Serial.print("Links \n");
-    digitalWrite(PHASE_PIN,m_drehrichtung);
+    if(m_drehrichtung == LENKER_RECHTS)
+      {
+        ledcWrite(CHANNELR, 0);
+        delay(3);
+        ledcWrite(CHANNELR, 0);
+      }
+      m_drehrichtung = LENKER_LINKS;
   }
-  else
+  else if (m_sollleistung >0)
   {
-    m_drehrichtung = LENKER_RECHTS;
-    //Serial.print("Rechts \n");
-    digitalWrite(PHASE_PIN,m_drehrichtung);
+    if(m_drehrichtung == LENKER_LINKS)
+      {
+        ledcWrite(CHANNELL, 0);
+        delay(3);
+        ledcWrite(CHANNELL, 0);
+      }
+      m_drehrichtung = LENKER_RECHTS;
   }
-  m_leistung *=2.55;
-  ledcWrite(m_Channel, abs(m_leistung));
+
+switch (m_drehrichtung)
+{
+  case 0:
+    ledcWrite(CHANNELR, 0);
+    m_sollleistung *=2.55;
+    for(byte i = 0; i < abs(m_sollleistung); i++)
+    {
+      ledcWrite(CHANNELL, i);
+      delay(2);
+    }
+  break;
+  
+  case 1:
+    ledcWrite(CHANNELL, 0);
+    m_sollleistung *=2.55;
+    for(byte i = 0; i < abs(m_sollleistung); i++)
+    {
+      ledcWrite(CHANNELR, i);
+      delay(2);
+    }
+  break;
+
+  default:
+    ledcWrite(CHANNELL, 0);
+    ledcWrite(CHANNELR, 0);
+  break;
+}
   return 0;
 }
+
 bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
       m_motorfreigabe = pMotorfreigabe;
       if(m_motorfreigabe == 0)
       {
-        m_leistung = 0;
-        ledcWrite(m_Channel, abs(m_leistung));
+        if (Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
+            {
+              Serial.print("Motorgesperrt \n");
+            }
+        else
+          m_motorfreigabe = 1;
       }
+      ledcWrite(CHANNELL, 0);
+      ledcWrite(CHANNELR, 0);
+      m_istleistung = 0;
+      m_sollleistung = 0;
       return 0;
 }   
+
+int cLenkermotoransteuerung::setFrequenz(int pFreq)
+{
+  m_freq = pFreq;
+  ledcSetup(CHANNELL, m_freq, m_pwmresolution);
+  ledcSetup(CHANNELR, m_freq, m_pwmresolution);
+  return 0;
+}
