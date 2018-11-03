@@ -38,6 +38,7 @@ public:
 	bool setLeistung(int pLeistung); //Die Motorleistung in % von -100, Linksdrehen bis 100 Rechtsdrehen, überprüft Motorfreigabe
 	bool setMotorfreigabe(bool pMotorfreigabe); //aufrufen um den Motor freizugeben oder zu sperren, Freigabe = 1, Gesperrt = 0; bei Gesperrten Motor die Funktion setzt Leistung auf 0
 	int setFrequenz(int pFreq); //Die Frequenz der beiden PWM Pins kann geändert werden
+	bool run();  //Müssen wir zyklisch aufrufen um Drehwinkel und so zu Kontrollieren. //Oder lagern wir das in Sesor aus?
 
 private:
 	byte 	m_drehrichtung = 2;
