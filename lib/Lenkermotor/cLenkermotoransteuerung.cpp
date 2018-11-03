@@ -15,6 +15,7 @@ D33   cLenkersteuerung    Current Sensor
 */
 #include "cLenkermotoransteuerung.h"
 
+
 cLenkermotoransteuerung::cLenkermotoransteuerung()
 {
   ledcSetup(CHANNELL, m_freq, m_pwmresolution);
