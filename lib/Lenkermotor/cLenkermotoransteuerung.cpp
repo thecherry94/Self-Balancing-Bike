@@ -1,7 +1,7 @@
 /*
 * File: selfbalancingbike.h
 * Autor: AB;ML
-* Date:08:09.2018  
+* Date:03:11.2018  
 * Sources: 
 * Content:
 PINS:
@@ -14,7 +14,6 @@ D33   cLenkersteuerung    Current Sensor
 *	
 */
 #include "cLenkermotoransteuerung.h"
-
 
 cLenkermotoransteuerung::cLenkermotoransteuerung()
 {
@@ -30,7 +29,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
 {
   m_sollleistung = pLeistung;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
     //Serial.print("setLeistung \n");
-  if(m_motorfreigabe == 0 || Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)  //Es wird überprüft ob der Motor freigegeben ist
+  if(m_motorfreigabe == 0 || Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)  //Es wird Ã¼berprÃ¼ft ob der Motor freigegeben ist
   {
     Serial.print("Motorgesperrt \n");
     ledcWrite(CHANNELL, 0);
@@ -50,7 +49,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
     if(m_drehrichtung == LENKER_RECHTS)
       {
         ledcWrite(CHANNELR, 0);
-        delay(3);
+        delay(3); //nenenenene so nicht
         ledcWrite(CHANNELR, 0);
       }
       m_drehrichtung = LENKER_LINKS;
@@ -66,17 +65,17 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
       m_drehrichtung = LENKER_RECHTS;
   }
 
-switch (m_drehrichtung)
+switch (m_drehrichtung)  //Ab hier Sicherheitsfunktion!!!!!!!!!!!
 {
   case 0:
     ledcWrite(CHANNELR, 0);
-    m_sollleistung *=2.55;
+    m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was?
     for(byte i = 0; i < abs(m_sollleistung); i++)
     {
       ledcWrite(CHANNELL, i);
-      delay(2);
+      delay(2); //Dekays sind glaub net erlaubt. muss mit timern gehen
     }
-  break;
+  break;  //Das ist Wichtig ;D
   
   case 1:
     ledcWrite(CHANNELL, 0);
@@ -118,7 +117,7 @@ bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 int cLenkermotoransteuerung::setFrequenz(int pFreq)
 {
   m_freq = pFreq;
-  ledcSetup(CHANNELL, m_freq, m_pwmresolution);
+  ledcSetup(CHANNELL, m_freq, m_pwmresolution); //Das geht nachträglich noch?
   ledcSetup(CHANNELR, m_freq, m_pwmresolution);
   return 0;
 }
