@@ -6,7 +6,7 @@ void quickSort(float  arr[], int left, int right) { // Quelle: http://www.algoli
   int i = left, j = right;
   float tmp;
   float pivot = arr[(left + right) / 2];
-  /* partition */
+  partition */
   while (i <= j) {
     while (arr[i] < pivot)
       i++;
