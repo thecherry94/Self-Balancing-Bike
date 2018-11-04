@@ -103,16 +103,15 @@ void cBike::run()
 
 void cBike::update()
 {
-    while(Serial.available()) 
-    {
-        String read = Serial.readStringUntil('\n');
-        if (read.substring(0, 1) == "D")
+    //Lenkeransteuerung
+    cLenkermotoransteuerung::runLenkermotor();
+
+    if(Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
         {
-            gyroleistung = read.substring(1, read.length()).toInt();
-            _gyro.setLeistung(gyroleistung);
-            Serial.println(gyroleistung);
+            cLenkermotoransteuerung::setMotorfreigabe(0);
         }
-    }
+    /*********************************************************/
+    //Gyromotor
     switch(_state)
     {
         case EBikeState::STARTING:
@@ -124,4 +123,5 @@ void cBike::update()
             _gyro.anlaufen();
         break;
     }
+    /****************************************************************/
 }

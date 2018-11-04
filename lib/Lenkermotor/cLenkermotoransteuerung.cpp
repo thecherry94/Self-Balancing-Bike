@@ -15,6 +15,7 @@ D33   cLenkersteuerung    Current Sensor
 */
 #include "cLenkermotoransteuerung.h"
 
+
 cLenkermotoransteuerung::cLenkermotoransteuerung()
 {
   ledcSetup(CHANNELL, m_freq, m_pwmresolution);
@@ -27,86 +28,107 @@ cLenkermotoransteuerung::cLenkermotoransteuerung()
 
 bool cLenkermotoransteuerung::setLeistung(int pLeistung)
 {
-  m_sollleistung = pLeistung;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
-    //Serial.print("setLeistung \n");
-  if(m_motorfreigabe == 0 || Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)  //Es wird Ã¼berprÃ¼ft ob der Motor freigegeben ist
+   if(pLeistung <-100 || pLeistung >100)
   {
-    Serial.print("Motorgesperrt \n");
+    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n "))
+    return 1;
+  }
+  if(pLeistung > 0 && pLeistung <10)
+    pLeistung = 10;
+  else if (pLeistung < 0 && pLeistung >-10)
+    pLeistung = -10;
+  
+  
+  m_sollleistung = pLeistung*ANDY_LEISTUNG_MAX/100;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
+   
+  
+  if(m_motorfreigabe == 0)  //Es wird Ã¼berprÃ¼ft ob der Motor freigegeben ist
+  {
+    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Motor nicht freigegeben"))
     ledcWrite(CHANNELL, 0);
     ledcWrite(CHANNELR, 0);
     m_istleistung = 0;
     m_sollleistung = 0;
     return 1;
   }
-  if(m_sollleistung <-100 || m_sollleistung >100)
+ 
+  if(m_sollleistung <0)  //Eingabe ist kleiner 0, Drehrichtung nach LINKS
   {
-    Serial.print("Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n");
-    return 1;
-  }
-
-  if(m_sollleistung <0)
-  {
-    if(m_drehrichtung == LENKER_RECHTS)
+    if(m_drehrichtung == LENKER_RECHTS) //Abfrage  ob vorherige Drehrichtung RECHTS war
       {
         ledcWrite(CHANNELR, 0);
-        delay(3); //nenenenene so nicht
-        ledcWrite(CHANNELR, 0);
+        m_time = millis();
       }
       m_drehrichtung = LENKER_LINKS;
   }
-  else if (m_sollleistung >0)
+  else if (m_sollleistung >0) //Drehrichtung soll nach RECHTS 
   {
     if(m_drehrichtung == LENKER_LINKS)
       {
         ledcWrite(CHANNELL, 0);
-        delay(3);
-        ledcWrite(CHANNELL, 0);
+        m_time = millis();
       }
       m_drehrichtung = LENKER_RECHTS;
   }
-
-switch (m_drehrichtung)  //Ab hier Sicherheitsfunktion!!!!!!!!!!!
-{
-  case 0:
-    ledcWrite(CHANNELR, 0);
-    m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was?
-    for(byte i = 0; i < abs(m_sollleistung); i++)
-    {
-      ledcWrite(CHANNELL, i);
-      delay(2); //Dekays sind glaub net erlaubt. muss mit timern gehen
-    }
-  break;  //Das ist Wichtig ;D
   
-  case 1:
-    ledcWrite(CHANNELL, 0);
-    m_sollleistung *=2.55;
-    for(byte i = 0; i < abs(m_sollleistung); i++)
-    {
-      ledcWrite(CHANNELR, i);
-      delay(2);
-    }
-  break;
-
-  default:
+  else
+  {
     ledcWrite(CHANNELL, 0);
     ledcWrite(CHANNELR, 0);
-  break;
-}
+  }
   return 0;
 }
 
+bool runLenkermotor()
+{
+  if(m_motorfreigabe == 0)
+    return 1;
+
+  if(millis() > m_time+DELAY_TIME )
+    {
+        switch (m_drehrichtung)  //Ab hier Sicherheitsfunktion!!!!!!!!!!!
+        {
+          case LENKER_LINKS:
+            ledcWrite(CHANNELR, 0);
+            m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was?
+            ledcWrite(CHANNELL, i);
+          break;  //Das ist Wichtig ;D
+          
+          case LENKER_RECHTS:
+            ledcWrite(CHANNELL, 0);
+            m_sollleistung *=2.55;
+            ledcWrite(CHANNELR, i);            
+          break;
+
+          default:
+            ledcWrite(CHANNELL, 0);
+            ledcWrite(CHANNELR, 0);
+          break;
+        }
+     }
+  return 0;
+}
+
+
 bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
-      m_motorfreigabe = pMotorfreigabe;
-      if(m_motorfreigabe == 0)
+      
+      if(pMotorfreigabe == 1)
       {
         if (Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
             {
-              Serial.print("Motorgesperrt \n");
+              LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"))
+              m_motorfreigabe = 0;
+              setLeistung(0);
+              return 1;
             }
         else
           m_motorfreigabe = 1;
       }
+      else
+        m_motorfreigabe = 0;
+         
+      
       ledcWrite(CHANNELL, 0);
       ledcWrite(CHANNELR, 0);
       m_istleistung = 0;
