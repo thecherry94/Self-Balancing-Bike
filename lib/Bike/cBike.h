@@ -19,12 +19,13 @@
 
 enum EBikeState
 {
-    STARTING,
-    INITIALIZATION,
-    GYRO_SPINUP,
-    RUNNING,
-    GYRO_SPINDOWN,
-    STOPPED
+    STARTING,       // Lenkersensor Nullpunkt
+    INITIALIZATION, // Gyromotor an piepen
+    GYRO_SPINUP,    // Gyro andrehen
+    RUNNING,        // warten auf Benutzereingabe für Lenkermotor für Eingang in Zustand
+    GYRO_SPINDOWN,  // Warnung! Festhalten, Regelung aus --> Motor langsam in Nullstellung fahren, Motor aus, Gyros bremsen
+    STOPPED,         // Alle Freigaben wegnehmen, 
+    EMERGENCY       // Sofort Stopp
 };
 
 
@@ -45,6 +46,8 @@ class cBike
         cNeigungssensor* _sensor_neigung;
         cLenkermotoransteuerung _Lenkmotor;
         lenkerDaten Sensordaten;
+        cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
+        
         
 
         /*

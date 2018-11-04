@@ -33,6 +33,7 @@ class cLenkersensor
     cLenkersensor();  // Konstruktur
     bool getData(lenkerDaten &pdaten);  // Messdaten bekommen, Übergabeparameter: Datenstruct vom Typ lenkerDaten, Rückgabewert: 0: alles okay, 1: Lenkermotorbetrieb verboten!!!
     void readCounter();
+    void init();
 };
 
 ////// Beispiel Implementierung ////

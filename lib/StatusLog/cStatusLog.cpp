@@ -37,6 +37,7 @@ std::string cStatusLogEntry::get_color(EStatusLogEntryType t)
 
 // Exportfunktion, die vorgibt, wie ein einzelner Eintrag beim Export formatiert wird
 //
+/*
 HTML::Element cStatusLogEntry::exprt()
 {
 	//std::stringstream ss;
@@ -55,7 +56,7 @@ HTML::Element cStatusLogEntry::exprt()
 
 	return node_base;
 
-	*/
+	
 
 	HTML::Paragraph p("");
 	p << HTML::Text(std::string("[") + _module + "] " + _message);
@@ -65,10 +66,11 @@ HTML::Element cStatusLogEntry::exprt()
 
 
 }
-
+*/
 
 // Exportfunktion, die vorgibt, wie der gesamte Log beim Export formatiert wird
 //
+/*
 HTML::Document cStatusLog::exprt()
 {
 	HTML::Document doc("ESP32 HTML Report");
@@ -96,4 +98,6 @@ HTML::Element cMyStatusLogEntry::exprt()
 
 	return basic_node;
 }
+
+*/
 

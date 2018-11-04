@@ -1,16 +1,25 @@
 //Lenkermotor Test Main
 #include <Arduino.h>
+#undef min
+#undef max
 #include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
+#include "cBike.h"
+
+
 
 const int pPoti = 2; //A2
 
 
+cBike bike(pPoti);
 
 void setup()
 {
     pinMode(pPoti, INPUT);
     Serial.begin(115200);
+
+     
+
 
     //Objekte ertellen
     cLenkermotoransteuerung Motor;
@@ -65,5 +74,5 @@ void setup()
 
 void loop()
 {
-
+    bike.update();
 }

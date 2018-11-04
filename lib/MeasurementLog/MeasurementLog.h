@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include <sstream>
+
 
 template<typename CharT>
 class DecimalSeparator : public std::numpunct<CharT>
