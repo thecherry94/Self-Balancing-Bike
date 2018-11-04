@@ -3,33 +3,37 @@
 #include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
 
-const int pPoti = A2;
-pinMode(pPoti, INPUT);
-Serial.begin(9600);
+const int pPoti = 2; //A2
 
 
-main()
+
+void setup()
 {
+    pinMode(pPoti, INPUT);
+    Serial.begin(115200);
+
     //Objekte ertellen
-    cLenkermotoransteuerung Motor();
+    cLenkermotoransteuerung Motor;
     Motor.setFrequenz(1000);
     Motor.setMotorfreigabe(true);
-    int Zyklen,StartPWM,SprungPWM,
-    serialPrint("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben")
-    serialRead(Zyklen);
-    serialRead(StartPWM)
-    serialRead(SprungPWM);
+    int Zyklen,StartPWM,SprungPWM;
+    Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
+    //serialRead(Zyklen);
+    //serialRead(StartPWM)
+    //serialRead(SprungPWM);
     int APoti[1001], AVolt[1001];
 
     for(int x=0; x<Zyklen;x++)
     {
 
         //Anfang finden
-        do{
+        do
+        {
             Motor.setLeistung(5);
-            }while((analaogRead(pPoti)>=10&&<=20))
-        Motor.setLeistung(0;) //Wir sind da
-        serialPrint("Wir sind da");
+        } while((analogRead(pPoti)>=10&&analogRead(pPoti)<=20));
+
+        Motor.setLeistung(0); //Wir sind da
+        Serial.println("Wir sind da");
         delay(1000);
 
         // Anfangszustand
@@ -37,23 +41,29 @@ main()
         delay(1500);
 
         //Sprung
-        serialPrint("Sprung");
+        Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
         for (int x=0; x<1000;x++)
             {
-                APoti[x]=analaogRead(pPoti)
+                APoti[x]=analogRead(pPoti);
                 //AVolt...
                 delay(3);
             }
         Motor.setLeistung(0);
-        serialPrint("Stopp");
+        Serial.println("Stopp");
         for (int x=0; x<1000;x++)
             {
-                serialPrint(APoti[x])
+                Serial.println(APoti[x]);
                 //AVolt...
                 
             }
-        serialPrint("Ende");
+        Serial.println("Ende");
         
     }
+}
+
+
+void loop()
+{
+
 }

@@ -4,7 +4,7 @@
         "PLATFORMIO_CALLER": "vscode"
     },
     "terminal.integrated.env.linux": {
-        "PATH": "/home/cherry/.platformio/penv/bin:/home/cherry/.platformio/penv:/app/bin:/usr/bin:/home/cherry/.var/app/com.visualstudio.code/data/node_modules/bin",
+        "PATH": "/home/cherry/.platformio/penv/bin:/home/cherry/.platformio/penv:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games",
         "PLATFORMIO_CALLER": "vscode"
     },
     "C_Cpp.errorSquiggles": "Disabled",
