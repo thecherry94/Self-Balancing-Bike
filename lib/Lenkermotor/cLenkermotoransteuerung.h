@@ -32,7 +32,6 @@ D26   CLenkermotoransteuerung    PWMR
 #define LENKERWINKEL_MAX 80
 #define LENKERWINKEL_MIN -80
 #define ANDY_LEISTUNG_MAX 30
-#define ANDY_LEISTUNG_MIN -30
 #define DELAY_TIME 10 //ms
 
 class cLenkermotoransteuerung

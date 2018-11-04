@@ -1,6 +1,7 @@
 //Lenkermotor Test Main
 #include <Arduino.h>
-#include "cLenkermotoransteuerung.h"
+#include "cBike.h"
+
 
 const int pPoti = A2;
 pinMode(pPoti, INPUT);
