@@ -6,7 +6,7 @@ void quickSort(float  arr[], int left, int right) { // Quelle: http://www.algoli
   int i = left, j = right;
   float tmp;
   float pivot = arr[(left + right) / 2];
-  partition */
+  partition 
   while (i <= j) {
     while (arr[i] < pivot)
       i++;
@@ -20,7 +20,6 @@ void quickSort(float  arr[], int left, int right) { // Quelle: http://www.algoli
       j--;
     }
   };
-  /* recursion */
   if (left < j)
     quickSort(arr, left, j);
   if (i < right)
@@ -56,3 +55,4 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
     return true;
   else return false;
 }
+*/

@@ -43,6 +43,8 @@ class cBike
          */ 
         cGyroansteuerung _gyro;
         cNeigungssensor* _sensor_neigung;
+        cLenkermotoransteuerung _Lenkmotor;
+        lenkerDaten Sensordaten;
         
 
         /*

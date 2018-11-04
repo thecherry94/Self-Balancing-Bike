@@ -30,7 +30,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
 {
    if(pLeistung <-100 || pLeistung >100)
   {
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n "))
+    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n "));
     return 1;
   }
   if(pLeistung > 0 && pLeistung <10)
@@ -44,7 +44,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
   
   if(m_motorfreigabe == 0)  //Es wird Ã¼berprÃ¼ft ob der Motor freigegeben ist
   {
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Motor nicht freigegeben"))
+    LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Motor nicht freigegeben"));
     ledcWrite(CHANNELL, 0);
     ledcWrite(CHANNELR, 0);
     m_istleistung = 0;
@@ -79,7 +79,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
   return 0;
 }
 
-bool runLenkermotor()
+bool cLenkermotoransteuerung::runLenkermotor()
 {
   if(m_motorfreigabe == 0)
     return 1;
@@ -91,13 +91,13 @@ bool runLenkermotor()
           case LENKER_LINKS:
             ledcWrite(CHANNELR, 0);
             m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was?
-            ledcWrite(CHANNELL, i);
+            ledcWrite(CHANNELL, m_sollleistung);
           break;  //Das ist Wichtig ;D
           
           case LENKER_RECHTS:
             ledcWrite(CHANNELL, 0);
             m_sollleistung *=2.55;
-            ledcWrite(CHANNELR, i);            
+            ledcWrite(CHANNELR, m_sollleistung);            
           break;
 
           default:
@@ -117,7 +117,7 @@ bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
       {
         if (Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
             {
-              LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"))
+              LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
               m_motorfreigabe = 0;
               setLeistung(0);
               return 1;

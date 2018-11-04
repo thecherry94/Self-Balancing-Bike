@@ -38,7 +38,7 @@ cLenkersensor::cLenkersensor()
 
 void cLenkersensor::readCounter()
 {
-    pcnt_get_counter_value(&counter);
+    pcnt_get_counter_value(ENCODER_1, &counter);
     daten.lenkwinkel = 360/511.0*counter*9/28.0;
     daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
     daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]

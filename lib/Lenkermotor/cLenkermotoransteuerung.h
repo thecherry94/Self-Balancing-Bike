@@ -1,5 +1,5 @@
 /*
-* File: selfbalancingbike.h
+*
 * Autor: AB;ML
 * Date:08:09.2018  
 * Sources: 
@@ -48,7 +48,7 @@ private:
 	bool 	m_motorfreigabe = 0;
 	int 	m_istleistung = 0;
 	int 	m_sollleistung = 0;
-	int 	m_istDuty = PWM_MIN;
+	int 	m_istDuty = 0;
 	int 	m_freq = 5000;
 	unsigned long m_time;
 
