@@ -1,8 +1,4 @@
 #include <Arduino.h>
-
-
-
-
 #include "cBike.h"
 
 
