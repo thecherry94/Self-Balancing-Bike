@@ -19,6 +19,12 @@ void setup()
     Serial.begin(115200);
 
      
+     //Setup Lenkersensor
+    pinMode(ENCODER_INPUT, INPUT);
+    pinMode(ENCODER_DIRECTION, INPUT);
+    pinMode(ENCODER_ZERO, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+    Serial.begin(115200);
 
 
     //Objekte ertellen

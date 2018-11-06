@@ -3,8 +3,7 @@
 
 #ifndef LENKERSENSOR__H
 #define LENKERSENSOR__H
-
-////////////// global h //////////////
+////////////// Lenkersensor //////////////
 #define ENCODER_INPUT 22             // Pin Counter Input Definition
 #define ENCODER_DIRECTION 21         // Pin Control Input Definition
 #define ENCODER_ZERO 23             // Pin Nulldurchgang Definition
@@ -14,6 +13,7 @@ struct lenkerDaten  // Struct mit Daten für den Lenker
   float lenkgeschwindigkeit;  // Winkelgeschwindigkeit in °/s, nach links: positv, nach rechts: negativ
   float lenkbeschleunigung; // Winkelbeschleunigung °/s², nach rechts: positv, nach rechts: negativ
 };
+
 
 ///////// cLenkersensor.h /////////////////
 
