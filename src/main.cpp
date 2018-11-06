@@ -77,8 +77,26 @@ void setup()
     }
 }
 
+cLenkersensor Lenkersensor;         // Objekt des Lenkersensor
+lenkerDaten lDaten;                 // Struct von lenkerDaten
 
 void loop()
 {
+
+
+    Lenkersensor.readCounter();
+    if(Lenkersensor.getData(lDaten) == 0)
+    {
+        Serial.printf("Alles Gut!");
+    }
+    else
+        Serial.printf("Alles Doof!");
+    Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
+
+
     bike.update();
+    if(flagg == 1)
+    {
+        Serial.printf("Hoelle!");
+    }
 }
