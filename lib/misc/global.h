@@ -2,6 +2,11 @@
 #ifndef GLOBAL__H
 #define GLOBAL__H
 
+
+
+
+
+
 #include <WiFi.h>
 
 /* 
