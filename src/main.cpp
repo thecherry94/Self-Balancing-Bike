@@ -9,8 +9,6 @@
 
 
 const int pPoti = 2; //A2
-
-
 lenkerDaten Sensordaten;
 cLenkermotoransteuerung Motor;
 cBike bike(pPoti);
@@ -24,7 +22,6 @@ void setup()
     pinMode(pPoti, INPUT);
     Serial.begin(115200);
 
-     
 
 
    
@@ -33,19 +30,12 @@ void setup()
     pinMode(ENCODER_DIRECTION, INPUT);
     pinMode(ENCODER_ZERO, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
-    Serial.begin(115200);
-
 
     //Objekte ertellen
-    cLenkermotoransteuerung Motor;
+   
     Motor.setFrequenz(1000);
     Motor.setMotorfreigabe(true);
-    int Zyklen,StartPWM,SprungPWM;
     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
-    //serialRead(Zyklen);
-    //serialRead(StartPWM)
-    //serialRead(SprungPWM);
-    int APoti[1001], AVolt[1001];
     
     int a = 0;
     int b = 0;
@@ -85,7 +75,6 @@ while(a == 0&&b==0&&c==0)
 }
 
 
-    for(int x=0; x<Zyklen;x++)
 void loop()
 {
      for(int x=0; x<Zyklen;x++)
@@ -95,7 +84,6 @@ void loop()
         do
         {
             Motor.setLeistung(5);
-        } while((analogRead(pPoti)>=10&&analogRead(pPoti)<=20));
         } while((Sensordaten.lenkwinkel>=10&&Sensordaten.lenkwinkel<=20));
 
         Motor.setLeistung(0); //Wir sind da
@@ -111,7 +99,6 @@ void loop()
         Motor.setLeistung(SprungPWM);
         for (int x=0; x<1000;x++)
             {
-                APoti[x]=analogRead(pPoti);
                 APoti[x]=Sensordaten.lenkwinkel;
                 //AVolt...
                 delay(3);
