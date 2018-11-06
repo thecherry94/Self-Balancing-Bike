@@ -74,6 +74,9 @@ while(a == 0&&b==0&&c==0)
    
 }
 
+cLenkersensor Lenkersensor;         // Objekt des Lenkersensor
+lenkerDaten lDaten;                 // Struct von lenkerDaten
+
 
 void loop()
 {
@@ -114,16 +117,6 @@ void loop()
         Serial.println("Ende");
         
     }
-<<<<<<< HEAD
-}
-
-cLenkersensor Lenkersensor;         // Objekt des Lenkersensor
-lenkerDaten lDaten;                 // Struct von lenkerDaten
-
-void loop()
-{
-
-
     Lenkersensor.readCounter();
     if(Lenkersensor.getData(lDaten) == 0)
     {
@@ -132,14 +125,4 @@ void loop()
     else
         Serial.printf("Alles Doof!");
     Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
-
-
-    bike.update();
-    if(flagg == 1)
-    {
-        Serial.printf("Hoelle!");
-    }
-=======
-    //bike.update();
->>>>>>> 970bdf6920b07ab24863420de4970cd306a37f1c
 }
