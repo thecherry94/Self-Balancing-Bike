@@ -15,7 +15,6 @@ D26   CLenkermotoransteuerung    PWMR
 #ifndef LENKERMOTORANSTEUERUNG__H
 #define LENKERMOTORANSTEUERUNG__H
 
-
 #include <Arduino.h>
 #include "cStatusLog.h"
 #include "cLenkersensor.h"
