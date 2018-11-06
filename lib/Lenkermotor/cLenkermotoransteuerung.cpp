@@ -143,3 +143,15 @@ int cLenkermotoransteuerung::setFrequenz(int pFreq)
   ledcSetup(CHANNELR, m_freq, m_pwmresolution);
   return 0;
 }
+
+bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung)
+{
+  //Abfrage ob Winkle I.O. ??
+
+//Reglen
+
+  if(Sensordaten.lenkwinkel<=pWinkel+PREZISION && Sensordaten.lenkwinkel>=pWinkel-PREZISION)
+  return 1;
+  else 
+  return 0;
+}
