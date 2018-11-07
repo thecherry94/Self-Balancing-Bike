@@ -22,9 +22,6 @@ void setup()
     pinMode(pPoti, INPUT);
     Serial.begin(115200);
 
-
-
-   
      //Setup Lenkersensor
     pinMode(ENCODER_INPUT, INPUT);
     pinMode(ENCODER_DIRECTION, INPUT);

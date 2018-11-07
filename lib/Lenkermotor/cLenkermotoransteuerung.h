@@ -32,7 +32,7 @@ D26   CLenkermotoransteuerung    PWMR
 #define CHANNELR 1
 #define LENKERWINKEL_MAX 80
 #define LENKERWINKEL_MIN -80
-#define ANDY_LEISTUNG_MAX 30
+#define ANDY_LEISTUNG_MAX 30 //die maximiale Leistung die freigegeben
 #define DELAY_TIME 10 //ms
 #define PREZISION 2 //in Grad
 
