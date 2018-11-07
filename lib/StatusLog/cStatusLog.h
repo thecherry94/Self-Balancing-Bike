@@ -1,7 +1,7 @@
 #include <string>
 #include <map>
+#include <vector>
 
-#include "HTML/HTML.h"
 #include "cSingleton.h"
 
 
@@ -47,7 +47,7 @@ class cStatusLogEntry
 		cStatusLogEntry(EStatusLogEntryType type, const std::string mod, const std::string msg);
 
 
-		virtual HTML::Element exprt();
+		//virtual HTML::Element exprt();
 
 };
 
@@ -67,7 +67,7 @@ class cMyStatusLogEntry : public cStatusLogEntry
 			_myData = mydata;
 		}
 
-		HTML::Element exprt();
+		//HTML::Element exprt();
 };
 
 
@@ -92,7 +92,7 @@ class cStatusLog : public cSingleton<cStatusLog>
 	public:
 
 
-		HTML::Document exprt();
+		//HTML::Document exprt();
 
 
 		void write(cStatusLogEntry entry)

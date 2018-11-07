@@ -24,6 +24,7 @@ cLenkermotoransteuerung::cLenkermotoransteuerung()
   ledcAttachPin(PWMR_PIN, CHANNELR);
   pinMode(PWML_PIN, OUTPUT);
   pinMode(PWMR_PIN, OUTPUT);
+  
 };
 
 bool cLenkermotoransteuerung::setLeistung(int pLeistung)
@@ -142,4 +143,22 @@ int cLenkermotoransteuerung::setFrequenz(int pFreq)
   ledcSetup(CHANNELL, m_freq, m_pwmresolution); //Das geht nachträglich noch?
   ledcSetup(CHANNELR, m_freq, m_pwmresolution);
   return 0;
+}
+
+bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung)
+{
+  //Abfrage ob Winkle I.O. ??
+
+  Setpoint=pWinkel;
+  Input=Sensordaten.lenkwinkel;
+
+
+  if(Sensordaten.lenkwinkel<=pWinkel+PREZISION && Sensordaten.lenkwinkel>=pWinkel-PREZISION)
+  return 1;
+  else 
+  {
+    //Lenker.Compute();
+    setLeistung(Output*pLeistung);
+    return 0;
+  }
 }

@@ -1,7 +1,7 @@
 /*
 *
 * Autor: AB;ML
-* Date:08:09.2018  
+* Date:6.11.2018  
 * Sources: 
 * Content:
 PINS:
@@ -15,9 +15,10 @@ D26   CLenkermotoransteuerung    PWMR
 #ifndef LENKERMOTORANSTEUERUNG__H
 #define LENKERMOTORANSTEUERUNG__H
 
-#include <cLenkersensor.h>
 #include <Arduino.h>
 #include "cStatusLog.h"
+#include "cLenkersensor.h"
+#include <PID_v1.h>
 
 #define MODULE_LENKERMOTOR "[LENKERMOTOR]"
 
@@ -33,6 +34,7 @@ D26   CLenkermotoransteuerung    PWMR
 #define LENKERWINKEL_MIN -80
 #define ANDY_LEISTUNG_MAX 30
 #define DELAY_TIME 10 //ms
+#define PREZISION 2 //in Grad
 
 class cLenkermotoransteuerung
 {
@@ -42,6 +44,7 @@ public:
 	bool setMotorfreigabe(bool pMotorfreigabe); //aufrufen um den Motor freizugeben oder zu sperren, Freigabe = 1, Gesperrt = 0; bei Gesperrten Motor die Funktion setzt Leistung auf 0
 	int setFrequenz(int pFreq); //Die Frequenz der beiden PWM Pins kann geändert werden
 	bool runLenkermotor();
+	bool position(int pWinkel, int pLeistung); //Fahre zu gewünschter Position und halte diese. //Eingabe des Winkels +-, Der Fahrleistung , Zyklisch aufrufen! Gibt 1 Zurück wenn Ziel erreicht.
 
 private:
 	byte 	m_drehrichtung = 2;
@@ -51,10 +54,19 @@ private:
 	int 	m_istDuty = 0;
 	int 	m_freq = 5000;
 	unsigned long m_time;
+	double Setpoint, Input, Output; //Für Regler Motor
+	//PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
 
 	const byte 	m_pwmresolution = 8;
 	lenkerDaten Sensordaten;
 };
+
+// class cPipsen
+// {
+// 	cPipsen();
+// 	void makesomenoise();
+// 	void Beep(int Ton);
+// };
 
 
 #endif
