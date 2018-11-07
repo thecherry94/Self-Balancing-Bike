@@ -1,7 +1,7 @@
 #include "Adafruit_Sensor.h"
 #include "Adafruit_BNO055.h"
 #include "Wire.h"
-#include "cWiFiKommunikation.h"
+#include "cWebServer.h"
 
 #ifndef NEIGUNG_H
 #define NEIGUNG_H

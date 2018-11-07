@@ -2,11 +2,86 @@
 #include <Arduino.h>
 #undef min
 #undef max
-#include "cLenkermotoransteuerung.h"
-#include "cLenkersensor.h"
-#include "cBike.h"
+//#include "cLenkermotoransteuerung.h"
+//#include "cLenkersensor.h"
+//#include "cBike.h"
+#include "cWebServer.h"
+#include "global.h"
+
+static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify(\'{\"type\": \"add\", \"data\": [4, 4, 4]}\');console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+
+void setup()
+{
+    Serial.begin(115200);
+    pinMode(LED_BUILTIN, OUTPUT);
+
+    SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
+
+    SERVER->attachURL("/", [](AsyncWebServerRequest* req)
+    {
+        AsyncWebServerResponse* res = req->beginResponse(200, "text/html", test_site);
+        req->send(res);
+    }, HTTP_GET);
+
+    SERVER->attachURL("/data", [](AsyncWebServerRequest* req)
+    {
+        AsyncWebServerResponse* res;
+
+        if(req->hasParam("test"))
+        {
+            const char* param = req->getParam("test")->value().c_str();
+            std::string response = std::string("Got your: ") + param;
+            res = req->beginResponse(200, "text/plain", response.c_str());
+        }
+        else
+        {
+            res = req->beginResponse(200, "text/plain", "No parameter");
+        }
+
+        req->send(res);
+    }, HTTP_GET);
+
+    SERVER->attachJSON("/json", [](AsyncWebServerRequest* req, JsonVariant& json)
+    {
+        JsonObject& obj = json.as<JsonObject>();
+        Serial.println("JSON CALLED");
+        obj.prettyPrintTo(Serial);
+
+        if(obj["type"].asString() == "add")
+        {
+            JsonArray& arr = obj["data"];
+            int sum = 0;
+            for(int i = 0; i < arr.size(); i++)
+            {
+                sum += arr[i].as<float>();
+            }
+
+            StaticJsonBuffer<200> jsonbuf;
+            JsonObject& root = jsonbuf.createObject();
+            root["type"] = "sum";
+            root["data"] = sum;
+
+            char jsonchar[256];
+            root.printTo((char*)jsonchar, root.measureLength() + 1);
+            AsyncWebServerResponse* res = req->beginResponse(200, "application/json", jsonchar);
+            req->send(res);
+            Serial.println("JSON SENT");
+            return;
+        }
+
+        Serial.println("JSON ERROR");
+    });
+}
 
 
+void loop()
+{
+
+}
+
+
+
+/*
 
 const int pPoti = 2; //A2
 lenkerDaten Sensordaten;
@@ -126,3 +201,4 @@ void loop()
         Serial.printf("Alles Doof!");
     Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
 }
+*/
