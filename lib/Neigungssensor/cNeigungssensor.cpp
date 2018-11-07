@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "cStatusLog.h"
-#include "cWiFiKommunikation.h"
+#include "cWebServer.h"
 
 #define MODULE_NEIGUNG "NEIGUNGSSENSOR"
 

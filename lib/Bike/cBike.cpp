@@ -35,73 +35,7 @@ void cBike::run()
     // Anfangsstatus setzen
     _state = EBikeState::STARTING;
 
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Trying to connect to " + std::string(WIFI_SSID)));
-
-    // Verbindung mit AP herstellen
-    WIFI_COM->connect(WiFiConfig::apSSID, WiFiConfig::apPASS);
-
-    //_sensor_neigung = new cNeigungssensor(55);
-
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Connection successfull"));
-
     
-    WIFI_COM->attachURL("/measurements/neigung", [](AsyncWebServerRequest* req)
-    {
-        // Hier wird die Neigung gesendet
-    });
-
-    
-    WIFI_COM->attachURL("/ui/gyro_demo", [&](AsyncWebServerRequest* req)
-    {
-        // Hier soll eine HTML-Seite übertragen werden, um das Gyro währenden der Demo
-        // für Schecker steuern zu können
-
-        // Hier kann JULIAN seine website einfügen
-
-        req->send(200, "text/html", HTML_SCHECKER_DEMO);
-    });
-
-    /*
-    WIFI_COM->attachEvent("/control/gyro", [&](AsyncWebServerRequest* req)
-    {
-        // Hier wird das gyro angesteuert
-        // ANDIs part
-
-        // Überprüfen, ob parameter überhaupt gesendet wurde
-        if (req->hasParam("power"))
-        {
-            // Parameter holen
-            AsyncWebParameter* p = req->getParam("power");
-            
-            // Wert ist als string hinterlegt. Wir brauchen aber einen integer
-            // Konvertieren
-            int power_percent = atoi(p->value().c_str());
-
-            _gyro.setMotorfreigabe(true);
-            _gyro.setLeistung(power_percent); 
-        }
-    });
-
-    // Überprüft den Fahrradstatus
-    // Bei genauerer Überlegung eigentlich unnötig und bescheuert
-    WIFI_COM->attachEvent("/status", [](AsyncWebServerRequest* req)
-    {
-        Serial.println("Received status check request");
-        req->send(200, "text/html", "s");
-    });
-    */
-
-   WIFI_COM->attachEvent("pp", [&](AsyncWebSocketClient* client, rapidjson::Value& json) 
-   {
-        rapidjson::StringBuffer strbuf;
-        rapidjson::Writer<rapidjson::StringBuffer> writer(strbuf);
-		json.Accept(writer);
-
-        Serial.println(strbuf.GetString());
-		client->text(strbuf.GetString());
-   });
-
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Shutdown"));
 
 
     _state = EBikeState::RUNNING;

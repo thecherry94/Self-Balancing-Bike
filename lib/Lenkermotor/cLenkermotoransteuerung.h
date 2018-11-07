@@ -18,7 +18,7 @@ D26   CLenkermotoransteuerung    PWMR
 #include <Arduino.h>
 #include "cStatusLog.h"
 #include "cLenkersensor.h"
-//#include <PID_v1.h>
+#include <PID_v1.h>
 
 #define MODULE_LENKERMOTOR "[LENKERMOTOR]"
 
@@ -54,10 +54,19 @@ private:
 	int 	m_istDuty = 0;
 	int 	m_freq = 5000;
 	unsigned long m_time;
+	double Setpoint, Input, Output; //Für Regler Motor
+	//PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
 
 	const byte 	m_pwmresolution = 8;
 	lenkerDaten Sensordaten;
 };
+
+// class cPipsen
+// {
+// 	cPipsen();
+// 	void makesomenoise();
+// 	void Beep(int Ton);
+// };
 
 
 #endif
