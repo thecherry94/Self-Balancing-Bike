@@ -337,3 +337,4 @@ ASALocalRun/
 .vscode/launch.json
 /include/README
 /lib/README
+.vscode/settings.json
