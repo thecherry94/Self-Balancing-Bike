@@ -7,6 +7,7 @@
 
 const int pPoti = 2; //A2
 lenkerDaten Sensordaten;
+cLenkersensor Lenkersensor;
 cLenkermotoransteuerung Motor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
@@ -77,8 +78,9 @@ void loop()
         //Anfang finden
         do
         {
+            Lenkersensor.readCounter();
             Motor.setLeistung(5);
-        } while((Sensordaten.motorwinkel>=10&&Sensordaten.motorwinkel<=20));
+        } while((Lenkersensor.getMotorwinkel() >= 10 && Lenkersensor.getMotorwinkel() <= 20 ));
 
         Motor.setLeistung(0); //Wir sind da
         Serial.println("Wir sind da");
@@ -93,7 +95,8 @@ void loop()
         Motor.setLeistung(SprungPWM);
         for (int x=0; x<1000;x++)
             {
-                APoti[x]=Sensordaten.motorwinkel;
+                Lenkersensor.readCounter();
+                APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(3);
             }
