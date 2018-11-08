@@ -47,7 +47,7 @@ class cBike
         cLenkermotoransteuerung _Lenkmotor;
         lenkerDaten Sensordaten;            // Struct für die Lenkersensordaten Winkel, Geschwindigkeit und Beschleunigung
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
-        
+        PID meinRegler;
         
 
         /*
