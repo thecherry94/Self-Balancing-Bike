@@ -62,4 +62,5 @@ void isr_lenkersensor()
 {
     lenkerflag = 0;
     pcnt_counter_resume(ENCODER_1);
+    detachInterrupt(ENCODER_ZERO);
 }
