@@ -11,7 +11,7 @@ cWebServer::cWebServer()
 void cWebServer::connectToAP(const char* ssid, const char* pass)
 {
     // Starte Verbindungsaufbau
-    WiFi.begin(ssid, pass);
+    WiFi.begin(const_cast<char *> (ssid), const_cast<char *> (pass));
 
     // Statusmeldung per Serial und feedback während Verbindungsaufbau
     // TODO delay entfernen bzw. thread starten
