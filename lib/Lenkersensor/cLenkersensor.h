@@ -35,7 +35,8 @@ class cLenkersensor
    public:
     cLenkersensor();  // Konstruktur
     bool getData(lenkerDaten &pdaten);  // Messdaten bekommen, Übergabeparameter: Datenstruct vom Typ lenkerDaten, Rückgabewert: 0: alles okay, 1: Lenkermotorbetrieb verboten!!!
-    void readCounter();
+    float getMotorwinkel(); // get Motorwinkel in °
+    void readCounter(); // muss ausgeführt werden, damit die Messwerte kommen
     void init();
 };
 
