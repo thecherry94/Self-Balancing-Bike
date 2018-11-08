@@ -45,7 +45,7 @@ class cBike
         cGyroansteuerung _gyro;
         cNeigungssensor* _sensor_neigung;
         cLenkermotoransteuerung _Lenkmotor;
-        lenkerDaten Sensordaten;
+        lenkerDaten Sensordaten;            // Struct für die Lenkersensordaten Winkel, Geschwindigkeit und Beschleunigung
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
         
         
