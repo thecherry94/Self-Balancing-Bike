@@ -200,5 +200,10 @@ void loop()
         Serial.println("Ende");
         
     }
+    a = 0;
+    b = 0;
+    c = 0;
+    Serial.printf("Wir haben den Versuch erfolgreich abgeschlossen, Sie koennen neue Versuche starten. Bitte nicht verklagen. Danke!");
+    Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
     //bike.update();
 }
