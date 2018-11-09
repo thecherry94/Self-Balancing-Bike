@@ -11,7 +11,7 @@ cWebServer::cWebServer()
 void cWebServer::connectToAP(const char* ssid, const char* pass)
 {
     // Starte Verbindungsaufbau
-    WiFi.begin(ssid, pass);
+    WiFi.begin(const_cast<char *> (ssid), const_cast<char *> (pass));
 
     // Statusmeldung per Serial und feedback während Verbindungsaufbau
     // TODO delay entfernen bzw. thread starten
@@ -32,13 +32,17 @@ void cWebServer::connectToAP(const char* ssid, const char* pass)
     DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
     _pserver->begin();
 
-    _pserver->onNotFound([](AsyncWebServerRequest *request) {
-	if (request->method() == HTTP_OPTIONS) {
-		request->send(200);
-	} else {
-		request->send(404);
-	}
-});
+    _pserver->onNotFound([](AsyncWebServerRequest *request) 
+    {
+	    if (request->method() == HTTP_OPTIONS) 
+        {
+		    request->send(200);
+	    } 
+        else 
+        {
+		    request->send(404);
+	    }
+    });
 }
 
 

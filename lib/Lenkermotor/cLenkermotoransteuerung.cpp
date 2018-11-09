@@ -1,13 +1,12 @@
 /*
 * File: selfbalancingbike.h
 * Autor: AB;ML
-* Date:03:11.2018  
+* Date:08:11.2018  
 * Sources: 
 * Content:
 PINS:
 D25   cLenkersteuerung    PWML
 D26   cLenkersteuerung    PWMH
-D32   cLenkersteuerung    Phase
 D33   cLenkersteuerung    Current Sensor
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung

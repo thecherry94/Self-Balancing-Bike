@@ -32,7 +32,7 @@ D26   CLenkermotoransteuerung    PWMR
 #define CHANNELR 1
 #define LENKERWINKEL_MAX 80
 #define LENKERWINKEL_MIN -80
-#define ANDY_LEISTUNG_MAX 30
+#define ANDY_LEISTUNG_MAX 30 //die maximiale Leistung die freigegeben
 #define DELAY_TIME 10 //ms
 #define PREZISION 2 //in Grad
 
@@ -54,8 +54,9 @@ private:
 	int 	m_istDuty = 0;
 	int 	m_freq = 5000;
 	unsigned long m_time;
-	double Setpoint, Input, Output; //Für Regler Motor
-	//PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+	double Setpoint=5, Input, Output; //Für Regler Motor
+	PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+
 
 	const byte 	m_pwmresolution = 8;
 	lenkerDaten Sensordaten;
