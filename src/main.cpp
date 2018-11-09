@@ -8,13 +8,35 @@
 #include "cWebServer.h"
 #include "global.h"
 
-static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify(\'{\"type\": \"add\", \"data\": [4, 4, 4]}\');console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+
+
+
+void setup_web_methods();
+
+
 
 void setup()
 {
     Serial.begin(115200);
     pinMode(LED_BUILTIN, OUTPUT);
 
+    setup_web_methods();
+}
+
+
+void loop()
+{
+
+}
+
+
+
+
+
+
+void setup_web_methods()
+{
     SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
 
     SERVER->attachURL("/", [](AsyncWebServerRequest* req)
@@ -44,10 +66,8 @@ void setup()
     SERVER->attachJSON("/json", [](AsyncWebServerRequest* req, JsonVariant& json)
     {
         JsonObject& obj = json.as<JsonObject>();
-        Serial.println("JSON CALLED");
-        obj.prettyPrintTo(Serial);
 
-        if(obj["type"].asString() == "add")
+        if(obj["type"] == "add")
         {
             JsonArray& arr = obj["data"];
             int sum = 0;
@@ -65,19 +85,15 @@ void setup()
             root.printTo((char*)jsonchar, root.measureLength() + 1);
             AsyncWebServerResponse* res = req->beginResponse(200, "application/json", jsonchar);
             req->send(res);
-            Serial.println("JSON SENT");
-            return;
         }
-
-        Serial.println("JSON ERROR");
     });
 }
 
 
-void loop()
-{
 
-}
+
+
+
 
 
 
