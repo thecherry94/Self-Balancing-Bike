@@ -1,12 +1,13 @@
 /*
 * File: selfbalancingbike.h
 * Autor: AB;ML
-* Date:08:11.2018  
+* Date:06:11.2018  
 * Sources: 
 * Content:
 PINS:
 D25   cLenkersteuerung    PWML
 D26   cLenkersteuerung    PWMH
+D32   cLenkersteuerung    Phase
 D33   cLenkersteuerung    Current Sensor
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
@@ -110,12 +111,12 @@ bool cLenkermotoransteuerung::runLenkermotor()
 }
 
 
-bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
+bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe, float pLenkwinkel)
 {
       
       if(pMotorfreigabe == 1)
       {
-        if (Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
+        if (pLenkwinkel > LENKERWINKEL_MAX || pLenkwinkel < LENKERWINKEL_MIN)
             {
               LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
               m_motorfreigabe = 0;
@@ -144,15 +145,15 @@ int cLenkermotoransteuerung::setFrequenz(int pFreq)
   return 0;
 }
 
-bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung)
+bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung,float pLenkwinkel)
 {
   //Abfrage ob Winkle I.O. ??
 
   Setpoint=pWinkel;
-  Input=Sensordaten.lenkwinkel;
+  Input=pLenkwinkel;
 
 
-  if(Sensordaten.lenkwinkel<=pWinkel+PREZISION && Sensordaten.lenkwinkel>=pWinkel-PREZISION)
+  if(pLenkwinkel<=pWinkel+PREZISION && pLenkwinkel>=pWinkel-PREZISION)
   return 1;
   else 
   {
