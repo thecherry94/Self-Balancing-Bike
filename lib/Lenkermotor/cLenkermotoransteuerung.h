@@ -43,7 +43,7 @@ public:
 	bool setLeistung(int pLeistung); //Die Motorleistung in % von -100, Linksdrehen bis 100 Rechtsdrehen, überprüft Motorfreigabe
 	bool setMotorfreigabe(bool pMotorfreigabe, float pLenkwinkel); //aufrufen um den Motor freizugeben oder zu sperren, Freigabe = 1, Gesperrt = 0; bei Gesperrten Motor die Funktion setzt Leistung auf 0
 	int setFrequenz(int pFreq); //Die Frequenz der beiden PWM Pins kann geändert werden
-	bool runLenkermotor();
+	bool runLenkermotor(); //Bei ret 0 wurde die neue Leistung gesetzt, bei ret 1 ist noch nicht genug Zeit vergangen
 	bool position(int pWinkel, int pLeistung,float pLenkwinkel); //Fahre zu gewünschter Position und halte diese. //Eingabe des Winkels +-, Der Fahrleistung , Zyklisch aufrufen! Gibt 1 Zurück wenn Ziel erreicht.
 
 private:

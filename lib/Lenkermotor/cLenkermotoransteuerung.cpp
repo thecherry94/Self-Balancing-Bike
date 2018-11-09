@@ -106,7 +106,9 @@ bool cLenkermotoransteuerung::runLenkermotor()
             ledcWrite(CHANNELR, 0);
           break;
         }
-     }
+    }
+  else
+    return 1;
   return 0;
 }
 

@@ -115,7 +115,7 @@ void setup()
     //Objekte ertellen
    
     Motor.setFrequenz(1000);
-    Motor.setMotorfreigabe(true, 12345);
+    Motor.setMotorfreigabe(true, 10);
     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
     
     
@@ -160,19 +160,21 @@ void loop()
 		}
 	}
    
-    for(int x=0; x<Zyklen;x++)
+     for(int x=0; x<Zyklen;x++)
     {
 
         //Anfang finden
         do
         {
             Lenkersensor.readCounter();
-            Serial.println(Lenkersensor.getMotorwinkel());
+            //Serial.println(Lenkersensor.getMotorwinkel());
             Motor.setLeistung(5);
         } while(Lenkersensor.getMotorwinkel() != 0.0);// && Lenkersensor.getMotorwinkel() <= 5 ));
 
         Motor.setLeistung(0); //Wir sind da
         Serial.println("Wir sind da");
+       Serial.println();
+
         delay(1000);
 
         // Anfangszustand
@@ -182,21 +184,20 @@ void loop()
         //Sprung
         Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
-        for (int x1=0; x1<1000;x1++)
+        for (int x=0; x<1000;x++)
             {
                 Lenkersensor.readCounter();
-                APoti[x1]=Lenkersensor.getMotorwinkel();
+                APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(3);
             }
         Motor.setLeistung(0);
         Serial.println("Stopp");
-        for (int x1=0; x1<1000;x1++)
+        for (int x=0; x<1000;x++)
             {
-                Serial.println(APoti[x1]);
+                Serial.println(APoti[x]);
             }
         Serial.println("Ende");
-        Serial.println(x);
         
     }
     //bike.update();
