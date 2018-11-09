@@ -1,5 +1,4 @@
 #include <Arduino.h>                // damit millis und analogWrite geht.
-
 #include "cLenkersensor.h"
 
 
@@ -39,14 +38,18 @@ cLenkersensor::cLenkersensor()
 void cLenkersensor::readCounter()
 {
     pcnt_get_counter_value(ENCODER_1, &counter);
-    //daten.lenkwinkel = 360/511.0*counter*9/28.0;  // Für Lenkwinkel des Lenkers
-    daten.lenkwinkel = counter*360/511;             // Für 360° Ausgabe
+    daten.lenkwinkel = 360/511.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
     daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
     daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
     
     lastLenkwinkel = daten.lenkwinkel;
     lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
     lastZeit = millis();
+}
+
+float cLenkersensor::getMotorwinkel()
+{
+    return counter*360/511;                             // Für 360° Ausgabe
 }
 
 bool cLenkersensor::getData(lenkerDaten &pdaten)
@@ -62,4 +65,5 @@ void isr_lenkersensor()
 {
     lenkerflag = 0;
     pcnt_counter_resume(ENCODER_1);
+    detachInterrupt(ENCODER_ZERO);
 }

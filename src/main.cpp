@@ -2,12 +2,9 @@
 #include <Arduino.h>
 #undef min
 #undef max
-//#include "cLenkermotoransteuerung.h"
-//#include "cLenkersensor.h"
-//#include "cBike.h"
-#include "cWebServer.h"
-#include "global.h"
+#include "cBike.h"
 
+<<<<<<< HEAD
 static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
 
@@ -98,9 +95,12 @@ void setup_web_methods()
 
 
 /*
+=======
+>>>>>>> dev-test
 
 const int pPoti = 2; //A2
 lenkerDaten Sensordaten;
+cLenkersensor Lenkersensor;
 cLenkermotoransteuerung Motor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
@@ -162,9 +162,6 @@ while(a == 0&&b==0&&c==0)
    
 }
 
-cLenkersensor Lenkersensor;         // Objekt des Lenkersensor
-lenkerDaten lDaten;                 // Struct von lenkerDaten
-
 
 void loop()
 {
@@ -174,8 +171,9 @@ void loop()
         //Anfang finden
         do
         {
+            Lenkersensor.readCounter();
             Motor.setLeistung(5);
-        } while((Sensordaten.lenkwinkel>=10&&Sensordaten.lenkwinkel<=20));
+        } while((Lenkersensor.getMotorwinkel() >= 10 && Lenkersensor.getMotorwinkel() <= 20 ));
 
         Motor.setLeistung(0); //Wir sind da
         Serial.println("Wir sind da");
@@ -190,7 +188,8 @@ void loop()
         Motor.setLeistung(SprungPWM);
         for (int x=0; x<1000;x++)
             {
-                APoti[x]=Sensordaten.lenkwinkel;
+                Lenkersensor.readCounter();
+                APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(3);
             }
@@ -199,19 +198,9 @@ void loop()
         for (int x=0; x<1000;x++)
             {
                 Serial.println(APoti[x]);
-                //AVolt...
-                
             }
         Serial.println("Ende");
         
     }
-    Lenkersensor.readCounter();
-    if(Lenkersensor.getData(lDaten) == 0)
-    {
-        Serial.printf("Alles Gut!");
-    }
-    else
-        Serial.printf("Alles Doof!");
-    Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
+    //bike.update();
 }
-*/
