@@ -160,7 +160,7 @@ void loop()
 		}
 	}
    
-     for(int x=0; x<Zyklen;x++)
+    for(int x=0; x<Zyklen;x++)
     {
 
         //Anfang finden
@@ -182,20 +182,21 @@ void loop()
         //Sprung
         Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
-        for (int x=0; x<1000;x++)
+        for (int x1=0; x1<1000;x1++)
             {
                 Lenkersensor.readCounter();
-                APoti[x]=Lenkersensor.getMotorwinkel();
+                APoti[x1]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(3);
             }
         Motor.setLeistung(0);
         Serial.println("Stopp");
-        for (int x=0; x<1000;x++)
+        for (int x1=0; x1<1000;x1++)
             {
-                Serial.println(APoti[x]);
+                Serial.println(APoti[x1]);
             }
         Serial.println("Ende");
+        Serial.println(x);
         
     }
     //bike.update();
