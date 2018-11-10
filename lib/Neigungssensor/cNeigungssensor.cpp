@@ -209,6 +209,8 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		EEPROM.get(eeAddr, calibrationData);
 		displaySensorOffsets(calibrationData);
 
+		Serial.println("Sensor data restored");
+		delay(1000);
 		_bno.setSensorOffsets(calibrationData);
 
 		_calibRestored = true;
@@ -235,6 +237,8 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		while (!_bno.isFullyCalibrated())
 		{
 			_bno.getEvent(&event);
+			displayCalStatus();
+			Serial.println("");
 			delay(_refreshRate);
 		}
 	}
@@ -311,6 +315,8 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		"Kalibierungskonfiguration wurde erfolgreich in EEPROM gespeichert"));*/
 
 	return true;
+
+	
 }
 
 void cNeigungssensor::displaySensorOrientation()
@@ -333,4 +339,10 @@ sensors_event_t cNeigungssensor::getEvent()
 	_bno.getEvent(&event);
 
 	return event;
+}
+
+
+imu::Vector<3> cNeigungssensor::getRawData(Adafruit_BNO055::adafruit_vector_type_t type = Adafruit_BNO055::adafruit_vector_type_t::VECTOR_EULER)
+{
+	return _bno.getVector(type);
 }

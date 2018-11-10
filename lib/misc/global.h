@@ -39,6 +39,11 @@ namespace WiFiConfig
     static const IPAddress softapMASK(255, 255, 255, 0);
 };
 
+namespace BNO055Config
+{
+    static const unsigned char Address = 55;
+}
+
 
 
 

@@ -33,6 +33,7 @@ class cNeigungssensor
         void displaySensorOffsets(const adafruit_bno055_offsets_t&);
 
         sensors_event_t getEvent();
+        imu::Vector<3> getRawData(Adafruit_BNO055::adafruit_vector_type_t);
 
         bool loadCalibrationFromMemory();
         void displaySensorOrientation();
