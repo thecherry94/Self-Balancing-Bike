@@ -90,6 +90,7 @@ void cBike::setup_webserver_methods()
 
     Serial.println("Web methods set");
 
+    _Lenkmotor.setLenkerSensor(&_lenkerSensor);
 }
 
 

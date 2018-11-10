@@ -105,9 +105,11 @@ cLenkersensor Lenkersensor;
 cLenkermotoransteuerung Motor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
-int APoti[1001];
-int AVolt[1001];
-
+int APoti[1000];
+int AVolt[1000];
+int a = 0;
+    int b = 0;
+    int c = 0;
 
 void setup()
 {
@@ -122,15 +124,23 @@ void setup()
 
     //Objekte ertellen
    
-    Motor.setFrequenz(1000);
-    Motor.setMotorfreigabe(true);
-    Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
-    
-    int a = 0;
-    int b = 0;
-    int c = 0;
-   
-while(a == 0&&b==0&&c==0) 
+    Motor.setFrequenz(500);
+
+    //Lenkersensor Kalibrieren
+    Serial.println("Lenkersensor wird kalibriert...");
+    while(Lenkersensor.getData(Sensordaten) == 1)
+    {
+      ;
+    }
+    Serial.println("Lenkersensor kalibriert!!!");
+
+}
+
+
+void loop()
+{
+     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
+    while(a == 0&&b==0&&c==0) 
    {
        while(a==0)
 	   {
@@ -161,7 +171,8 @@ while(a == 0&&b==0&&c==0)
 		}
 	}
    
-}
+   Serial.println("Motor wird freigegeben...");
+   Motor.setMotorfreigabe(true);
 
 
 void loop()
@@ -192,16 +203,18 @@ void loop()
                 Lenkersensor.readCounter();
                 APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
-                delay(3);
+                delay(1);
             }
         Motor.setLeistung(0);
+        while(Motor.runLenkermotor() == 1)
+        {;}
         Serial.println("Stopp");
         for (int x=0; x<1000;x++)
             {
                 Serial.println(APoti[x]);
             }
         Serial.println("Ende");
-        
+        delay(2000);
     }
     //bike.update();
 }

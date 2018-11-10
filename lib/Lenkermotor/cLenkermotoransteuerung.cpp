@@ -7,8 +7,6 @@
 PINS:
 D25   cLenkersteuerung    PWML
 D26   cLenkersteuerung    PWMR
-D32   cLenkersteuerung    Phase
-D33   cLenkersteuerung    Current Sensor
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
 *	
@@ -91,13 +89,19 @@ bool cLenkermotoransteuerung::runLenkermotor()
         {
           case LENKER_LINKS:
             ledcWrite(CHANNELR, 0);
-           // m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was? OKOKOK ;) passiert jetzt oben in setLeistung einmal
-            ledcWrite(CHANNELL, abs(m_sollleistung)); //ledcWrite kann keine negativen Zahlen verarbeiten und setzt dann auf 100% duty
+            
+            for(int i = 0; i < abs(m_sollleistung); i++)
+            {
+               ledcWrite(CHANNELL, i);  //ledcWrite kann keine negativen Zahlen verarbeiten und setzt dann auf 100% duty
+            }
           break;  //Das ist Wichtig ;D
           
           case LENKER_RECHTS:
             ledcWrite(CHANNELL, 0);
-            ledcWrite(CHANNELR, m_sollleistung);            
+             for(int i = 0; i < m_sollleistung; i++)
+            {
+               ledcWrite(CHANNELR, i);
+            }           
           break;
 
           default:
@@ -112,12 +116,13 @@ bool cLenkermotoransteuerung::runLenkermotor()
 }
 
 
-bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe, float pLenkwinkel)
+bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
-      
+      m_motorfreigabe = 1;
+      return 0; //wieder rausnehmen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(pMotorfreigabe == 1)
       {
-        if (pLenkwinkel > LENKERWINKEL_MAX || pLenkwinkel < LENKERWINKEL_MIN)
+        if (_lenkerSensor->getMotorwinkel() > LENKERWINKEL_MAX || _lenkerSensor->getMotorwinkel() < LENKERWINKEL_MIN)
             {
               LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
               m_motorfreigabe = 0;
@@ -148,15 +153,15 @@ int cLenkermotoransteuerung::setFrequenz(int pFreq)
   return 0;
 }
 
-bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung,float pLenkwinkel)
+bool cLenkermotoransteuerung::position(int pSollwinkel, int pLeistung)
 {
   //Abfrage ob Winkle I.O. ??
 
-  Setpoint=pWinkel;
-  Input=pLenkwinkel;
+  Setpoint=pSollwinkel;
+  Input= _lenkerSensor->getMotorwinkel();
 
 
-  if(pLenkwinkel<=pWinkel+PREZISION && pLenkwinkel>=pWinkel-PREZISION)
+  if(_lenkerSensor->getMotorwinkel()<=pSollwinkel+PREZISION && _lenkerSensor->getMotorwinkel()>=pSollwinkel-PREZISION)
   return 1;
   else 
   {
@@ -164,4 +169,10 @@ bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung,float pLenkwin
     setLeistung(Output*pLeistung);
     return 0;
   }
+}
+
+
+void cLenkermotoransteuerung::setLenkerSensor(cLenkersensor* sensor)
+{
+  _lenkerSensor = sensor;
 }
