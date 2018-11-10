@@ -82,6 +82,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
   int Lokal=1000+istLeistung; 
   Serial.println(Lokal);
   Gyro.writeMicroseconds(Lokal);
+  Serial.println("an der sowftware ligt es net");
   return 0;
 }
 bool cGyroansteuerung::setBeschleunigung(byte pBeschleunigung)

@@ -12,12 +12,14 @@ static const char* test_site = "<html><head><title>HTTP Test</title></head><scri
 //void setup_web_methods();
 
 
-cBike bike(0);
+cBike bike(4);
 void setup()
 {
     Serial.begin(115200);
     pinMode(LED_BUILTIN, OUTPUT);
     EEPROM.begin(8192);
+
+    
 
     bike.run();
 

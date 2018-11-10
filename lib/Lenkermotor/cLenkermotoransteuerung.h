@@ -28,8 +28,8 @@ D26   CLenkermotoransteuerung    PWMR
 #define MOTORFREIGABE_GESPERRT  0
 #define PWML_PIN DAC1
 #define PWMR_PIN DAC2
-#define CHANNELL 0
-#define CHANNELR 1
+#define CHANNELL 8
+#define CHANNELR 9
 #define LENKERWINKEL_MAX 80
 #define LENKERWINKEL_MIN -80
 #define ANDY_LEISTUNG_MAX 60 //die maximiale Leistung die freigegeben
