@@ -1,0 +1,42 @@
+<html>
+    <head>
+        <title>HTTP Test</title>
+    </head>
+    <script>
+        var txt;
+        var btn;
+        var lbl;
+        document.addEventListener("DOMContentLoaded", function(event)
+        {
+            txt = document.getElementById("txt");
+            btn = document.getElementById("btn");
+            lbl = document.getElementById("lbl");
+        });
+
+        function btn_click()
+        {
+            var xhr = new XMLHttpRequest();
+            var url = "192.168.0.208/json";
+            xhr.open("POST", url, true);
+            xhr.setRequestHeader("Content-Type", "application/json");
+
+            xhr.onreadystatechange = function()
+            {
+                if(xhr.readyState === 4 && xhr.status === 200)
+                {
+                    var json = JSON.parse(xhr.responseText);
+                    console.log(json);
+                }
+            };
+            var data = JSON.stringify({type: "add", data: [4, 4, 4]});
+            console.log(data);
+            xhr.send(data);
+        }
+    </script>
+    <body>
+        <input type="text" id="txt" />
+        <button type="button" id="btn" onclick="btn_click();">Send</button>
+        <br />
+        <label id="lbl">Response</label>
+    </body>
+</html>
