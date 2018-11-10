@@ -11,7 +11,7 @@
 static cMeasurementLog<float> lg("Zeit [s]", "Amplitude", "Phase");
 static ulong t1 = 0;
 static ulong t2 = 0;
-static ulong ttotal = 4;
+static ulong ttotal = 500;
 static bool do_log = false;
 cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
@@ -115,7 +115,7 @@ void cBike::setup_webserver_methods()
     SERVER->attachURL("/data/auswuchten/pulse", [&](AsyncWebServerRequest* req)
     {
         req->send(200, "text/plain", "Messpuls für 2s");
-        t2 = 2000.0L;
+        t2 = 500.0L * 1000.0L;
 
     }, HTTP_GET);
 
@@ -187,7 +187,7 @@ void cBike::update()
 {
     //Lenkeransteuerung
    _Lenkmotor.runLenkermotor();
-    if ((do_log || t2 > 1) && (millis() - t1 >= ttotal))
+    if ((do_log || t2 > 1) && (micros() - t1 >= ttotal))
     {
         imu::Vector<3> raw_data = _sensorNeigung->getRawData(Adafruit_BNO055::adafruit_vector_type_t::VECTOR_LINEARACCEL);
         Serial.printf("[X]: %f\t[Y]: %f\t[Z]: %f\n", raw_data.x(), raw_data.y(), raw_data.z());
@@ -195,7 +195,7 @@ void cBike::update()
         _lenkerSensor.readCounter();
         lg.write((float)(millis() / 1000.0L), raw_data.z(), _lenkerSensor.getMotorwinkel());
 
-        t1 = millis();
+        t1 = micros();
 
         if (t2 > 1)
             t2 -= ttotal;
