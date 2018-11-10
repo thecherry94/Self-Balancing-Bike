@@ -6,9 +6,9 @@
 #include "driver/pcnt.h"
 
 ////////////// Lenkersensor global.h //////////////
-#define ENCODER_INPUT 13             // Pin Counter Input Definition
-#define ENCODER_DIRECTION 12         // Pin Control Input Definition
-#define ENCODER_ZERO 14             // Pin Nulldurchgang Definition
+#define ENCODER_INPUT 5             // Pin Counter Input Definition
+#define ENCODER_DIRECTION 18         // Pin Control Input Definition
+#define ENCODER_ZERO 19             // Pin Nulldurchgang Definition
 struct lenkerDaten  // Struct mit Daten für den Lenker
 {
   float lenkwinkel; // Winkel des Lenkers in °, in der Mitte: 0, nach links: positv, nach rechts: negativ

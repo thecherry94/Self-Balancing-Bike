@@ -49,7 +49,7 @@ void cBike::update()
 
     if(Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
     {
-        _Lenkmotor.setMotorfreigabe(false);
+        _Lenkmotor.setMotorfreigabe(false, 4567);
     }
     /*********************************************************/
     //Gyromotor

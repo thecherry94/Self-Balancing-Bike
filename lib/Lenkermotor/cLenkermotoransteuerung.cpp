@@ -1,12 +1,13 @@
 /*
 * File: selfbalancingbike.h
 * Autor: AB;ML
-* Date:08:11.2018  
+* Date:06:11.2018  
 * Sources: 
 * Content:
 PINS:
 D25   cLenkersteuerung    PWML
-D26   cLenkersteuerung    PWMH
+D26   cLenkersteuerung    PWMR
+D32   cLenkersteuerung    Phase
 D33   cLenkersteuerung    Current Sensor
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
@@ -39,7 +40,7 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
     pLeistung = -10;
   
   
-  m_sollleistung = pLeistung*ANDY_LEISTUNG_MAX/100;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
+  m_sollleistung = pLeistung*ANDY_LEISTUNG_MAX*2.55/100;   //Der Wert wird zum Schutz in eine lokale Variable gespeichert
    
   
   if(m_motorfreigabe == 0)  //Es wird Ã¼berprÃ¼ft ob der Motor freigegeben ist
@@ -90,13 +91,12 @@ bool cLenkermotoransteuerung::runLenkermotor()
         {
           case LENKER_LINKS:
             ledcWrite(CHANNELR, 0);
-            m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was?
-            ledcWrite(CHANNELL, m_sollleistung);
+           // m_sollleistung *=2.55; //Äm nein soll das bei jedem aufruf erhöt werden oder was? OKOKOK ;) passiert jetzt oben in setLeistung einmal
+            ledcWrite(CHANNELL, abs(m_sollleistung)); //ledcWrite kann keine negativen Zahlen verarbeiten und setzt dann auf 100% duty
           break;  //Das ist Wichtig ;D
           
           case LENKER_RECHTS:
             ledcWrite(CHANNELL, 0);
-            m_sollleistung *=2.55;
             ledcWrite(CHANNELR, m_sollleistung);            
           break;
 
@@ -105,21 +105,24 @@ bool cLenkermotoransteuerung::runLenkermotor()
             ledcWrite(CHANNELR, 0);
           break;
         }
-     }
+    }
+  else
+    return 1;
   return 0;
 }
 
 
-bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
+bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe, float pLenkwinkel)
 {
       
       if(pMotorfreigabe == 1)
       {
-        if (Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
+        if (pLenkwinkel > LENKERWINKEL_MAX || pLenkwinkel < LENKERWINKEL_MIN)
             {
               LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
               m_motorfreigabe = 0;
               setLeistung(0);
+              Serial.println("Motor NICHT freigegeben");
               return 1;
             }
         else
@@ -133,6 +136,7 @@ bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
       ledcWrite(CHANNELR, 0);
       m_istleistung = 0;
       m_sollleistung = 0;
+      Serial.println("Motor freigegeben");
       return 0;
 }   
 
@@ -144,15 +148,15 @@ int cLenkermotoransteuerung::setFrequenz(int pFreq)
   return 0;
 }
 
-bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung)
+bool cLenkermotoransteuerung::position(int pWinkel, int pLeistung,float pLenkwinkel)
 {
   //Abfrage ob Winkle I.O. ??
 
   Setpoint=pWinkel;
-  Input=Sensordaten.lenkwinkel;
+  Input=pLenkwinkel;
 
 
-  if(Sensordaten.lenkwinkel<=pWinkel+PREZISION && Sensordaten.lenkwinkel>=pWinkel-PREZISION)
+  if(pLenkwinkel<=pWinkel+PREZISION && pLenkwinkel>=pWinkel-PREZISION)
   return 1;
   else 
   {
