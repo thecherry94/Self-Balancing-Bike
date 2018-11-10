@@ -21,10 +21,7 @@ cBike::cBike(byte gyroPWMPin)
     _state = EBikeState::STARTING;
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Bike starting"));
 
-
-    
-
-
+    _Lenkmotor.setLenkerSensor(&_lenkerSensor);
 }
 
 
@@ -47,10 +44,7 @@ void cBike::update()
     //Lenkeransteuerung
    _Lenkmotor.runLenkermotor();
 
-    if(Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
-    {
-        _Lenkmotor.setMotorfreigabe(false, 4567);
-    }
+   
     /*********************************************************/
     //Gyromotor
     switch(_state)

@@ -95,8 +95,8 @@ cLenkersensor Lenkersensor;
 cLenkermotoransteuerung Motor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
-int APoti[1001];
-int AVolt[1001];
+int APoti[1000];
+int AVolt[1000];
 int a = 0;
     int b = 0;
     int c = 0;
@@ -113,8 +113,7 @@ void setup()
     attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
     //Objekte ertellen
    
-    Motor.setFrequenz(1000);
-    Motor.setMotorfreigabe(true, 10);
+    Motor.setFrequenz(500);
 
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
@@ -164,8 +163,8 @@ void loop()
 		}
 	}
    
-   Serial.println("Motor wir freigegeben...");
-   Motor.setMotorfreigabe(true, Lenkersensor.getMotorwinkel());
+   Serial.println("Motor wird freigegeben...");
+   Motor.setMotorfreigabe(true);
 
     for(int x=0; x<Zyklen;x++)
     {
@@ -203,16 +202,18 @@ void loop()
                 Lenkersensor.readCounter();
                 APoti[i]=Lenkersensor.getMotorwinkel();
                 //AVolt...
-                delay(3);
+                delay(1);
             }
         Motor.setLeistung(0);
+        while(Motor.runLenkermotor() == 1)
+        {;}
         Serial.println("Stopp");
         for (int i=0; i<1000;i++)
             {
                 Serial.println(APoti[i]);
             }
         Serial.println("Ende");
-        
+        delay(2000);
     }
     a = 0;
     b = 0;
