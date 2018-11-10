@@ -55,7 +55,11 @@ private:
 	int 	m_freq = 5000;
 	unsigned long m_time;
 	double Setpoint=5, Input, Output; //Für Regler Motor
+<<<<<<< HEAD
 	PID Lenker;//(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+=======
+	PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+>>>>>>> 9006791f1bd7184f5a6c9b367a028366f4e1e717
 
 
 	const byte 	m_pwmresolution = 8;
