@@ -32,9 +32,9 @@ bool cLenkermotoransteuerung::setLeistung(int pLeistung)
     LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTOR, "Bist du Dumm oder was, ALTAA gibt ne gescheite Zahl an!!!! \n "));
     return 1;
   }
-  if(pLeistung > 0 && pLeistung <10)
+  if(pLeistung > 0 && pLeistung <10 && pLeistung !=0)
     pLeistung = 10;
-  else if (pLeistung < 0 && pLeistung >-10)
+  else if (pLeistung < 0 && pLeistung >-10&& pLeistung !=0)
     pLeistung = -10;
   
   
@@ -83,32 +83,56 @@ bool cLenkermotoransteuerung::runLenkermotor()
   if(m_motorfreigabe == 0)
     return 1;
 
-  if(millis() > m_time+DELAY_TIME )
-    {
-        switch (m_drehrichtung)  //Ab hier Sicherheitsfunktion!!!!!!!!!!!
-        {
-          case LENKER_LINKS:
-            ledcWrite(CHANNELR, 0);
-            
-            for(int i = 0; i < abs(m_sollleistung); i++)
+  /*_lenkerSensor->readCounter();
+  if (_lenkerSensor->getMotorwinkel() > LENKERWINKEL_MAX || _lenkerSensor->getMotorwinkel() < LENKERWINKEL_ANDY)
             {
-               ledcWrite(CHANNELL, i);  //ledcWrite kann keine negativen Zahlen verarbeiten und setzt dann auf 100% duty
+              LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
+              m_motorfreigabe = 0;
+              setLeistung(0);
+              Serial.println("Motor NICHT freigegeben");
+              return 1;
             }
-          break;  //Das ist Wichtig ;D
-          
-          case LENKER_RECHTS:
-            ledcWrite(CHANNELL, 0);
-             for(int i = 0; i < m_sollleistung; i++)
-            {
-               ledcWrite(CHANNELR, i);
-            }           
-          break;
+*/
+  if(millis() > m_time+DELAY_TIME)
+    {
+      switch (m_drehrichtung)  //Ab hier Sicherheitsfunktion!!!!!!!!!!!
+      {
+        case LENKER_LINKS:
+          ledcWrite(CHANNELR, 0);
+          ledcWrite(CHANNELL, abs(m_sollleistung)); 
+          /*if(m_sollleistung < m_ramp)
+          {
+            ledcWrite(CHANNELL, m_ramp); 
+            m_ramp++;
+          }
+          else
+          {
+            ledcWrite(CHANNELL, m_ramp); 
+            m_ramp--;
+          }*/
 
-          default:
-            ledcWrite(CHANNELL, 0);
-            ledcWrite(CHANNELR, 0);
-          break;
-        }
+        break;
+        
+        case LENKER_RECHTS:
+          ledcWrite(CHANNELL, 0);
+          ledcWrite(CHANNELR, m_sollleistung); 
+          /*if(m_sollleistung > m_ramp)
+          {
+            ledcWrite(CHANNELR, m_ramp);  
+            m_ramp--;
+          }
+           else
+          {
+            ledcWrite(CHANNELL, m_ramp); 
+            m_ramp++;
+          }   */    
+        break;
+
+        default:
+          ledcWrite(CHANNELL, 0);
+          ledcWrite(CHANNELR, 0);
+        break;
+      }
     }
   else
     return 1;
@@ -120,9 +144,9 @@ bool cLenkermotoransteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
       m_motorfreigabe = 1;
       return 0; //wieder rausnehmen !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-      if(pMotorfreigabe == 1)
+      if(pMotorfreigabe == true)
       {
-        if (_lenkerSensor->getMotorwinkel() > LENKERWINKEL_MAX || _lenkerSensor->getMotorwinkel() < LENKERWINKEL_MIN)
+        if (_lenkerSensor->getMotorwinkel() > LENKERWINKEL_MAX || _lenkerSensor->getMotorwinkel() < LENKERWINKEL_ANDY)
             {
               LOG->write(cStatusLogEntry(EStatusLogEntryType::ERROR,MODULE_LENKERMOTOR, "Anschlag!!! Keine Motorfreigabe"));
               m_motorfreigabe = 0;

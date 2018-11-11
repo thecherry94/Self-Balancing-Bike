@@ -4,16 +4,10 @@
 #undef max
 #include "cBike.h"
 
-static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+//static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
 
 
-
-
-//void setup_web_methods();
-
-
-cBike bike(4);
 void setup()
 {
     Serial.begin(115200);
@@ -36,8 +30,6 @@ void loop()
 
 
 
-
-/*
 void setup_web_methods()
 {
     SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
@@ -90,31 +82,25 @@ void setup_web_methods()
             req->send(res);
         }
     });
-}*/
+}
+****************************************/
 
-
-
-
-
-
-
-
-
-/*
 
 const int pPoti = 2; //A2
-lenkerDaten Sensordaten;
+static lenkerDaten Sensordaten;
+static cLenkersensor Lenkersensor;
 cLenkermotoransteuerung Motor;
-cBike bike(pPoti);
+//0cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
 int APoti[1000];
 int AVolt[1000];
 int a = 0;
-    int b = 0;
-    int c = 0;
+int b = 0;
+int c = 0;
 
 void setup()
 {
+     Serial.println("Setup");
     pinMode(pPoti, INPUT);
     Serial.begin(115200);
 
@@ -123,17 +109,12 @@ void setup()
     pinMode(ENCODER_DIRECTION, INPUT);
     pinMode(ENCODER_ZERO, INPUT_PULLUP);
     attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
-
-    //Objekte ertellen
-   
     Motor.setFrequenz(500);
-
+     Lenkersensor.readCounter();
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
     while(Lenkersensor.getData(Sensordaten) == 1)
-    {
-      ;
-    }
+    {;}
     Serial.println("Lenkersensor kalibriert!!!");
 
 }
@@ -141,7 +122,7 @@ void setup()
 
 void loop()
 {
-     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
+     Serial.println("Zyklen anzahl, Anfangsgesch und Sprunggeschwindichkeit eingeben");
     while(a == 0&&b==0&&c==0) 
    {
        while(a==0)
@@ -149,7 +130,8 @@ void loop()
 		 while(Serial.available()) 
 			{
 				String read = Serial.readStringUntil('\n');
-				Zyklen = read.substring(1, read.length()).toInt();
+				Zyklen = read.substring(0, read.length()).toInt();
+                Serial.println(Zyklen);
 				a=1;
 			}
 		}
@@ -158,7 +140,8 @@ void loop()
 		 while(Serial.available()) 
 			{
 				String read = Serial.readStringUntil('\n');
-				StartPWM = read.substring(1, read.length()).toInt();
+				StartPWM = read.substring(0, read.length()).toInt();
+                Serial.println(StartPWM);
 				b=1;
 			}
 		}
@@ -167,41 +150,50 @@ void loop()
 		 while(Serial.available()) 
 			{
 				String read = Serial.readStringUntil('\n');
-				SprungPWM = read.substring(1, read.length()).toInt();
+				SprungPWM = read.substring(0, read.length()).toInt();
+                Serial.println(SprungPWM);
 				c=1;
 			}
 		}
 	}
-   
-   Serial.println("Motor wird freigegeben...");
+    Serial.println("Motor wird freigegeben...");
    Motor.setMotorfreigabe(true);
+   
+   
 
-
-void loop()
-{
      for(int x=0; x<Zyklen;x++)
     {
 
         //Anfang finden
         do
         {
+             Lenkersensor.readCounter();
             Motor.setLeistung(5);
-        } while((Sensordaten.motorwinkel>=10&&Sensordaten.motorwinkel<=20));
+            while(Motor.runLenkermotor() == 1)
+            {;}
+        } while(Lenkersensor.getMotorwinkel() != 0.0);
 
         Motor.setLeistung(0); //Wir sind da
         Serial.println("Wir sind da");
+        Serial.print("Zyklus: ");
+        Serial.println(x);
         delay(1000);
 
         // Anfangszustand
         Motor.setLeistung(StartPWM);
+        while(Motor.runLenkermotor() == 1)
+        {;}
         delay(1500);
 
         //Sprung
         Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
-        for (int x=0; x<1000;x++)
+        while(Motor.runLenkermotor() == 1)
+        {;}
+        for (int i=0; i<1000;i++)
             {
-                APoti[x]=Sensordaten.motorwinkel;
+                Lenkersensor.readCounter();
+                APoti[i]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(1);
             }
@@ -209,13 +201,16 @@ void loop()
         while(Motor.runLenkermotor() == 1)
         {;}
         Serial.println("Stopp");
-        for (int x=0; x<1000;x++)
+        for (int i=0; i<1000;i++)
             {
-                Serial.println(APoti[x]);
+                Serial.println(APoti[i]);
             }
         Serial.println("Ende");
         delay(2000);
     }
-    //bike.update();
+    a = 0;
+    b = 0;
+    c = 0;
+    Serial.println("Wir haben den Versuch erfolgreich abgeschlossen, Sie koennen neue Versuche starten. Bitte nicht verklagen. Danke!");
+   
 }
-*/
