@@ -15,6 +15,7 @@ cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
 {
   pinMode(GyroPWMPin, OUTPUT);
     Gyro.attach(GyroPWMPin);
+    Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
 }
  
 
@@ -63,33 +64,8 @@ bool cGyroansteuerung::setBeschleunigung(byte pBeschleunigung)
 void cGyroansteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
    motorfreigabe=pMotorfreigabe;
-   //laufen() aufrufen?
+   anlaufen();
 }
-
-//Nicht Aktiv
-
-bool cGyroansteuerung::setLookupDrehzahl(unsigned int pDrehzahl)
-{
-	/*int Zeiger;
-	for (int x = 100;x <= 200; x++)
-	{
-		if (pDrehzahl >= EEPROM.read(x))
-		{
-			Zeiger = x;
-			break;
-		}
-	}
-	sollLeistung = EEPROM.read(Zeiger);*/
-  return 0;
-}
-void cGyroansteuerung::setMachNeLookup(int pMessDrehzahl)
-{
-	int Adresse = istLeistung + 100; //Ab Adresse 100 bis 200
-  EEPROM.begin(4096);
-	EEPROM.put(Adresse, pMessDrehzahl);
-  EEPROM.commit();
-}
-
 
 int cGyroansteuerung::getLeistung(bool ist = true)
 {

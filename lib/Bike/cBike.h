@@ -1,7 +1,11 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
-#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
+
+//Komm on das kann man doch net hochladen
+//#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
+//!!!!!!!!!!!!!!! 
+#include "cNeigungssensor.h"
 #include "cGyroansteuerung.h"
 #include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
