@@ -173,6 +173,7 @@ void cBike::run()
     // Anfangsstatus setzen
     setup_webserver_methods();
     _sensorNeigung = new cNeigungssensor(BNO055Config::Address);
+   // _Lenkmotor.setBike(this);
     
 
 

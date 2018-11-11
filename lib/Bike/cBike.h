@@ -1,7 +1,11 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
-#include "precomp.h"
+#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
+#include "cGyroansteuerung.h"
+#include "cLenkermotoransteuerung.h"
+#include "cLenkersensor.h"
+#include "cMeasurementLog.h"
 #include "global.h"
 
 
@@ -75,5 +79,15 @@ class cBike
         void run();         // Hier sitzt die Startlogik
 
         void update();      // Programmlogik
+
+        EBikeState get_state()
+        {
+            return _state;
+        }
+
+        void set_state(EBikeState state)
+        {
+            _state = state;
+        }
 
 };

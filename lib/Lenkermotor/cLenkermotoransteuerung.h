@@ -20,6 +20,8 @@ D26   CLenkermotoransteuerung    PWMR
 #include "cLenkersensor.h"
 #include <PID_v1.h>
 
+#include "cBike.h"
+
 #define MODULE_LENKERMOTOR "[LENKERMOTOR]"
 
 #define LENKER_LINKS  0
@@ -28,12 +30,13 @@ D26   CLenkermotoransteuerung    PWMR
 #define MOTORFREIGABE_GESPERRT  0
 #define PWML_PIN DAC1
 #define PWMR_PIN DAC2
-#define CHANNELL 8
-#define CHANNELR 9
+#define CHANNELL 3
+#define CHANNELR 4
 #define LENKERWINKEL_MAX 80
-#define LENKERWINKEL_MIN -80
+#define LENKERWINKEL_ANDY -80
 #define ANDY_LEISTUNG_MAX 60 //die maximiale Leistung die freigegeben
-#define DELAY_TIME 10 //ms
+#define DELAY_TIME 50 //ms
+#define RAMP 100
 #define PREZISION 2 //in Grad
 
 class cLenkermotoransteuerung
@@ -48,27 +51,28 @@ public:
 	
 	
 	void setLenkerSensor(cLenkersensor* sensor);
+	/*void setBike(cBike* bike)
+	{
+		m_bike = bike;
+	}*/
 
 private:
 	byte 	m_drehrichtung = 2;
+	byte	m_ramp = 1;
 	bool 	m_motorfreigabe = 0;
 	int 	m_istleistung = 0;
 	int 	m_sollleistung = 0;
 	int 	m_istDuty = 0;
 	int 	m_freq = 5000;
 	unsigned long m_time;
+	unsigned long m_ramptime;
 	double Setpoint=5, Input, Output; //Für Regler Motor
+	//cBike* m_bike;
 	/*
-<<<<<<< HEAD
-	PID Lenker;//(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
-=======
-	PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
-<<<<<<< HEAD
->>>>>>> 9006791f1bd7184f5a6c9b367a028366f4e1e717
-//was das fürn scheiß???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 
-=======
->>>>>>> 8b05e3aeacbfae39181d41304a7e3559de0c3c6f
+	PID Lenker;//(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+	PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
+
 */
 	const byte 	m_pwmresolution = 8;
 
