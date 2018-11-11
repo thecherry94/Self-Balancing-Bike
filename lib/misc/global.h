@@ -35,9 +35,19 @@ namespace WiFiConfig
     static const char*     apSSID = "HIT-FRITZBOX-7490";
     static const char*     apPASS = "63601430989011937932";
 
+    // Max Hotspot
+    //
+    //static const char*     apSSID = "Max WLAN";
+    //static const char*     apPASS = "asdfghjkl";
+
     static const IPAddress softapIP(10, 10, 10, 0);
     static const IPAddress softapMASK(255, 255, 255, 0);
 };
+
+namespace BNO055Config
+{
+    static const unsigned char Address = 55;
+}
 
 
 

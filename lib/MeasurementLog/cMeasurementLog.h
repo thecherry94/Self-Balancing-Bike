@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <sstream>
 
 #ifndef MEASUREMENTLOG__H
 #define MEASUREMENTLOG__H
@@ -66,12 +67,6 @@ class cMeasurementLog
         template <class... TRest>
         void write(T first, TRest... rest)
         {
-            if (sizeof...(TRest) != _column_headers.size())
-            {
-                // FATAL ERROR
-                // TODO: IMPLEMENT
-            }
-
             _data.push_back(first);
             write(rest...);
         }
@@ -81,11 +76,18 @@ class cMeasurementLog
             _data.push_back(data);
         }
 
+        void reset()
+        {
+            _data.clear();
+        }
+
         std::string exprt(EMeasurementLogFormatting f)
         {
             std::stringstream ss;
             ss.imbue(std::locale(ss.getloc(), new DecimalSeparator<char>(',')));
             
+            int j = 0;
+
             switch(f)
             {
                 case EMeasurementLogFormatting::FORMAT_EXCEL:
@@ -93,16 +95,22 @@ class cMeasurementLog
                     for (int i = 0; i < _column_headers.size(); i++)
                         ss << _column_headers[i] << ";";
                     
-                    ss << "\n\n";
+                    ss << "\n";
 
                     for (int i = 0; i < _data.size();  i++)
                     {   
                         ss << _data[i];
-
-                        if (i % _column_headers.size())
+                        j++;
+                        
+                        if (j >= _column_headers.size())
+                        {
                             ss << "\n";
+                            j = 0;
+                        }
                         else
                             ss << ";";
+
+                        
                     }
                 
                 break;

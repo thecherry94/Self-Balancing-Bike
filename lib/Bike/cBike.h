@@ -5,12 +5,6 @@
 #include "global.h"
 
 
-#define WIFI_SSID       "HIT-FRITZBOX-7490"
-#define WIFI_PASSWORD   "63601430989011937932"
-
-//#define WIFI_SSID       "BikeAP"
-//#define WIFI_PASSWORD   "1235"
-
 
 #define SENSOR_TASK             "sensor-main"
 #define SENSOR_TASK_STACKSIZE   10000
@@ -43,9 +37,8 @@ class cBike
          ************************************************
          */ 
         cGyroansteuerung _gyro;
-        cNeigungssensor* _sensor_neigung;
+        cNeigungssensor* _sensorNeigung;
         cLenkermotoransteuerung _Lenkmotor;
-        lenkerDaten Sensordaten;            // Struct für die Lenkersensordaten Winkel, Geschwindigkeit und Beschleunigung
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
         
 
@@ -58,6 +51,17 @@ class cBike
         EBikeState              _state;
 
         AsyncWebSocket*         _main_socket;
+
+
+        /*
+         ************************************************
+         *             Private Funktionen               *
+         ************************************************
+         */ 
+
+        void setup_webserver_methods();
+
+
         
         /*
          ************************************************

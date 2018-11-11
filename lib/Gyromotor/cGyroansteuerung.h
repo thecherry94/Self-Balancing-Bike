@@ -28,14 +28,14 @@
 
 #define Gyro1PWMPin 23
 #define Gyro2PWMPin 19
-#define StandadGyroAnlauf 40
+#define StandardGyroAnlauf 400
 #define maxLeistung 60
 #define verboteneZahl 6666
 
 class cGyroansteuerung
 {
   private:
-  unsigned int beschleunigung= StandadGyroAnlauf; //Zeit für 1% Schritt in ms
+  unsigned int beschleunigung= StandardGyroAnlauf; //Zeit für 1% Schritt in ms
   byte sollLeistung, istLeistung;
   bool motorfreigabe=false; //0=Keine Freigabe
   long vorigeZeit=millis();
