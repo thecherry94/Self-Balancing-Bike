@@ -91,3 +91,9 @@ void cGyroansteuerung::setMachNeLookup(int pMessDrehzahl)
 }
 
 
+int cGyroansteuerung::getLeistung(bool ist = true)
+{
+  return ist ? istLeistung : sollLeistung;
+}
+
+

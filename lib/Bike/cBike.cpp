@@ -43,10 +43,10 @@ cBike::cBike(byte gyroPWMPin)
 
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
-    while(Lenkersensor.getData(Sensordaten) == 1)
-    {
-      ;
-    }
+    // while(Lenkersensor.getData(Sensordaten) == 1)
+    // {
+    //   ;
+    // }
     Serial.println("Lenkersensor kalibriert!!!");
 
     
@@ -159,6 +159,28 @@ void cBike::setup_webserver_methods()
         req->send(res);
     }, HTTP_GET);
 
+
+    SERVER->attachURL("/gyro/", [&](AsyncWebServerRequest* req)
+    {
+        req->send(200, "text/html", WebPages::GyroControl);
+    }, HTTP_GET);
+
+
+    SERVER->attachURL("/gyro/power", [&](AsyncWebServerRequest* req)
+    {
+        if(req->hasParam("val"))
+        {
+            int leistung = atoi(req->getParam("val")->value().c_str());
+            _gyro.setLeistung(leistung); 
+
+            Serial.println(leistung);       
+        }
+        char buf[3];
+        sprintf(buf, "%d", _gyro.getLeistung(false));
+        req->send(200, "text/plain", buf);
+    }, HTTP_GET);
+
+
     Serial.println("Web methods set");
 
     _Lenkmotor.setLenkerSensor(&_lenkerSensor);
@@ -172,7 +194,7 @@ void cBike::run()
      
     // Anfangsstatus setzen
     setup_webserver_methods();
-    _sensorNeigung = new cNeigungssensor(BNO055Config::Address);
+    //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
     
 
 

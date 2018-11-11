@@ -50,6 +50,8 @@ class cGyroansteuerung
   void setMotorfreigabe(bool pMotorfreigabe);
   bool setLookupDrehzahl(unsigned int pDrehzahl);
   void setMachNeLookup(int pMessDrehzahl); //1/min
+
+  int getLeistung(bool);
 };
 
 
