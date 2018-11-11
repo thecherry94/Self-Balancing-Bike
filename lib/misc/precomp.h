@@ -1,5 +1,4 @@
 #include "cNeigungssensor.h"
-#include "MeasurementLog.h"
 //#include "cWiFiKommunikation.h"
 #include "cGyroansteuerung.h"
 #include "cLenkermotoransteuerung.h"

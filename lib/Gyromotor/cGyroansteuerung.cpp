@@ -1,45 +1,12 @@
 /*
 * File: selfbalancingbike.h
 * Autor: AB;ML
-* Date: 08.09.2018  
+* Date: 11.11.2018  
 * Sources: 
 * Content: 
 
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
 *		
-*/
-/*
-//HEADER Kopieren:
-
-#include <Servo.h>
-#include <EEPROM.h>
-#define Gyro1PWMPin ?
-#define StandadGyroAnlauf 15
-#define maxLeistung 70
-#define verboteneZahl 6666
-
-===================================================
-
-class cGyroansteuerung
-{
-  private:
-  unsigned int beschleunigung= StandadGyroAnlauf; //Zeit für 1% Schritt in ms
-  char sollLeistung, istLeistung;
-  bool motorfreigabe=false; //0=Keine Freigabe
-  long vorigeZeit=clock();
-  //EEPROM von Byte 0 bis 100 //Soll Drehzahl in 1/s Speichern
-
-  public:
-  cGyroansteuerung();
-  bool setLeistung(char pSollLeistung);
-  bool laufen(); //return 1 wenn fertig !!Andreung in Diagramm
-  bool setBeschleunigung(char pBeschleunigung); //Zahl in s bis Gyro komplet von 0 auf 100
-  void setMotorfreigabe(bool pMotorfreigabe);
-  // bool setLookupDrehzahl(unsignd int pDrehzahl);
-  // void setMachNeLookup(int pMessDrehzahl); //1/min
-};
-
-
 */
 
 #include "cGyroansteuerung.h"
@@ -68,8 +35,8 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
     if(sollLeistung!=istLeistung)
     {
       //magic
-      if(millis()>vorigeZeit+beschleunigung) //Schon 3 instanzen ;D
-      {
+      if(millis()>vorigeZeit+beschleunigung||istLeistung<=GRUNDWERT+BoostTo) //geändert 11.11.2018
+      {//Schon 3 instanzen ;D
         vorigeZeit=millis();
         istLeistung=istLeistung+1*((sollLeistung-istLeistung)/abs(sollLeistung-istLeistung));
       }
@@ -79,8 +46,8 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
   else 
 	istLeistung=0;
   //PWM Schalten
-  int Lokal=1000+istLeistung; 
-  Serial.println(Lokal);
+  int Lokal=GRUNDWERT+istLeistung; 
+  Serial.println(Lokal-GRUNDWERT);
   Gyro.writeMicroseconds(Lokal);
   return 0;
 }
@@ -98,6 +65,9 @@ void cGyroansteuerung::setMotorfreigabe(bool pMotorfreigabe)
    motorfreigabe=pMotorfreigabe;
    //laufen() aufrufen?
 }
+
+//Nicht Aktiv
+
 bool cGyroansteuerung::setLookupDrehzahl(unsigned int pDrehzahl)
 {
 	/*int Zeiger;
