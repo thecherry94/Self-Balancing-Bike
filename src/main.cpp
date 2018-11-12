@@ -1,3 +1,4 @@
+
 //Lenkermotor Test Main
 #include <Arduino.h>
 #undef min
@@ -214,3 +215,13 @@ void loop()
     Serial.println("Wir haben den Versuch erfolgreich abgeschlossen, Sie koennen neue Versuche starten. Bitte nicht verklagen. Danke!");
    
 }
+
+
+/* //Hier Testet Andy 
+#include "cLenkermotorV2.h"
+void setup()
+{
+    cLenkermotorV2 Motor2;
+
+}
+*/
