@@ -1,8 +1,8 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
-
-//Komm on das kann man doch net hochladen
+//#include "precomp.h"
+//Komm on das kann man doch net hochladen. wie soll das bei mir funktionieren.
 //#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
 //!!!!!!!!!!!!!!! 
 #include "cNeigungssensor.h"
