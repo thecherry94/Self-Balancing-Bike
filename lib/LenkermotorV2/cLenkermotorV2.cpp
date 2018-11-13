@@ -8,7 +8,12 @@
 *		
 */	
 
+#include <Arduino.h>
 #include "cLenkermotorV2.h"
+#include <PID_v1.h>
+#include "cLenkersensor.h"
+
+ cLenkersensor mySensor;
 
 cLenkermotorV2::cLenkermotorV2()
 {
@@ -18,14 +23,14 @@ pinMode(PWM_PIN, OUTPUT);
 pinMode(dir_PIN, OUTPUT);
 }
 
-bool setMotorfreigabe( pMotorfreigabe)
+bool cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 {
     Motorfreigabe=pMotorfreigabe;
     running();
     return 0;
 }
 
-bool running()
+bool cLenkermotorV2::running()
 {
     //Freigabe prüfen
     if(Motorfreigabe==false)
@@ -37,7 +42,7 @@ bool running()
         //Fehler
     }
     //Winkel prüfen
-    if(...)//n.io.
+    if(abs(mySensor.getLenkerwinkel())<75||mySensor.getCalibration()==1)//n.io.
     {
         istLeistung=0;
         //Fehler
@@ -57,9 +62,9 @@ bool running()
     
 }
 
-bool dirchange(int sollLeistung)
+bool cLenkermotorV2::dirchange(int sollLeistung)
 {
-    if (sign(istLeistung)!=sign(sollLeistung))
+    if (istLeistung/abs(istLeistung) != sollLeistung/abs(sollLeistung))
     {
         //Abschalten
         istLeistung=0;
@@ -70,7 +75,7 @@ bool dirchange(int sollLeistung)
         else
         dir=1;
         //Pin
-        DIRPIN=dir;
+        dir=dir_PIN;
         //timer start
         Zeit=millis();
     }
@@ -80,39 +85,40 @@ bool dirchange(int sollLeistung)
     return false;
 }
 
-PWMschalten()
+void cLenkermotorV2::PWMschalten()
 {
     //mappen
-    abs(istLeistung*255/100)
+    abs(istLeistung*255/100);
 }
 
-setLeistung(psollLeistung)
+void cLenkermotorV2::setLeistung(int psollLeistung)
 {
-    if(psollLeistung<=100&&>=-100)
+    if(psollLeistung<=100&&psollLeistung>=-100)
     sollLeistung=psollLeistung*ANDYFAKTOR/100;
-    else
+    //else
     //Fehler
     
     
 }
 
-bool Drehen(int pWinkel int pLeistung)
+bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
 {
-    if(psollLeistung<=-100&&>=100)
+    if(pLeistung<=-100&&pLeistung>=100)
     {
         //Fehler
         return 1;
     }
-    if(Winkel=...)
+   
+    if(pWinkel<=mySensor.getLenkerwinkel()+PREZESSION && pWinkel>=mySensor.getLenkerwinkel()-PREZESSION)
     {
         return 0;
     }
     //PID...
-    sollLeistung=&Output*pLeistung/100;
+    //sollLeistung=&Output*pLeistung/100;
     return 1;
 }
 
-int getLeistung();
+int cLenkermotorV2::getLeistung(void)
 {
     return istLeistung;
 }

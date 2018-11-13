@@ -8,6 +8,7 @@
 #include "cMeasurementLog.h"
 //#include "precomp.h"
 #include "global.h"
+#include "cLenkermotorV2.h"
 
 
 

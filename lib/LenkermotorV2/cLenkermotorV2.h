@@ -8,12 +8,14 @@
 *		
 */	
 
+
 #define TOTZEIT 20 //in ms
 #define ANDYFAKTOR 30 //in Prozent
 #define CHANNEL 3
 #define Frequenz 1000
 #define PWM_PIN 15 //! Noch klätren.  Sollte man das nicht wo gesammelt machen?
 #define dir_PIN 16
+#define PREZESSION 3 //+-Grad
 
 
 
@@ -33,6 +35,7 @@ bool running();                                 //Hauptfunktion Zyklisch aufrufe
 
 private:
 
+unsigned long Zeit;
 bool dir=0;
 int sollLeistung=0;
 int istLeistung=0;
