@@ -1,6 +1,7 @@
 #pragma once
 
 // precomp entählt alle benötigten header Dateien
+<<<<<<< HEAD
 //#include "precomp.h"
 //Komm on das kann man doch net hochladen. wie soll das bei mir funktionieren.
 //#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
@@ -10,6 +11,9 @@
 #include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
 #include "cMeasurementLog.h"
+=======
+#include "precomp.h"
+>>>>>>> parent of 60a343d... ACHTUNG!!!!!
 #include "global.h"
 
 
@@ -83,15 +87,5 @@ class cBike
         void run();         // Hier sitzt die Startlogik
 
         void update();      // Programmlogik
-
-        EBikeState get_state()
-        {
-            return _state;
-        }
-
-        void set_state(EBikeState state)
-        {
-            _state = state;
-        }
 
 };
