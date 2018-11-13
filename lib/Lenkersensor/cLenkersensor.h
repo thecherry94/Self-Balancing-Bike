@@ -37,7 +37,9 @@ class cLenkersensor
     bool getData(lenkerDaten &pdaten);  // Messdaten bekommen, Übergabeparameter: Datenstruct vom Typ lenkerDaten, Rückgabewert: 0: alles okay, 1: Lenkermotorbetrieb verboten!!!
     float getMotorwinkel(); // get Motorwinkel in °
     void readCounter(); // muss ausgeführt werden, damit die Messwerte kommen
-    void init();
+    bool getLenkerwinkel(float & Lenkerwinkel);
+    bool getLenkergeschwindigkeit(float & Lenkergeschwindigkeit);
+    bool getLenkerbeschleunigung(float & Lenkerbeschleunigung);
 };
 
 ////// Beispiel Implementierung ////

@@ -66,6 +66,50 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
         return 0;
 }
 
+bool cLenkersensor::getLenkerwinkel(float & Lenkerwinkel)
+{
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        Lenkerwinkel = 666;
+        return 1;
+    }
+    else 
+    {
+           Lenkerwinkel = daten.lenkwinkel;     // Daten rückgeben
+            return 0;
+    }
+       
+}
+
+bool cLenkersensor::getLenkergeschwindigkeit(float & Lenkergeschwindigkeit)
+{
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        Lenkergeschwindigkeit = 666;
+        return 1;
+    }
+    else
+    {
+        Lenkergeschwindigkeit = daten.lenkgeschwindigkeit;
+        return 0;
+    }
+}
+
+bool cLenkersensor::getLenkerbeschleunigung(float & Lenkerbeschleunigung)
+{
+    
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        Lenkerbeschleunigung = 666;
+        return 1;
+    }
+    else 
+    {
+        Lenkerbeschleunigung = daten.lenkbeschleunigung;     // Daten rückgeben
+        return 0;
+    }
+        
+}
 void isr_lenkersensor()
 {
     lenkerflag = 0;
