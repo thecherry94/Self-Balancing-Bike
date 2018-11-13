@@ -112,7 +112,8 @@ void setup()
 
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
-    while(Lenkersensor.getMotorwinkel == 1)
+    Lenkersensor.readCounter();
+    while(Lenkersensor.getMotorwinkel() == 1)
     { ; }
     Serial.println("Lenkersensor kalibriert!!!");
 
@@ -121,7 +122,7 @@ void setup()
 
 void loop()
 {
-     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
+    Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
     while(a == 0&&b==0&&c==0) 
    {
        while(a==0)
@@ -164,29 +165,32 @@ void loop()
         {
             Lenkersensor.readCounter();
             Motor.setLeistung(5);
-
-        } while(Lenkersensor.getMotorwinkel>=10&&Lenkersensor.getMotorwinkel<=20);
+            while(Motor.runLenkermotor()== 1){;}
+        } while(Lenkersensor.getMotorwinkel()>=10&&Lenkersensor.getMotorwinkel()<=20);
 
         Motor.setLeistung(0); //Wir sind da
+        while(Motor.runLenkermotor()== 1){;}
         Serial.println("Wir sind da");
         delay(1000);
 
         // Anfangszustand
         Motor.setLeistung(StartPWM);
+        while(Motor.runLenkermotor()== 1){;}
         delay(1500);
 
         //Sprung
         Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
-        for (int x=0; x<1000;x++)
+        while(Motor.runLenkermotor()== 1){;}
+        for (int i=0; i<1000;i++)
             {
-                APoti[x]=;
+                Lenkersensor.readCounter();
+                APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(1);
             }
         Motor.setLeistung(0);
-        while(Motor.runLenkermotor() == 1)
-        {;}
+        while(Motor.runLenkermotor() == 1){;}
         Serial.println("Stopp");
         for (int x=0; x<1000;x++)
             {
@@ -195,4 +199,7 @@ void loop()
         Serial.println("Ende");
         delay(2000);
     }
+    int a = 0;
+    int b = 0;
+    int c = 0;
 }
