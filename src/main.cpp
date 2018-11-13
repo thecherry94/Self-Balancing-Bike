@@ -7,38 +7,23 @@
 
 static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
-
-
-
-<<<<<<< HEAD
-=======
 //void setup_web_methods();
-
-
-cBike bike(4);
->>>>>>> parent of 60a343d... ACHTUNG!!!!!
+/*
 void setup()
 {
     Serial.begin(115200);
     pinMode(LED_BUILTIN, OUTPUT);
     EEPROM.begin(8192);
-
-    
-
     bike.run();
 
     //setup_web_methods();
 }
 
-
 void loop()
 {
     bike.update();
 }
-
-
-
-
+*/
 
 /*
 void setup_web_methods()
@@ -92,26 +77,16 @@ void setup_web_methods()
             AsyncWebServerResponse* res = req->beginResponse(200, "application/json", jsonchar);
             req->send(res);
         }
-    });
-<<<<<<< HEAD
+    }
 }
-=======
-}*/
-
-
->>>>>>> parent of 60a343d... ACHTUNG!!!!!
 
 
 
-
-
-
-
-/*
+*/
 
 const int pPoti = 2; //A2
-lenkerDaten Sensordaten;
 cLenkermotoransteuerung Motor;
+cLenkersensor Lenkersensor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
 int APoti[1000];
@@ -137,10 +112,8 @@ void setup()
 
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
-    while(Lenkersensor.getData(Sensordaten) == 1)
-    {
-      ;
-    }
+    while(Lenkersensor.getMotorwinkel == 1)
+    { ; }
     Serial.println("Lenkersensor kalibriert!!!");
 
 }
@@ -183,17 +156,16 @@ void loop()
    Serial.println("Motor wird freigegeben...");
    Motor.setMotorfreigabe(true);
 
-
-void loop()
-{
      for(int x=0; x<Zyklen;x++)
     {
 
         //Anfang finden
         do
         {
+            Lenkersensor.readCounter();
             Motor.setLeistung(5);
-        } while((Sensordaten.motorwinkel>=10&&Sensordaten.motorwinkel<=20));
+
+        } while(Lenkersensor.getMotorwinkel>=10&&Lenkersensor.getMotorwinkel<=20);
 
         Motor.setLeistung(0); //Wir sind da
         Serial.println("Wir sind da");
@@ -208,7 +180,7 @@ void loop()
         Motor.setLeistung(SprungPWM);
         for (int x=0; x<1000;x++)
             {
-                APoti[x]=Sensordaten.motorwinkel;
+                APoti[x]=;
                 //AVolt...
                 delay(1);
             }
@@ -223,18 +195,4 @@ void loop()
         Serial.println("Ende");
         delay(2000);
     }
-    //bike.update();
 }
-<<<<<<< HEAD
-
-
-/* //Hier Testet Andy 
-#include "cLenkermotorV2.h"
-void setup()
-{
-    cLenkermotorV2 Motor2;
-
-}
-=======
->>>>>>> parent of 60a343d... ACHTUNG!!!!!
-*/

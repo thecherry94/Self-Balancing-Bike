@@ -17,7 +17,7 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin)
-    : _gyro(gyroPWMPin)         //Hier wird die cGyro initialisiert
+    : _gyro(gyroPWMPin)       //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     

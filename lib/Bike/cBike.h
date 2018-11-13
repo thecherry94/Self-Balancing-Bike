@@ -1,11 +1,6 @@
 #pragma once
 
-// precomp entählt alle benötigten header Dateien
-<<<<<<< HEAD
-//#include "precomp.h"
-//Komm on das kann man doch net hochladen. wie soll das bei mir funktionieren.
-//#include "D:\Users\Max\Documents\GitHub\Self-Balancing-Bike\lib\Neigungssensor\cNeigungssensor.h"
-//!!!!!!!!!!!!!!! 
+
 #include "cNeigungssensor.h"
 #include "cGyroansteuerung.h"
 #include "cLenkermotoransteuerung.h"
@@ -13,7 +8,6 @@
 #include "cMeasurementLog.h"
 =======
 #include "precomp.h"
->>>>>>> parent of 60a343d... ACHTUNG!!!!!
 #include "global.h"
 
 
