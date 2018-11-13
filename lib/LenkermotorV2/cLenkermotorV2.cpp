@@ -8,7 +8,7 @@
 *		
 */	
 
-#include "LenkermotorV2.h"
+#include "cLenkermotorV2.h"
 
 cLenkermotorV2::cLenkermotorV2()
 {

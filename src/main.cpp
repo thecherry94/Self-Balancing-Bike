@@ -86,7 +86,7 @@ void setup_web_methods()
 
 const int pPoti = 2; //A2
 cLenkermotoransteuerung Motor;
-cLenkersensor Lenkersensor;
+//cLenkersensor Lenkersensor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
 int APoti[1000];
@@ -101,21 +101,20 @@ void setup()
     Serial.begin(115200);
 
      //Setup Lenkersensor
-    pinMode(ENCODER_INPUT, INPUT);
-    pinMode(ENCODER_DIRECTION, INPUT);
-    pinMode(ENCODER_ZERO, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+    
 
     //Objekte ertellen
    
     Motor.setFrequenz(500);
 
+    /*
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
     Lenkersensor.readCounter();
     while(Lenkersensor.getMotorwinkel() == 1)
     { ; }
     Serial.println("Lenkersensor kalibriert!!!");
+    */
 
 }
 
@@ -165,10 +164,10 @@ void loop()
         //Anfang finden
         do
         {
-            Lenkersensor.readCounter();
+//            Lenkersensor.readCounter();
             Motor.setLeistung(5);
             while(Motor.runLenkermotor()== 1){;}
-        } while(Lenkersensor.getMotorwinkel()!=0.0);
+        } while(true);//Lenkersensor.getMotorwinkel()!=0.0);
 
         Motor.setLeistung(0); //Wir sind da
         while(Motor.runLenkermotor()== 1){;}
@@ -186,8 +185,8 @@ void loop()
         while(Motor.runLenkermotor()== 1){;}
         for (int i=0; i<1000;i++)
             {
-                Lenkersensor.readCounter();
-                APoti[x]=Lenkersensor.getMotorwinkel();
+                //Lenkersensor.readCounter();
+                //APoti[x]=Lenkersensor.getMotorwinkel();
                 //AVolt...
                 delay(1);
             }

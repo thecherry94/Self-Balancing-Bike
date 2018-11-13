@@ -8,6 +8,11 @@ int16_t counter;
 
 cLenkersensor::cLenkersensor()
 {
+    pinMode(ENCODER_INPUT, INPUT);
+    pinMode(ENCODER_DIRECTION, INPUT);
+    pinMode(ENCODER_ZERO, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+    
     lastLenkwinkel = 0;
     lastLenkgeschwindigkeit = 0;
     lastZeit = millis();
