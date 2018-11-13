@@ -194,13 +194,11 @@ void cBike::run()
      
     // Anfangsstatus setzen
     setup_webserver_methods();
-<<<<<<< HEAD
+
     //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
     //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
    // _Lenkmotor.setBike(this);
-=======
-    _sensorNeigung = new cNeigungssensor(BNO055Config::Address);
->>>>>>> parent of 60a343d... ACHTUNG!!!!!
+
     
 
 

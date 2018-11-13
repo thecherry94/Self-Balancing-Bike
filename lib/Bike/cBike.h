@@ -6,8 +6,7 @@
 #include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
 #include "cMeasurementLog.h"
-=======
-#include "precomp.h"
+//#include "precomp.h"
 #include "global.h"
 
 
@@ -29,7 +28,7 @@ enum EBikeState
 };
 
 
-static int task_core = 0;
+//static int task_core = 0;
 
 
 

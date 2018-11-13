@@ -5,7 +5,7 @@
 #undef max
 #include "cBike.h"
 
-static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+//static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
 //void setup_web_methods();
 /*
@@ -122,6 +122,9 @@ void setup()
 
 void loop()
 {
+    a = 0;
+    b = 0;
+    c = 0;
     Serial.println("ZyklenZahl Anfangsgesch und Sprunggeschwindichkeit eingeben");
     while(a == 0&&b==0&&c==0) 
    {
@@ -159,14 +162,13 @@ void loop()
 
      for(int x=0; x<Zyklen;x++)
     {
-
         //Anfang finden
         do
         {
             Lenkersensor.readCounter();
             Motor.setLeistung(5);
             while(Motor.runLenkermotor()== 1){;}
-        } while(Lenkersensor.getMotorwinkel()>=10&&Lenkersensor.getMotorwinkel()<=20);
+        } while(Lenkersensor.getMotorwinkel()!=0.0);
 
         Motor.setLeistung(0); //Wir sind da
         while(Motor.runLenkermotor()== 1){;}
@@ -199,7 +201,4 @@ void loop()
         Serial.println("Ende");
         delay(2000);
     }
-    int a = 0;
-    int b = 0;
-    int c = 0;
 }
