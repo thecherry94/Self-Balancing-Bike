@@ -34,12 +34,14 @@ class cLenkersensor
     unsigned int lastZeit;  // letze Zeit des letzen Messwertes in ms
    public:
     cLenkersensor();  // Konstruktur
+    void readCounter(); // muss ausgeführt werden, damit die Messwerte kommen
+
+    float getLenkerwinkel();
+    float getLenkergeschwindigkeit();
+    float getLenkerbeschleunigung();
     bool getData(lenkerDaten &pdaten);  // Messdaten bekommen, Übergabeparameter: Datenstruct vom Typ lenkerDaten, Rückgabewert: 0: alles okay, 1: Lenkermotorbetrieb verboten!!!
     float getMotorwinkel(); // get Motorwinkel in °
-    void readCounter(); // muss ausgeführt werden, damit die Messwerte kommen
-    bool getLenkerwinkel(float & Lenkerwinkel);
-    bool getLenkergeschwindigkeit(float & Lenkergeschwindigkeit);
-    bool getLenkerbeschleunigung(float & Lenkerbeschleunigung);
+    bool getCalibration();
 };
 
 ////// Beispiel Implementierung ////

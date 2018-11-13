@@ -8,6 +8,7 @@ int16_t counter;
 
 cLenkersensor::cLenkersensor()
 {
+    abs(7);
     pinMode(ENCODER_INPUT, INPUT);
     pinMode(ENCODER_DIRECTION, INPUT);
     pinMode(ENCODER_ZERO, INPUT_PULLUP);
@@ -66,50 +67,54 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
         return 0;
 }
 
-bool cLenkersensor::getLenkerwinkel(float & Lenkerwinkel)
+float cLenkersensor::getLenkerwinkel()
 {
     if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
     {
-        Lenkerwinkel = 666;
-        return 1;
+        return 666;
     }
     else 
     {
-           Lenkerwinkel = daten.lenkwinkel;     // Daten rückgeben
-            return 0;
+        return daten.lenkwinkel;     // Daten rückgeben
     }
        
 }
 
-bool cLenkersensor::getLenkergeschwindigkeit(float & Lenkergeschwindigkeit)
+float cLenkersensor::getLenkergeschwindigkeit()
 {
     if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
     {
-        Lenkergeschwindigkeit = 666;
-        return 1;
+        return 666;
     }
     else
     {
-        Lenkergeschwindigkeit = daten.lenkgeschwindigkeit;
-        return 0;
+        return daten.lenkgeschwindigkeit;
     }
 }
 
-bool cLenkersensor::getLenkerbeschleunigung(float & Lenkerbeschleunigung)
+float cLenkersensor::getLenkerbeschleunigung()
 {
     
     if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
     {
-        Lenkerbeschleunigung = 666;
-        return 1;
+        return 666;
     }
     else 
     {
-        Lenkerbeschleunigung = daten.lenkbeschleunigung;     // Daten rückgeben
-        return 0;
+        return daten.lenkbeschleunigung;     // Daten rückgeben
+        
     }
         
 }
+
+bool cLenkersensor::getCalibration()
+{
+    if(lenkerflag == 1)
+        return 1;
+    else
+        return 0;
+}
+
 void isr_lenkersensor()
 {
     lenkerflag = 0;
