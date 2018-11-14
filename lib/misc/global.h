@@ -27,13 +27,13 @@ namespace WiFiConfig
 {
     // Philipp WLAN
     //
-    //static const char*     apSSID = "Cherry";
-    //static const char*     apPASS = "4991Pk1994";
+    static const char*     apSSID = "Cherry";
+    static const char*     apPASS = "4991Pk1994";
 
     // Walter WLAN
     //
-    static const char*     apSSID = "HIT-FRITZBOX-7490";
-    static const char*     apPASS = "63601430989011937932";
+    //static const char*     apSSID = "HIT-FRITZBOX-7490";
+    //static const char*     apPASS = "63601430989011937932";
 
     // Max Hotspot
     //
