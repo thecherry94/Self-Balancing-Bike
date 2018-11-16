@@ -226,7 +226,7 @@ void cBike::setup_webserver_methods()
 
 void cBike::run()
 {
-     _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!!
+     _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
     setup_webserver_methods();

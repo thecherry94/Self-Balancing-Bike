@@ -27,8 +27,8 @@ namespace WiFiConfig
 {
     // Philipp WLAN
     //
-    static const char*     apSSID = "Cherry";
-    static const char*     apPASS = "4991Pk1994";
+    //static const char*     apSSID = "Cherry";
+    //static const char*     apPASS = "4991Pk1994";
 
     // Walter WLAN
     //
@@ -39,6 +39,11 @@ namespace WiFiConfig
     //
     //static const char*     apSSID = "Max WLAN";
     //static const char*     apPASS = "asdfghjkl";
+
+    //Andy WLAN
+    static const char*     apSSID = "Trandyspot";
+    static const char*     apPASS = "12345678";
+
 
     static const IPAddress softapIP(10, 10, 10, 0);
     static const IPAddress softapMASK(255, 255, 255, 0);
