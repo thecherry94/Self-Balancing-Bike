@@ -10,18 +10,19 @@
 
 
 #define TOTZEIT 20 //in ms
-#define ANDYFAKTOR 30 //in Prozent
-#define CHANNEL 3
+#define ANDYFAKTOR 60 //in Prozent
+#define CHANNEL 9
 #define Frequenz 1000
-#define PWM_PIN 15 //! Noch klätren.  Sollte man das nicht wo gesammelt machen?
-#define dir_PIN 16
+#define PWM_PIN DAC1
+#define dir_PIN DAC2
 #define PREZISION 3 //+-Grad
 #define Boost 5 //in Prozent
-#define MAXSPEED 10 //in Kp
+#define MAXSPEED 10000 //in Kp
 #define BREMSWINKEL 85
 
 
 #include <PID_v1.h>
+#include "cLenkersensor.h"
 
 class cLenkermotorV2
 
@@ -35,21 +36,23 @@ int getLeistung();                              //is klar
 void setMotorfreigabe(bool pMotorfreigabe);     //auf true setzen!!! sonnst geht nix
 bool Drehen(int pWinkel, int pLeistung);         //noch net fertig
 bool running();                                 //Hauptfunktion Zyklisch aufrufen
+void setLenkerSensor(cLenkersensor* sensor);
 
 
 
 private:
 
-unsigned long Zeit;
+unsigned long Zeit = 0;
 bool dir=0;
 int sollLeistung=0;
 int istLeistung=0;
 bool Motorfreigabe=0;
 void PWMschalten();
-bool dirchange(int sollLeistung);
-bool sign(int Zahl);
+bool dirchange();
+//byte sign(int Zahl);
 void Bremsen();
 double Setpoint, Input, Output;
 PID Regler;
+cLenkersensor* _lenkerSensor;
 
 };

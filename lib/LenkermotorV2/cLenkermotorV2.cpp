@@ -14,7 +14,14 @@
 #include "cLenkersensor.h"
 #include "cStatusLog.h"
 
- cLenkersensor mySensor; //Objekt von julian das kann weg.
+ 
+template <typename T> int sgn(T val) {
+    int x = (T(0) < val) - (val < T(0));
+    Serial.print("sign:");
+    Serial.println(x);
+    return (x);
+}
+
 
 cLenkermotorV2::cLenkermotorV2() : 
     Regler(&Input, &Output, &Setpoint, (double)4, (double)1, (double)1, P_ON_M, DIRECT) //&Input, &Output, &Setpoint, Kp, Ki, Kd, POn, DIRECT
@@ -24,12 +31,14 @@ cLenkermotorV2::cLenkermotorV2() :
     pinMode(PWM_PIN, OUTPUT);
     pinMode(dir_PIN, OUTPUT);
     Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
+    
 }
 
 void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 {
     Motorfreigabe=pMotorfreigabe;
-    running();
+        running();
+    Serial.println("freigabe");
     //if (Motorfreigabe)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTORV2, "Motor=frei"));
     //else
@@ -47,10 +56,10 @@ bool cLenkermotorV2::running()
         return 1;
     }
     //Winkel prüfen
-    if(abs(mySensor.getLenkerwinkel())>BREMSWINKEL-5||mySensor.getCalibration()==1)//n.io.
+    if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL-5||_lenkerSensor->getCalibration()==1)//n.io.
     {
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Overshot"));
-        if (abs(mySensor.getLenkerwinkel())>BREMSWINKEL)
+        if (abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL)
         {
         Drehen(BREMSWINKEL,ANDYFAKTOR);
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Powerbreak"));
@@ -58,56 +67,78 @@ bool cLenkermotorV2::running()
         else
         sollLeistung=0;
     }
+   
     //Geschwindigkeit Prüfen
-    if(abs(mySensor.getLenkergeschwindigkeit())>MAXSPEED)//n.io.
+    if(abs(_lenkerSensor->getLenkergeschwindigkeit())>MAXSPEED)//n.io.
     {
-        sollLeistung=(abs(sollLeistung)-1)*sign(sollLeistung); //Das wird wohl zu Schnell sein oder überschrieben werden
+        Serial.println("zu hohe Geschwindigkeit");
+        sollLeistung=(abs(sollLeistung)-1)*sgn(sollLeistung); //Das wird wohl zu Schnell sein oder überschrieben werden
         //Fehler
     }
     
     //dirchange prüfen
-    if(dirchange(sollLeistung))
+    if(dirchange())
     {
         //running
         istLeistung=sollLeistung;
         PWMschalten();
+        Regler.Compute(); 
+        return 0;
     }
-    Regler.Compute();
-    return 0;
+    Regler.Compute(); 
+    Serial.println("Chill");
+    return 1;
+    
     
 }
 
-bool cLenkermotorV2::dirchange(int sollLeistung)
+bool cLenkermotorV2::dirchange()
 {
-    if (sign(istLeistung) != sign(sollLeistung))
+    if (sgn(istLeistung) != sgn(sollLeistung))
     {
         //Abschalten
         istLeistung=0;
         PWMschalten();
         //dirchange
         if(sollLeistung<=0)
-        dir=0;
+            dir=0;
         else
-        dir=1;
+            dir=1;
         //Pin
-        dir=dir_PIN;
+        digitalWrite(dir_PIN,dir);
         //timer start
         Zeit=millis();
+        istLeistung=sollLeistung;
+        Serial.print("2   ");Serial.println(istLeistung);
     }
     else if(millis()>=Zeit+TOTZEIT)
-    return true;
-    
+     {
+       return true;
+     }
     return false;
 }
 
 void cLenkermotorV2::PWMschalten()
 {
     //Log Motor
-    ledcWrite(CHANNEL, abs(istLeistung*255/100));
+    Serial.print("Leistung:");
+    Serial.println(istLeistung);
+    
+    if (sollLeistung==0) {
+      ledcWrite(CHANNEL, 0);
+    }
+    else
+    {
+        int x = abs(istLeistung*2.55);
+        ledcWrite(CHANNEL, x);
+        Serial.print("x:");
+        Serial.println(x);
+    }
 }
 
 void cLenkermotorV2::setLeistung(int psollLeistung)
 {
+    
     if(psollLeistung<=100&&psollLeistung>=-100)
     {   
         sollLeistung=psollLeistung*ANDYFAKTOR/100;
@@ -115,7 +146,7 @@ void cLenkermotorV2::setLeistung(int psollLeistung)
     }  
     else
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Bist du Dumm oder so? gibt ne gescheite Zahl an!!!! \n "));
-
+    
 }
 
 bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
@@ -126,7 +157,7 @@ bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
         return 1;
     }
    
-    if(pWinkel<=mySensor.getLenkerwinkel()+PREZISION && pWinkel>=mySensor.getLenkerwinkel()-PREZISION)
+    if(pWinkel<=_lenkerSensor->getLenkerwinkel()+PREZISION && pWinkel>=_lenkerSensor->getLenkerwinkel()-PREZISION)
     {
         return 0;
     }
@@ -146,7 +177,14 @@ int cLenkermotorV2::getLeistung(void)
     return istLeistung;
 }
 
-bool cLenkermotorV2::sign(int Zahl)
+/*
+byte cLenkermotorV2::sign(int Zahl)
 {
-return(Zahl/abs(Zahl));
+    return(Zahl/abs(Zahl));
+    
+}*/
+
+void cLenkermotorV2::setLenkerSensor(cLenkersensor* sensor)
+{
+  _lenkerSensor = sensor;
 }

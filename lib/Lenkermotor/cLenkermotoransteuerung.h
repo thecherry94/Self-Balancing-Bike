@@ -26,8 +26,8 @@ D26   CLenkermotoransteuerung    PWMR
 #define LENKER_RECHTS  1
 #define MOTORFREIGABE_FREI  1
 #define MOTORFREIGABE_GESPERRT  0
-#define PWML_PIN DAC1
-#define PWMR_PIN DAC2
+#define PWML_PIN 33
+#define PWMR_PIN 34
 #define CHANNELL 8
 #define CHANNELR 9
 #define LENKERWINKEL_MAX 80
@@ -58,18 +58,7 @@ private:
 	int 	m_freq = 5000;
 	unsigned long m_time;
 	double Setpoint=5, Input, Output; //Für Regler Motor
-	/*
-<<<<<<< HEAD
-	PID Lenker;//(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
-=======
-	PID Lenker(double &Input,double &Output,double &Setpoint, int x= 5, int y= 3, int v= 1, int o= DIRECT);//ohne #defines Kp, Ki, Kd
-<<<<<<< HEAD
->>>>>>> 9006791f1bd7184f5a6c9b367a028366f4e1e717
-//was das fürn scheiß???!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
 
-=======
->>>>>>> 8b05e3aeacbfae39181d41304a7e3559de0c3c6f
-*/
 	const byte 	m_pwmresolution = 8;
 
 	cLenkersensor* _lenkerSensor;
