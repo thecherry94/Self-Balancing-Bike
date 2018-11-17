@@ -38,6 +38,8 @@ class cWebServer : public cSingleton<cWebServer>
         void attachURL(const char*, ArRequestHandlerFunction, WebRequestMethod);
         void attachJSON(const char*, ArJsonRequestHandlerFunction);
         void attachSocketEvent(char* name, AsyncWebSocketEventHandler handler);
+
+        AsyncWebSocketClient* get_client(uint8_t client_id);
 };
 
 

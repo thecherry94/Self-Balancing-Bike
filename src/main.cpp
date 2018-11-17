@@ -4,6 +4,7 @@
 #undef min
 #undef max
 #include "cBike.h"
+#include "cLivelog.h"
 
 
 //static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
@@ -14,12 +15,17 @@ cBike bike(0);
 void setup()
 {
     Serial.begin(115200);
+    
     pinMode(LED_BUILTIN, OUTPUT);
     EEPROM.begin(8192);
     bike.run();
 
+    
+    
+    
     //setup_web_methods();
 }
+
 
 void loop()
 {

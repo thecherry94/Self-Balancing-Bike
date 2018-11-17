@@ -9,6 +9,7 @@
 //#include "precomp.h"
 #include "global.h"
 #include "cLenkermotorV2.h"
+#include "cLivelog.h"
 
 
 
@@ -46,6 +47,8 @@ class cBike
         cNeigungssensor* _sensorNeigung;
         cLenkermotoransteuerung _Lenkmotor;
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
+
+        cLivelog<float>* _livelog;
         
 
         /*
