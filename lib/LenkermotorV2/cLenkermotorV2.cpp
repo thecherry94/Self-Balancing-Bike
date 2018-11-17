@@ -10,20 +10,20 @@
 
 #include <Arduino.h>
 #include "cLenkermotorV2.h"
-#include <PID_v1.h>
+
 #include "cLenkersensor.h"
 #include "cStatusLog.h"
 
  cLenkersensor mySensor; //Objekt von julian das kann weg.
 
-cLenkermotorV2::cLenkermotorV2()
+cLenkermotorV2::cLenkermotorV2() : 
+    Regler(&Input, &Output, &Setpoint, (double)4, (double)1, (double)1, P_ON_M, DIRECT) //&Input, &Output, &Setpoint, Kp, Ki, Kd, POn, DIRECT
 {
-ledcSetup(CHANNEL, Frequenz, 8); //8=Resolution
-ledcAttachPin(PWM_PIN, CHANNEL);
-pinMode(PWM_PIN, OUTPUT);
-pinMode(dir_PIN, OUTPUT);
-PID Regler(&Input, &Output, &Setpoint, 4, 1, 1, P_ON_M, DIRECT); //&Input, &Output, &Setpoint, Kp, Ki, Kd, POn, DIRECT
-Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
+    ledcSetup(CHANNEL, Frequenz, 8); //8=Resolution
+    ledcAttachPin(PWM_PIN, CHANNEL);
+    pinMode(PWM_PIN, OUTPUT);
+    pinMode(dir_PIN, OUTPUT);
+    Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
 }
 
 void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
@@ -72,7 +72,7 @@ bool cLenkermotorV2::running()
         istLeistung=sollLeistung;
         PWMschalten();
     }
-    //Regler.compute();
+    Regler.Compute();
     return 0;
     
 }

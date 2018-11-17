@@ -32,8 +32,8 @@ namespace WiFiConfig
 
     // Walter WLAN
     //
-    //static const char*     apSSID = "HIT-FRITZBOX-7490";
-    //static const char*     apPASS = "63601430989011937932";
+    static const char*     apSSID = "HIT-FRITZBOX-7490";
+    static const char*     apPASS = "63601430989011937932";
 
     // Max Hotspot
     //
@@ -41,8 +41,8 @@ namespace WiFiConfig
     //static const char*     apPASS = "asdfghjkl";
 
     //Andy WLAN
-    static const char*     apSSID = "Trandyspot";
-    static const char*     apPASS = "12345678";
+    //static const char*     apSSID = "Trandyspot";
+    //static const char*     apPASS = "12345678";
 
 
     static const IPAddress softapIP(10, 10, 10, 0);

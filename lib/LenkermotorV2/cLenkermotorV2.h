@@ -21,7 +21,7 @@
 #define BREMSWINKEL 85
 
 
-
+#include <PID_v1.h>
 
 class cLenkermotorV2
 
@@ -50,5 +50,6 @@ bool dirchange(int sollLeistung);
 bool sign(int Zahl);
 void Bremsen();
 double Setpoint, Input, Output;
+PID Regler;
 
 };
