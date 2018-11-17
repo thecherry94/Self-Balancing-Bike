@@ -13,6 +13,9 @@ static ulong t1 = 0;
 static ulong t2 = 0;
 static ulong ttotal = 500;
 static bool do_log = false;
+
+static int auswuchten_client_id = -1;
+
 cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
@@ -209,12 +212,15 @@ void cBike::setup_webserver_methods()
 
 
 
-    SERVER->attachSocketEvent("test", [&](AsyncWebSocket* server, uint32_t client_id, JsonObject& root)
+    SERVER->attachSocketEvent("auswuchten_set_client_request", [&](AsyncWebSocket* server, uint32_t client_id, JsonObject& root)
     {
-        Serial.print("[WebSocket] got WS event: ");
-        Serial.println(root["type"].asString());
+        auswuchten_client_id = client_id;
 
-        server->client(client_id)->text("{\"type\": \"test\", \"data\":{}}");
+        char buf[256];
+        sprintf(buf, "{\"type\": \"auswuchten_set_client_response\", \"data\": {\"result\": true, \"client_id\": %d}}", auswuchten_client_id);
+
+        server->client(client_id)->text(buf);
+        Serial.println("Auswuchten client set");
     });
 
     Serial.println("Web methods set");
@@ -224,12 +230,24 @@ void cBike::setup_webserver_methods()
 
 
 
+
 void cBike::run()
 {
      _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
     setup_webserver_methods();
+
+    _livelog = new cLivelog<float>(100, "Zeit[ms]", "Amplitude");
+    _livelog->SetSufficientValuesReachedCallback(
+        [&](std::vector<float> values, std::vector<std::string> headers, int num_data_in_row, int rows)
+    {
+        if(auswuchten_client_id > 0)
+        {
+            const char* json = cLivelog<float>::make_json("auswuchten_data", values, headers, num_data_in_row, rows).c_str();
+            SERVER->get_client(auswuchten_client_id)->text(json);
+        }
+    });
 
     //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
     // _Lenkmotor.setBike(this);
@@ -246,6 +264,13 @@ void cBike::run()
 
 void cBike::update()
 {
+    std::vector<float> data_row;
+    data_row.reserve(2);
+    data_row.push_back(millis());
+    data_row.push_back(5 * sin(2.0 * 3.1416 * (100.0/(millis() / 1000.0))));
+    _livelog->write(data_row);
+
+    /*
     //Lenkeransteuerung
    _Lenkmotor.runLenkermotor();
     if ((do_log || t2 > 1) && (micros() - t1 >= ttotal))
@@ -265,8 +290,7 @@ void cBike::update()
     /*if(Sensordaten.lenkwinkel > LENKERWINKEL_MAX || Sensordaten.lenkwinkel < LENKERWINKEL_MIN)
     {
         _Lenkmotor.setMotorfreigabe(false, 4567);
-    }*/
-    /*********************************************************/
+    }
     //Gyromotor
     switch(_state)
     {
@@ -280,5 +304,5 @@ void cBike::update()
             //_lenkerSensor.readCounter(); 
         break;
     }
-    /****************************************************************/
+    */
 }

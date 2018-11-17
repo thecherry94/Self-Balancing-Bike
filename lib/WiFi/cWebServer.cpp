@@ -128,3 +128,9 @@ void cWebServer::onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient 
 
 
 }
+
+
+AsyncWebSocketClient* cWebServer::get_client(uint8_t client_id)
+{
+    return _pws->client(client_id);
+}

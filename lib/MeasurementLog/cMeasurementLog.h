@@ -73,6 +73,9 @@ class cMeasurementLog
 
         void write(T data)
         {
+            if ((float)_data.size() / (float)_data.capacity() >= 0.9f)
+                _data.reserve(100 * _column_headers.size());
+
             _data.push_back(data);
         }
 
