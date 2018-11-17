@@ -8,6 +8,12 @@ int16_t counter;
 
 cLenkersensor::cLenkersensor()
 {
+    abs(7);
+    pinMode(ENCODER_INPUT, INPUT);
+    pinMode(ENCODER_DIRECTION, INPUT);
+    pinMode(ENCODER_ZERO, INPUT_PULLUP);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+    
     lastLenkwinkel = 0;
     lastLenkgeschwindigkeit = 0;
     lastZeit = millis();
@@ -41,6 +47,7 @@ void cLenkersensor::readCounter()
     daten.lenkwinkel = 360/511.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
     daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
     daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
+    
     lastLenkwinkel = daten.lenkwinkel;
     lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
     lastZeit = millis();
@@ -57,6 +64,54 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
     if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
         return 1;
     else 
+        return 0;
+}
+
+float cLenkersensor::getLenkerwinkel()
+{
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        return 666;
+    }
+    else 
+    {
+        return daten.lenkwinkel;     // Daten rückgeben
+    }
+       
+}
+
+float cLenkersensor::getLenkergeschwindigkeit()
+{
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        return 666;
+    }
+    else
+    {
+        return daten.lenkgeschwindigkeit;
+    }
+}
+
+float cLenkersensor::getLenkerbeschleunigung()
+{
+    
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        return 666;
+    }
+    else 
+    {
+        return daten.lenkbeschleunigung;     // Daten rückgeben
+        
+    }
+        
+}
+
+bool cLenkersensor::getCalibration()
+{
+    if(lenkerflag == 1)
+        return 1;
+    else
         return 0;
 }
 

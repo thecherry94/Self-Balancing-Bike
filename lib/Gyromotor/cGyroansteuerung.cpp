@@ -15,15 +15,17 @@ cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
 {
   pinMode(GyroPWMPin, OUTPUT);
     Gyro.attach(GyroPWMPin);
+    Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
+     Serial.print("Gyro auf Pin=");  Serial.println(GyroPWMPin);
 }
  
 
 bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 {
-  if (pSollLeistung<=maxLeistung&&pSollLeistung>=0)
+  if (pSollLeistung<=100&&pSollLeistung>=0)
   {
-    sollLeistung=pSollLeistung;
-     Serial.println(sollLeistung);
+    sollLeistung=pSollLeistung*maxLeistung/100+BoostTo-2; //geändert 16.11.2018
+     //Serial.println(sollLeistung);
     return 0;
   }
   return 1;
@@ -35,7 +37,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
     if(sollLeistung!=istLeistung)
     {
       //magic
-      if(millis()>vorigeZeit+beschleunigung||istLeistung<=GRUNDWERT+BoostTo) //geändert 11.11.2018
+      if(millis()>vorigeZeit+beschleunigung||istLeistung<=BoostTo) //geändert 11.11.2018
       {//Schon 3 instanzen ;D
         vorigeZeit=millis();
         istLeistung=istLeistung+1*((sollLeistung-istLeistung)/abs(sollLeistung-istLeistung));
@@ -47,7 +49,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
 	istLeistung=0;
   //PWM Schalten
   int Lokal=GRUNDWERT+istLeistung; 
-  Serial.println(Lokal-GRUNDWERT);
+  Serial.println(istLeistung);
   Gyro.writeMicroseconds(Lokal);
   return 0;
 }
@@ -63,33 +65,8 @@ bool cGyroansteuerung::setBeschleunigung(byte pBeschleunigung)
 void cGyroansteuerung::setMotorfreigabe(bool pMotorfreigabe)
 {
    motorfreigabe=pMotorfreigabe;
-   //laufen() aufrufen?
+   anlaufen();
 }
-
-//Nicht Aktiv
-
-bool cGyroansteuerung::setLookupDrehzahl(unsigned int pDrehzahl)
-{
-	/*int Zeiger;
-	for (int x = 100;x <= 200; x++)
-	{
-		if (pDrehzahl >= EEPROM.read(x))
-		{
-			Zeiger = x;
-			break;
-		}
-	}
-	sollLeistung = EEPROM.read(Zeiger);*/
-  return 0;
-}
-void cGyroansteuerung::setMachNeLookup(int pMessDrehzahl)
-{
-	int Adresse = istLeistung + 100; //Ab Adresse 100 bis 200
-  EEPROM.begin(4096);
-	EEPROM.put(Adresse, pMessDrehzahl);
-  EEPROM.commit();
-}
-
 
 int cGyroansteuerung::getLeistung(bool ist = true)
 {

@@ -2,6 +2,8 @@
 #define WEBSERVER__H
 
 #include <Arduino.h>
+#include <map>
+#include <string>
 #include "ESPAsyncWebServer.h"
 #include "AsyncJson.h"
 #include "cSingleton.h"
@@ -11,7 +13,7 @@
 
 #define SERVER cWebServer::instance()
 
-
+using AsyncWebSocketEventHandler = std::function<void(AsyncWebSocket* server, uint32_t client_id, JsonObject& root)>;
 
 class cWebServer : public cSingleton<cWebServer>
 {
@@ -19,9 +21,15 @@ class cWebServer : public cSingleton<cWebServer>
 
     private:
         AsyncWebServer* _pserver;
+        AsyncWebSocket* _pws;
+        std::map<std::string, AsyncWebSocketEventHandler> _socket_events;
+
+        void onWebSocketEvent(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len);
 
     protected:
         cWebServer();
+
+        
 
     public:
         void connectToAP(const char*, const char*);
@@ -29,6 +37,7 @@ class cWebServer : public cSingleton<cWebServer>
 
         void attachURL(const char*, ArRequestHandlerFunction, WebRequestMethod);
         void attachJSON(const char*, ArJsonRequestHandlerFunction);
+        void attachSocketEvent(char* name, AsyncWebSocketEventHandler handler);
 };
 
 

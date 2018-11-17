@@ -17,7 +17,7 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin)
-    : _gyro(gyroPWMPin)         //Hier wird die cGyro initialisiert
+    : _gyro(gyroPWMPin)       //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     
@@ -166,7 +166,7 @@ void cBike::setup_webserver_methods()
     }, HTTP_GET);
 
 
-    SERVER->attachURL("/gyro/power", [&](AsyncWebServerRequest* req)
+    SERVER->attachURL("/gyro/leistung", [&](AsyncWebServerRequest* req)
     {
         if(req->hasParam("val"))
         {
@@ -175,11 +175,47 @@ void cBike::setup_webserver_methods()
 
             Serial.println(leistung);       
         }
+
         char buf[3];
         sprintf(buf, "%d", _gyro.getLeistung(false));
         req->send(200, "text/plain", buf);
     }, HTTP_GET);
 
+
+    SERVER->attachURL("/lenker/winkel", [&](AsyncWebServerRequest* req)
+    {
+        if(req->hasParam("val"))
+        {
+            // Lenkerwinkel setzen   
+        }
+
+        char buf[16];
+        sprintf(buf, "%f", _lenkerSensor.getLenkerwinkel());
+        req->send(200, "text/plain", buf);
+    }, HTTP_GET);
+
+
+
+
+
+
+    SERVER->attachSocketEvent("ping", [&](AsyncWebSocket* server, uint32_t client_id, JsonObject& root)
+    {
+        Serial.print("[WebSocket] got WS event: ");
+        Serial.println(root["type"].asString());
+
+        server->client(client_id)->text("{\"type\": \"pong\", \"data\":{}}");
+    });
+
+
+
+    SERVER->attachSocketEvent("test", [&](AsyncWebSocket* server, uint32_t client_id, JsonObject& root)
+    {
+        Serial.print("[WebSocket] got WS event: ");
+        Serial.println(root["type"].asString());
+
+        server->client(client_id)->text("{\"type\": \"test\", \"data\":{}}");
+    });
 
     Serial.println("Web methods set");
 
@@ -190,13 +226,14 @@ void cBike::setup_webserver_methods()
 
 void cBike::run()
 {
-     _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!!
+     _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
     setup_webserver_methods();
+
     //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
-    //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
-   // _Lenkmotor.setBike(this);
+    // _Lenkmotor.setBike(this);
+
     
 
 
