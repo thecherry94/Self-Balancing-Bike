@@ -92,6 +92,7 @@ void setup_web_methods()
 
 
 const int pPoti = 2; //A2
+//cLenkermotoransteuerung Motor;
 cLenkermotorV2 Motor;
 cLenkersensor _lenkerSensor;
 cBike bike(pPoti);
@@ -124,6 +125,8 @@ void setup()
 
 void loop()
 {
+
+    
     a = 0;
     b = 0;
     c = 0;
@@ -171,26 +174,26 @@ void loop()
         do
         {
             _lenkerSensor.readCounter();
-            
             Motor.setLeistung(5);
-            while(Motor.running()== 1)
+            while(Motor.runLenkermotor()== 1)
             {;}
         } while(_lenkerSensor.getMotorwinkel()!=0.0);
 
         Motor.setLeistung(0); //Wir sind da
-        while(Motor.running()== 1){;}
+        while(Motor.runLenkermotor()== 1){;}
         Serial.println("Wir sind da");
         delay(1000);
 
         // Anfangszustand
         Motor.setLeistung(StartPWM);
-        while(Motor.running()== 1){;}
+        while(Motor.runLenkermotor()== 1){;}
+        digitalWrite(35,HIGH);
         delay(1500);
 
         //Sprung
         Serial.println("Sprung");
         Motor.setLeistung(SprungPWM);
-        while(Motor.running()== 1){;}
+        while(Motor.runLenkermotor()== 1){;}
         for (int i=0; i<1000;i++)
             {
                 _lenkerSensor.readCounter();
@@ -198,7 +201,7 @@ void loop()
                 delay(1);
             }
         Motor.setLeistung(0);
-        while(Motor.running() == 1){;}
+        while(Motor.runLenkermotor() == 1){;}
         Serial.println("Stopp");
         for (int i=0; i<0;i++)
             {
@@ -207,7 +210,8 @@ void loop()
             }
         Serial.println("Ende");
         delay(2000);
-        ledcWrite(9, 0);
-        while(true);
+        
     }
+    
+    
 }

@@ -17,8 +17,6 @@
  
 template <typename T> int sgn(T val) {
     int x = (T(0) < val) - (val < T(0));
-    Serial.print("sign:");
-    Serial.println(x);
     return (x);
 }
 
@@ -37,7 +35,7 @@ cLenkermotorV2::cLenkermotorV2() :
 void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 {
     Motorfreigabe=pMotorfreigabe;
-        running();
+        runLenkermotor();
     Serial.println("freigabe");
     //if (Motorfreigabe)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTORV2, "Motor=frei"));
@@ -45,17 +43,19 @@ void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTORV2, "Motor=aus"));
 }
 
-bool cLenkermotorV2::running()
+bool cLenkermotorV2::runLenkermotor()
 {
     //Freigabe prüfen
     if(Motorfreigabe==false)
     {
         //Abschalten
         sollLeistung=0;
+        istLeistung = 0;
         PWMschalten();
         return 1;
     }
     //Winkel prüfen
+    /*
     if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL-5||_lenkerSensor->getCalibration()==1)//n.io.
     {
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Overshot"));
@@ -65,9 +65,13 @@ bool cLenkermotorV2::running()
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Powerbreak"));
         }
         else
-        sollLeistung=0;
+        {
+            sollLeistung=0;
+            istLeistung=0;
+        }
+        
     }
-   
+   */
     //Geschwindigkeit Prüfen
     if(abs(_lenkerSensor->getLenkergeschwindigkeit())>MAXSPEED)//n.io.
     {
@@ -86,7 +90,6 @@ bool cLenkermotorV2::running()
         return 0;
     }
     Regler.Compute(); 
-    Serial.println("Chill");
     return 1;
     
     
@@ -96,20 +99,20 @@ bool cLenkermotorV2::dirchange()
 {
     if (sgn(istLeistung) != sgn(sollLeistung))
     {
+        
+        //dirchange
+        if(sollLeistung<0)
+            digitalWrite(dir_PIN,LOW);
+        else if(sollLeistung>0)
+            digitalWrite(dir_PIN,HIGH);
+        else
+            digitalWrite(dir_PIN,LOW);
         //Abschalten
         istLeistung=0;
         PWMschalten();
-        //dirchange
-        if(sollLeistung<=0)
-            dir=0;
-        else
-            dir=1;
-        //Pin
-        digitalWrite(dir_PIN,dir);
         //timer start
         Zeit=millis();
         istLeistung=sollLeistung;
-        Serial.print("2   ");Serial.println(istLeistung);
     }
     else if(millis()>=Zeit+TOTZEIT)
      {
@@ -121,19 +124,8 @@ bool cLenkermotorV2::dirchange()
 void cLenkermotorV2::PWMschalten()
 {
     //Log Motor
-    Serial.print("Leistung:");
-    Serial.println(istLeistung);
-    
-    if (sollLeistung==0) {
-      ledcWrite(CHANNEL, 0);
-    }
-    else
-    {
-        int x = abs(istLeistung*2.55);
-        ledcWrite(CHANNEL, x);
-        Serial.print("x:");
-        Serial.println(x);
-    }
+    int x = abs(istLeistung*2.55);
+    ledcWrite(CHANNEL, x);
 }
 
 void cLenkermotorV2::setLeistung(int psollLeistung)

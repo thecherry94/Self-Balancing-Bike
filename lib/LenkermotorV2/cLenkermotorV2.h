@@ -9,12 +9,12 @@
 */	
 
 
-#define TOTZEIT 20 //in ms
-#define ANDYFAKTOR 60 //in Prozent
-#define CHANNEL 9
+#define TOTZEIT 200 //in ms  min 20
+#define ANDYFAKTOR 50 //in Prozent
+#define CHANNEL 2
 #define Frequenz 1000
-#define PWM_PIN DAC1
-#define dir_PIN DAC2
+#define PWM_PIN 32
+#define dir_PIN 14
 #define PREZISION 3 //+-Grad
 #define Boost 5 //in Prozent
 #define MAXSPEED 10000 //in Kp
@@ -35,7 +35,7 @@ void setLeistung(int psollLeistung);            //-100 bis 100
 int getLeistung();                              //is klar
 void setMotorfreigabe(bool pMotorfreigabe);     //auf true setzen!!! sonnst geht nix
 bool Drehen(int pWinkel, int pLeistung);         //noch net fertig
-bool running();                                 //Hauptfunktion Zyklisch aufrufen
+bool runLenkermotor();                                 //Hauptfunktion Zyklisch aufrufen
 void setLenkerSensor(cLenkersensor* sensor);
 
 
