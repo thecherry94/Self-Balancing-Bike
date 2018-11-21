@@ -1,0 +1,402 @@
+
+<html>
+    <head>
+        <title>Selbststabilisierendes Fahrrad - Gyro Demo</title>
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>  
+        <style>
+            *
+            {
+                padding: 0;
+                margin: 0;
+                letter-spacing: 2px;
+                
+            }
+            body
+            {
+                 font-family: 'Raleway';font-size: 22px;
+            }
+            h1
+            {
+                font-size: 5vmin;
+                margin-bottom: 20px;
+            }
+    
+            h2
+            {
+                font-size: 3vmin;
+            }
+    
+            #containerContainer
+            {
+                width: 80%;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                margin-left: auto;
+                margin-right: auto;
+                justify-content: center;
+                color: #3c3c3c;
+            }
+            
+            /********************* Mobile Geraete***************/
+            @media (max-width: 1000px) {
+                #containerContainer{
+                    width: 100%;
+                }
+            }	
+    
+            .subjectContainer
+            {
+                height: 25%;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                background-color: white;
+                font-size: 3vmin;
+            }
+    
+            #titleContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #statusContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #sliderContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-bottom: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #neigungContainer
+            {
+                border-right: 1px solid #3c3c3c;
+                border-left: 1px solid #3c3c3c;
+            }
+    
+            #sliderRevsSlider
+            {
+                width: 95%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            input[type=range] 
+            {
+              -webkit-appearance: none;
+              width: 100%;
+              margin: 22.75px 0;
+            }
+
+            input[type=range]:focus 
+            {
+              outline: none;
+            }
+
+            input[type=range]::-webkit-slider-runnable-track 
+            {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: #003366;
+              border-radius: 2px;
+              border: 0.2px solid #010101;
+            }
+
+            input[type=range]::-webkit-slider-thumb
+            {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+              -webkit-appearance: none;
+              margin-top: -22.95px;
+            }
+
+            input[type=range]:focus::-webkit-slider-runnable-track 
+            {
+              background: #004080;
+            }
+
+            input[type=range]::-moz-range-track 
+            {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              background: #003366;
+              border-radius: 2px;
+              border: 0.2px solid #010101;
+            }
+
+            input[type=range]::-moz-range-thumb 
+            {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+            }
+
+            input[type=range]::-ms-track 
+            {
+              width: 100%;
+              height: 4.5px;
+              cursor: pointer;
+              background: transparent;
+              border-color: transparent;
+              color: transparent;
+            }
+
+            input[type=range]::-ms-fill-lower 
+            {
+              background: #00264d;
+              border: 0.2px solid #010101;
+              border-radius: 4px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+
+            input[type=range]::-ms-fill-upper 
+            {
+              background: #003366;
+              border: 0.2px solid #010101;
+              border-radius: 4px;
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+            }
+
+            input[type=range]::-ms-thumb 
+            {
+              box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+              border: 1px solid #3c3c3c;
+              height: 50px;
+              width: 50px;
+              border-radius: 25px;
+              background: #ffffff;
+              cursor: pointer;
+              height: 4.5px;
+            }
+
+            input[type=range]:focus::-ms-fill-lower 
+            {
+              background: #003366;
+            }
+
+            input[type=range]:focus::-ms-fill-upper 
+            {
+              background: #004080;
+            }
+    
+        </style>
+
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+        <script>
+            var ws = new WebSocketClient("ws://192.168.0.67/ws");
+
+            // Klasse mit EventSystem, um den Verbindungsstatus zu erfassen
+            // und erhaltene Nachrichten an den korrekten Ort weiterzuleiten
+            //
+            function WebSocketClient(ws_location)
+            {
+                var ws_loc = ws_location;
+                var wsc = null;
+                var connected = false;
+                var tm_pp = null;
+                var tm_pp_time = 2000;
+                
+                
+                var ev_open = [];
+                var ev_close = [];
+                var ev_msg = {};
+
+                var colors = {
+                    red: "#E24E42",
+                    yellow: "#e9b000",
+                    green: "#1eaf9e"
+                };
+
+                var self = this;
+
+                
+
+                this.send = function(data)
+                {
+                    if(connected && wsc != null)
+                    {
+                        wsc.send(data);
+                    }
+                }
+
+                var on_open = function()
+                {
+                    console.log("OPEN");
+                    connected = true;
+                    set_status_message("Verbunden", colors.green);
+                    
+                    var packet = {
+                        "type": "pp",
+                        "data": {}
+                    }
+                    self.send(JSON.stringify(packet))
+
+                    tm_pp = setTimeout(function()
+                    {
+                        on_close();
+                        self.connect();
+                    }, tm_pp_time);
+
+                    for(var i = 0; i < ev_open.length; i++)
+                        ev_open[i]();
+                }
+
+                var on_close = function()
+                {
+                    connected = false;
+                    set_status_message("Nicht Verbunden", colors.red);
+
+                    for(var i = 0; i < ev_close.length; i++)
+                        ev_close[i]();
+                }
+
+                var on_msg = function(ev)
+                {
+                    console.log(ev);
+                    var data = JSON.parse(ev.data);
+                    
+
+                    if(ev_msg.hasOwnProperty(data.type))
+                        ev_msg[data.type](data);
+                }
+
+                this.add_open_event = function(func)
+                {
+                    ev_open.push(func);
+                }
+
+                this.add_close_event = function(func)
+                {
+                    ev_close.push(func);
+                }
+
+                this.add_message_event = function(name, func)
+                {
+                    ev_msg[name] = func;
+                }
+
+
+                this.connect = function()
+                {
+                    
+                    if(connected)
+                        return;
+
+                    set_status_message("Connecting...", colors.yellow);
+                    
+                    wsc = null;
+                    wsc = new WebSocket(ws_loc);
+                    wsc.onopen = on_open;
+                    wsc.onclose = on_close;
+                    wsc.onmessage = on_msg;   
+
+                    /*
+                    setTimeout(function()
+                    {
+                        set_status_message("Connection attempt failed", colors.red);
+
+                        setTimeout(function()
+                        {
+                            if(!connected)
+                                self.connect();
+                        }, 1000);    
+                    }, 2000);      
+                    */  
+                };
+
+
+                this.add_message_event("pp", function(data)
+                {
+                    var packet = {
+                        "type": "pp",
+                        "data": {}
+                    }
+                    
+                    clearTimeout(tm_pp);
+                    tm_pp = null;
+
+                    this.send(JSON.stringify(packet))
+                });
+
+
+                
+            }
+
+
+
+            $(function()
+            {
+                //ws.connect();
+                var test = new WebSocket("ws://192.168.0.67/ws");
+            });
+
+            
+            
+            /* Funktion, um Text und Farbe der Statusmeldung zu setzen */
+            function set_status_message(text, color)
+            {
+                $('#fontStatus').html(text);
+                $('#fontStatus').attr("color", color);
+            }
+
+
+            function update_neigung(data)
+            {
+                
+                $('#neigungValueContainer').html(data);
+            }
+        </script>
+
+    </head>
+    <body>
+        <div id="containerContainer">
+            <div id="titleContainer" class="subjectContainer">
+                <h1>Gyroansteuerung - Demo</h1>
+                <h2>Selbststabilisierendes Fahrrad</h2>
+            </div>
+    
+            <div id="statusContainer" class="subjectContainer">
+                Status: <br><br><font id="fontStatus" color="red">nicht verbunden</font>
+            </div>
+    
+            <div id="sliderContainer" class="subjectContainer">
+                Drehzahl [%]<br>
+                <input type="range" min="1" max="1300" value="0" id="sliderRevsSlider" oninput="on_slider_changed(this.value)">
+                <div id="sliderRevSliderPerc">0%</div>
+            </div>
+    
+            <div id="neigungContainer" class="subjectContainer">
+                Neigung [deg]
+                <br>
+                <br />
+                <div id="neigungValueContainer">
+                    ###
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,184 @@
+
+<html>
+    <head>
+        <title>Selbststabilisierendes Fahrrad - Gyro Demo</title>
+        <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>  
+        <style>
+            *
+            {
+                padding: 0;
+                margin: 0;
+                letter-spacing: 2px;   
+            }
+            body
+            {
+                font-family: 'Raleway';
+                font-size: 2vmin;
+            }
+            #container_main
+            {
+                width: 100%;
+                height: 100%;
+                background-color: aqua;
+            }
+            #container_header
+            {
+                width: 100%;
+                height: 15%;
+                background-color: cadetblue;
+                text-align: center;
+            }
+            #container_schalter
+            {
+                width: 100%;
+                height: 20%;
+                background-color: bisque;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+                
+            }
+            .toggle
+            {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #container_schieberegler
+            {
+                width: 100%;
+                height: 30%;
+                background-color: turquoise;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-around;
+            }
+            #container_messwerte
+            {
+                width: 100%;
+                height: 20%;
+                background-color: palegreen;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            #messwerte
+            {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-around;
+            }
+            #container_special
+            {
+                width: 100%;
+                height: 15%;
+                background-color: indigo;
+                text-align: center;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            .container
+            {
+                display: flex;
+                flex-direction: column;
+                /*align-items: center;*/
+                justify-content: center;
+            }
+            #range_n1
+            {
+                width: 80%;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .schieberegler
+            {
+                width: 100%;
+                text-align: center;
+            }
+            fieldset
+            {
+                border: none;
+                
+            }
+            
+            
+            
+            
+            
+        </style>
+
+        
+        
+
+    </head>
+    <body>
+        <div id="container_main">
+            <div id="container_header" class="container">
+                <h1>Selbststabilisierendes Fahrrad</h1>
+            </div>
+            <div id="container_schalter">
+                <div class="toggle">
+                    <label> 
+                        An-/Aus-Schalter
+                        <input type="checkbox"> <span></span> 
+                    </label>
+                </div>
+                <div class="toggle">
+                    <label> 
+                        Gyro links
+                        <input type="checkbox"> <span></span> 
+                    </label>
+                </div>
+                <div class="toggle">
+                    <label> 
+                        Gyro rechts
+                        <input type="checkbox"> <span></span> 
+                    </label>
+                </div>
+                <div class="toggle">
+                    <label> 
+                        Regelung
+                        <input type="checkbox"> <span></span> 
+                    </label>
+                </div>
+            </div>
+            <div id="container_schieberegler">
+                <div class="schieberegler">
+                <p>Drehzahl Gyro links</p>
+                <input id="range_n1" type="range" min="0" max="100" value="0">  
+                </div>
+                <div class="schieberegler">
+                <p>Drehzahl Gyro rechts</p>
+                <input id="range_n1" type="range" min="0" max="100" value="0">
+                </div>
+                <div class="schieberegler">
+                <form>
+                  <p>Motorrichtung</p>
+                  <fieldset>
+                    <input type="radio" id="left" name="Lenkermotor" value="Links">
+                    <label for="left"> Links</label> 
+                    <input type="radio" id="stop" name="Lenkermotor" value="Stopp" checked="checked">
+                    <label for="stop"> Stopp</label>
+                    <input type="radio" id="right" name="Lenkermotor" value="Rechts">
+                    <label for="right"> Rechts </label> 
+                  </fieldset>
+                </form>
+                </div>
+            </div>
+            <div id="container_messwerte">
+                <div id="messwerte">
+                    <div>Neigungswinkel: <font id="fontNeigungswinkel">0 °</font></div>
+                    
+                    <div>Lenkerwinkel: <font id="fontLenkerwinkel">0 °</font></div>
+                    <div>Regler-Soll: <font id="fontRegler">90 °</font></div>
+                </div>
+                    
+                
+            </div>
+            <div id="container_special">
+                <div>Status: <font id="fontStatus">Lenksensor kalibirieren</font></div>
+            </div>
+        </div>
+    </body>
+</html>
