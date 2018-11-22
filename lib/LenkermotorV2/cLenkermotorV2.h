@@ -8,11 +8,11 @@
 *		
 */	
 
-
-#define TOTZEIT 200 //in ms  min 20
+//DO NOT TOUCH !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#define TOTZEIT 80 //in ms  min 20
 #define ANDYFAKTOR 50 //in Prozent
 #define CHANNEL 2
-#define Frequenz 1000
+#define Frequenz 2000
 #define PWM_PIN 32
 #define dir_PIN 14
 #define PREZISION 3 //+-Grad
@@ -34,9 +34,11 @@ cLenkermotorV2();
 void setLeistung(int psollLeistung);            //-100 bis 100
 int getLeistung();                              //is klar
 void setMotorfreigabe(bool pMotorfreigabe);     //auf true setzen!!! sonnst geht nix
-bool Drehen(int pWinkel, int pLeistung);         //noch net fertig
-bool runLenkermotor();                                 //Hauptfunktion Zyklisch aufrufen
+bool Drehen(int pWinkel, int pLeistung);        //noch net fertig
+bool runLenkermotor();                          //Hauptfunktion Zyklisch aufrufen
 void setLenkerSensor(cLenkersensor* sensor);
+bool musik(int pTon, int pLeistung);
+
 
 
 
