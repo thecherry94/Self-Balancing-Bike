@@ -7,11 +7,11 @@
 #include "cLivelog.h"
 
 
-//static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
+static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
-//void setup_web_methods();
-/*
-cBike bike(0);
+void setup_web_methods();
+
+cBike bike(4);
 void setup()
 {
     Serial.begin(115200);
@@ -23,7 +23,7 @@ void setup()
     
     
     
-    //setup_web_methods();
+    setup_web_methods();
 }
 
 
@@ -33,7 +33,7 @@ void loop()
 }
 
 
-/*
+
 void setup_web_methods()
 {
     SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
@@ -85,11 +85,11 @@ void setup_web_methods()
             AsyncWebServerResponse* res = req->beginResponse(200, "application/json", jsonchar);
             req->send(res);
         }
-    }
+    } );
 }
 
-*/
 
+/*
 
 const int pPoti = 2; //A2
 //cLenkermotoransteuerung Motor;
@@ -117,8 +117,8 @@ void setup()
     //Lenkersensor Kalibrieren
     Serial.println("Lenkersensor wird kalibriert...");
     _lenkerSensor.readCounter();
-    while(_lenkerSensor.getCalibration() == 1)
-    { ;}
+    // while(_lenkerSensor.getCalibration() == 1)
+    // { ;}
     Serial.println("Lenkersensor kalibriert!!!");
 }
 
@@ -215,3 +215,4 @@ void loop()
     
     
 }
+*/
