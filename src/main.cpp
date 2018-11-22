@@ -98,6 +98,8 @@ cLenkersensor _lenkerSensor;
 cBike bike(pPoti);
 int Zyklen,StartPWM,SprungPWM;
 int APoti[1000];
+int zeit[1000];
+int lastzeit;
 int a = 0;
     int b = 0;
     int c = 0;
@@ -174,7 +176,7 @@ void loop()
         do
         {
             _lenkerSensor.readCounter();
-            Motor.setLeistung(5);
+            Motor.setLeistung(15);
             while(Motor.runLenkermotor()== 1)
             {;}
         } while(_lenkerSensor.getMotorwinkel()!=0.0);
@@ -190,28 +192,40 @@ void loop()
         digitalWrite(35,HIGH);
         delay(1500);
 
-        //Sprung
-        Serial.println("Sprung");
-        Motor.setLeistung(SprungPWM);
-        while(Motor.runLenkermotor()== 1){;}
+
+    
+
+
+        lastzeit = millis();
+       
         for (int i=0; i<1000;i++)
             {
                 _lenkerSensor.readCounter();
-                APoti[i]=_lenkerSensor.getMotorwinkel();
+                APoti[i] =_lenkerSensor.getMotorwinkel();
+                zeit[i] = millis() - lastzeit;
                 delay(1);
+                if(i==500)
+                {
+                     //Sprung
+                    Serial.println("Sprung");
+                    Motor.setLeistung(SprungPWM);
+                    while(Motor.runLenkermotor()== 1){;}
+                    
+                }
             }
         Motor.setLeistung(0);
         while(Motor.runLenkermotor() == 1){;}
         Serial.println("Stopp");
-        for (int i=0; i<0;i++)
+        for (int i=0; i<1000;i++)
             {
-                Serial.print("Winkel:");
+                Serial.print(zeit[i]);
+                Serial.print(";");
+                //Serial.print("Winkel:");
                 Serial.println(APoti[i]);
             }
         Serial.println("Ende");
         delay(2000);
         
     }
-    
     
 }

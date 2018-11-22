@@ -75,6 +75,11 @@ bool cLenkermotorV2::runLenkermotor()
     //Geschwindigkeit Prüfen
     if(abs(_lenkerSensor->getLenkergeschwindigkeit())>MAXSPEED)//n.io.
     {
+        Serial.println(_lenkerSensor->getLenkergeschwindigkeit());
+        Serial.println(abs(_lenkerSensor->getLenkergeschwindigkeit()));
+
+
+
         Serial.println("zu hohe Geschwindigkeit");
         sollLeistung=(abs(sollLeistung)-1)*sgn(sollLeistung); //Das wird wohl zu Schnell sein oder überschrieben werden
         //Fehler

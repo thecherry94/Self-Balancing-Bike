@@ -9,10 +9,10 @@
 */	
 
 
-#define TOTZEIT 200 //in ms  min 20
+#define TOTZEIT 80 //in ms  min 20
 #define ANDYFAKTOR 50 //in Prozent
 #define CHANNEL 2
-#define Frequenz 1000
+#define Frequenz 2200
 #define PWM_PIN 32
 #define dir_PIN 14
 #define PREZISION 3 //+-Grad
