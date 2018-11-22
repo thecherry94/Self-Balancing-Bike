@@ -190,6 +190,7 @@ bool cLenkermotorV2::musik(int pTon, int pLeistung)
 {
     if(pTon>=1000&&pTon<=5000&&pLeistung<15&&pLeistung<=0)
     {
+        Serial.println("bin beim Andy");
         setLeistung(pLeistung*-1);
         ledcSetup(CHANNEL, pTon, 8);
         return 0;

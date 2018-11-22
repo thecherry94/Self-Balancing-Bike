@@ -101,6 +101,8 @@
 #define NOTE_DS8 4978
 
 
+/*
+
 static const char* test_site = "<html><head><title>HTTP Test</title></head><script>function btn_click(){var t=new XMLHttpRequest;t.open(\"POST\",\"/json\",!0),t.setRequestHeader(\"Content-Type\",\"application/json\"),t.onreadystatechange=function(){if(4===t.readyState&&200===t.status){var e=JSON.parse(t.responseText);console.log(e)}};var e=JSON.stringify({type:\"add\",data:[4,4,4]});console.log(e),t.send(e)}var txt,btn,lbl;document.addEventListener(\"DOMContentLoaded\",function(t){txt=document.getElementById(\"txt\"),btn=document.getElementById(\"btn\"),lbl=document.getElementById(\"lbl\")})</script><body><input id=\"txt\"/> <button type=\"button\" id=\"btn\" onclick=\"btn_click()\">Send</button><br/><label id=\"lbl\">Response</label></body></html>";
 
 void setup_web_methods();
@@ -183,7 +185,7 @@ void setup_web_methods()
 }
 
 
-/*
+*/
 
 const int pPoti = 2; //A2
 //cLenkermotoransteuerung Motor;
@@ -267,120 +269,177 @@ void loop()
 			}
 		}
 	}
-   if(SprungPWM == 100 && StartPWM == 100)
+    Serial.println("Musik fängt an!");
+   if(true)
    {
-       _lenkerSensor.Musik(NOTE_G6,5);
+       Motor.setMotorfreigabe(true);
+       if(Motor.musik(NOTE_G6,10) == true)
+       {
+           Serial.println("True");
+       }
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(550);
-            _lenkerSensor.Musik(NOTE_G6,0);
+            Motor.musik(NOTE_G6,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
-       _lenkerSensor.Musik(NOTE_G6,5);
+       Motor.musik(NOTE_G6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(550);
-            _lenkerSensor.Musik(NOTE_G6,0);
+            Motor.musik(NOTE_G6,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
 
-       _lenkerSensor.Musik(NOTE_G6,5);
+       Motor.musik(NOTE_G6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(600);
-       _lenkerSensor.Musik(NOTE_DS6,5);
+       Motor.musik(NOTE_DS6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(450);
-       _lenkerSensor.Musik(NOTE_AS6,5);
+       Motor.musik(NOTE_AS6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(150);
 
-       _lenkerSensor.Musik(NOTE_G6,5);
+       Motor.musik(NOTE_G6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(600);
-       _lenkerSensor.Musik(NOTE_DS6,5);
+       Motor.musik(NOTE_DS6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(450);
-       _lenkerSensor.Musik(NOTE_AS6,5);
+       Motor.musik(NOTE_AS6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(150);
 
-       _lenkerSensor.Musik(NOTE_G6,5);
+       Motor.musik(NOTE_G6,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(1200);
 
-       _lenkerSensor.Musik(NOTE_D7,5);
+       Motor.musik(NOTE_D7,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(550);
-            _lenkerSensor.Musik(NOTE_D7,0);
+            Motor.musik(NOTE_D7,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
-       _lenkerSensor.Musik(NOTE_D7,5);
+       Motor.musik(NOTE_D7,10);
+       while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
        delay(550);
-            _lenkerSensor.Musik(NOTE_D7,0);
+            Motor.musik(NOTE_D7,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
 
-        _lenkerSensor.Musik(NOTE_D7,5);
+        Motor.musik(NOTE_D7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_DS7,5);
+        Motor.musik(NOTE_DS7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_FS6,5);
+        Motor.musik(NOTE_FS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_DS6,5);
+        Motor.musik(NOTE_DS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_G6,5);
+        Motor.musik(NOTE_G6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(1200);
 
-        _lenkerSensor.Musik(NOTE_G7,5);
-        delay(600)
-        _lenkerSensor.Musik(NOTE_G6,5);
-        delay(250)
-            _lenkerSensor.Musik(NOTE_G6,0);
+        Motor.musik(NOTE_G7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
+        delay(600);
+        Motor.musik(NOTE_G6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
+        delay(250);
+            Motor.musik(NOTE_G6,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
-        _lenkerSensor.Musik(NOTE_G6,5);
-        delay(250)
-            _lenkerSensor.Musik(NOTE_G6,0);
+        Motor.musik(NOTE_G6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
+        delay(250);
+            Motor.musik(NOTE_G6,0);
+            while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
             delay(50);
 
-        _lenkerSensor.Musik(NOTE_G7,5);
+        Motor.musik(NOTE_G7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_FS7,5);
+        Motor.musik(NOTE_FS7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_F7,5);
+        Motor.musik(NOTE_F7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_E7,5);
+        Motor.musik(NOTE_E7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
-        _lenkerSensor.Musik(NOTE_DS7,5);
+        Motor.musik(NOTE_DS7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
-        _lenkerSensor.Musik(NOTE_E7,5);
+        Motor.musik(NOTE_E7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_GS6,5);
+        Motor.musik(NOTE_GS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_CS7,5);
+        Motor.musik(NOTE_CS7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_C7,5);
+        Motor.musik(NOTE_C7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_B7,5);
+        Motor.musik(NOTE_B7,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
-        _lenkerSensor.Musik(NOTE_A6,5);
+        Motor.musik(NOTE_A6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_DS6,5);
+        Motor.musik(NOTE_DS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(300);
 
-        _lenkerSensor.Musik(NOTE_FS6,5);
+        Motor.musik(NOTE_FS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_DS6,5);
+        Motor.musik(NOTE_DS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_FS6,5);
+        Motor.musik(NOTE_FS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(600);
-        _lenkerSensor.Musik(NOTE_DS6,5);
+        Motor.musik(NOTE_DS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(450);
-        _lenkerSensor.Musik(NOTE_AS6,5);
+        Motor.musik(NOTE_AS6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(150);
 
-        _lenkerSensor.Musik(NOTE_G6,5);
+        Motor.musik(NOTE_G6,10);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
         delay(1200);       
+        
+        Motor.musik(2000,0);
+        while(Motor.runLenkermotor()== 1){;}        // Das while ist doof!!!!!
    }
+   Serial.println("Musik ist fertig!");
 
    Serial.println("Motor wird freigegeben...");
    Motor.setMotorfreigabe(true);
