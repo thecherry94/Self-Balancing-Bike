@@ -319,8 +319,67 @@ void loop()
         delay(150);
 
         _lenkerSensor.Musik(NOTE_G6,5);
+        delay(1200);
+
+        _lenkerSensor.Musik(NOTE_G7,5);
+        delay(600)
+        _lenkerSensor.Musik(NOTE_G6,5);
+        delay(250)
+            _lenkerSensor.Musik(NOTE_G6,0);
+            delay(50);
+        _lenkerSensor.Musik(NOTE_G6,5);
+        delay(250)
+            _lenkerSensor.Musik(NOTE_G6,0);
+            delay(50);
+
+        _lenkerSensor.Musik(NOTE_G7,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_FS7,5);
+        delay(450);
+        _lenkerSensor.Musik(NOTE_F7,5);
         delay(150);
-        
+
+        _lenkerSensor.Musik(NOTE_E7,5);
+        delay(150);
+        _lenkerSensor.Musik(NOTE_DS7,5);
+        delay(150);
+        _lenkerSensor.Musik(NOTE_E7,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_GS6,5);
+        delay(150);
+
+        _lenkerSensor.Musik(NOTE_CS7,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_C7,5);
+        delay(450);
+        _lenkerSensor.Musik(NOTE_B7,5);
+        delay(150);
+
+        _lenkerSensor.Musik(NOTE_AS6,5);
+        delay(150);
+        _lenkerSensor.Musik(NOTE_A6,5);
+        delay(150);
+        _lenkerSensor.Musik(NOTE_AS6,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_DS6,5);
+        delay(300);
+
+        _lenkerSensor.Musik(NOTE_FS6,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_DS6,5);
+        delay(450);
+        _lenkerSensor.Musik(NOTE_AS6,5);
+        delay(150);
+
+        _lenkerSensor.Musik(NOTE_FS6,5);
+        delay(600);
+        _lenkerSensor.Musik(NOTE_DS6,5);
+        delay(450);
+        _lenkerSensor.Musik(NOTE_AS6,5);
+        delay(150);
+
+        _lenkerSensor.Musik(NOTE_G6,5);
+        delay(1200);       
    }
 
    Serial.println("Motor wird freigegeben...");
