@@ -44,6 +44,10 @@ namespace WiFiConfig
     // static const char*     apSSID = "Trandyspot";
     // static const char*     apPASS = "12345678";
 
+    //Julian WLAN
+    // static const char*     apSSID = "huiasdf";
+    // static const char*     apPASS = "asdfasdf";
+
 
     static const IPAddress softapIP(10, 10, 10, 0);
     static const IPAddress softapMASK(255, 255, 255, 0);
