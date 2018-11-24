@@ -3,8 +3,62 @@
 #include <Arduino.h>
 #undef min
 #undef max
+#include "cStateMachine.h"
 #include "cBike.h"
 #include "cLivelog.h"
+#include "global.h"
+
+
+#include "states/cInitializationState.h"
+#include "states/cGyroSpinupState.h"
+#include "states/cRunningState.h"
+#include "states/cGyroSpindownState.h"
+#include "states/cEmergencyState.h"
+
+
+
+
+
+
+// 19 = LINKS
+// 15 = RECHTS
+cBike bike(19, 15);
+
+cStateMachine stateMachine;
+
+cInitializationState initState(&bike, STATE_INIT);
+cGyroSpinupState spinupState(&bike, STATE_GYROSPINUP);
+cRunningState runningState(&bike, STATE_RUNNING);
+cGyroSpindownState spindownState(&bike, STATE_GYROSPINDOWN);
+cEmergencyState emergencyState(&bike, STATE_EMERGENCY);
+
+
+
+void setup()
+{
+    Serial.begin(115200);
+    Serial.println("Initialisiere States...");
+
+    stateMachine.AddState(&initState);
+    stateMachine.AddState(&runningState);
+    stateMachine.AddState(&spinupState);
+    stateMachine.AddState(&spindownState);
+    stateMachine.AddState(&emergencyState);
+    Serial.println("States initialisiert.");
+}
+
+
+
+void loop()
+{
+    stateMachine.Update();
+}
+
+
+
+
+
+/*
 
 #define Musikleistung 14
 

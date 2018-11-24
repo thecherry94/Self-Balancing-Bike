@@ -22,12 +22,16 @@ void cWebServer::connectToAP(const char* ssid, const char* pass)
     // TODO delay entfernen bzw. thread starten
     Serial.print("Connecting to ");
     Serial.println(ssid);
+
+    /*
     while(WiFi.status() != WL_CONNECTED)
     {
         delay(100);
         Serial.print(".");
         digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     }
+    */
+
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.print("Connection established.\n Local IP: ");
     Serial.println(WiFi.localIP().toString().c_str());

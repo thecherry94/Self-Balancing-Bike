@@ -19,8 +19,8 @@ static int auswuchten_client_id = -1;
 cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
-cBike::cBike(byte gyroPWMPin)
-    : _gyro(gyroPWMPin)       //Hier wird die cGyro initialisiert
+cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
+    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)       //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     
@@ -30,8 +30,8 @@ cBike::cBike(byte gyroPWMPin)
 
 
     // Fahrradstatus auf STARTING setzen
-    _state = EBikeState::STARTING;
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Bike starting"));
+    //_state = EBikeState::STARTING;
+    //LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Bike starting"));
 
 
      //Setup Lenkersensor
@@ -135,7 +135,7 @@ void cBike::setup_webserver_methods()
         {
             int leistung = atoi(req->getParam("leistung")->value().c_str());
 
-            _gyro.setLeistung(leistung);
+            _gyroL.setLeistung(leistung);
 
             char buf[128];
             sprintf(buf, "Leistung gesetzt auf: %d%s", leistung, "%");
@@ -174,13 +174,13 @@ void cBike::setup_webserver_methods()
         if(req->hasParam("val"))
         {
             int leistung = atoi(req->getParam("val")->value().c_str());
-            _gyro.setLeistung(leistung); 
+            _gyroL.setLeistung(leistung); 
 
             Serial.println(leistung);       
         }
 
         char buf[3];
-        sprintf(buf, "%d", _gyro.getLeistung(false));
+        sprintf(buf, "%d", _gyroL.getLeistung(false));
         req->send(200, "text/plain", buf);
     }, HTTP_GET);
 
@@ -233,7 +233,7 @@ void cBike::setup_webserver_methods()
 
 void cBike::run()
 {
-     _gyro.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
+     _gyroL.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
     setup_webserver_methods();
@@ -260,6 +260,33 @@ void cBike::run()
 }
 
 
+
+
+cLenkersensor* cBike::GetSensorLenker()
+{
+    return &_lenkerSensor;
+}
+
+
+cGyroansteuerung* cBike::GetGyroL()
+{
+    return &_gyroL;
+}
+
+cGyroansteuerung* cBike::GetGyroR()
+{
+    return &_gyroR;
+}
+
+cLenkermotorV2* cBike::GetLenkeransteuerung()
+{
+    return &_Lenkmotor;
+}
+
+cNeigungssensor* cBike::GetSensorNeigung()
+{
+    return _sensorNeigung;
+}
 
 
 void cBike::update()
@@ -300,7 +327,7 @@ void cBike::update()
         break;
 
         case EBikeState::RUNNING:
-            _gyro.anlaufen();
+            _gyroL.anlaufen();
             //_lenkerSensor.readCounter(); 
         break;
     }

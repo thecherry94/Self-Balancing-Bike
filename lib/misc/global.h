@@ -3,7 +3,11 @@
 #define GLOBAL__H
 
 
-
+#define STATE_INIT          "init"
+#define STATE_GYROSPINUP    "spinup"
+#define STATE_RUNNING       "run"
+#define STATE_GYROSPINDOWN  "spindown"
+#define STATE_EMERGENCY     "emergency"
 
 
 

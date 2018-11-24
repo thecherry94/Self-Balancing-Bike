@@ -3,7 +3,6 @@
 
 #include "cNeigungssensor.h"
 #include "cGyroansteuerung.h"
-#include "cLenkermotoransteuerung.h"
 #include "cLenkersensor.h"
 #include "cMeasurementLog.h"
 //#include "precomp.h"
@@ -43,9 +42,10 @@ class cBike
          * cMeineKlase _meineKlasse;                    *
          ************************************************
          */ 
-        cGyroansteuerung _gyro;
+        cGyroansteuerung _gyroL;
+        cGyroansteuerung _gyroR;
         cNeigungssensor* _sensorNeigung;
-        cLenkermotoransteuerung _Lenkmotor;
+        cLenkermotorV2 _Lenkmotor;
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
 
         cLivelog<float>* _livelog;
@@ -68,7 +68,7 @@ class cBike
          ************************************************
          */ 
 
-        void setup_webserver_methods();
+        
 
 
         
@@ -79,10 +79,17 @@ class cBike
          */ 
         byte gyroleistung = 0;
     public:
-        cBike(byte);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
+        cBike(byte, byte);        // Hier sollen die Member lediglich mit Standardwerten initialisiert
 
         void run();         // Hier sitzt die Startlogik
 
         void update();      // Programmlogik
+        void setup_webserver_methods();
+
+        cLenkersensor* GetSensorLenker();  
+        cGyroansteuerung* GetGyroL();
+        cGyroansteuerung* GetGyroR();
+        cLenkermotorV2* GetLenkeransteuerung();
+        cNeigungssensor* GetSensorNeigung();
 
 };

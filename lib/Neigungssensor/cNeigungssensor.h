@@ -22,6 +22,8 @@ class cNeigungssensor
         int _refreshRate;
 
         bool _calibRestored;
+        bool _calibrationRunning;
+        bool _calibSuccess;
 
         // Zusätzliches Variablen
         //
@@ -40,6 +42,8 @@ class cNeigungssensor
 
         bool loadCalibrationFromMemory();
         void displaySensorOrientation();
+
+        bool IsCalibrated();
 
 };
 
