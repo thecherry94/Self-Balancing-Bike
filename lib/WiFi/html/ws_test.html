@@ -3,45 +3,87 @@
         <title>HTTP Test</title>
     </head>
     <script>
-        var txt;
-        var btn;
-        var lbl;
-
+        
+        // Eine Event basierte Klasse, um einen WebSocket-Client zu betreiben
+        //
         function WebSocketClient()
         {
+            // Das WebSocket Objekt
             this.ws = null;
+
+            // Verbindungsstatus
             this.connected = false;
+
+            // Timeout für den ping-pong Austausch
             this.tm_pp = null;
+
+            // Timeout für die Wiederholversuche beim Verbindungswiederaufbau
             this.tm_retry = null;
+
+            // WebSocket-Server URL
             this.loc = "";
+
+            // Event Map
             this.events = {};
 
+
+
+            // Fügt ein Event hinzu
+            //
             this.addEventListener = function(name, func)
             {
                 this.events[name] = func;
             }
+            
 
-
+            // Erstelt ein JSON Objekt zum senden
+            // Format
+            // {
+            //    type: "",
+            //    data: 
+            //    {
+            //      number: 0,
+            //      str: "example"      
+            //    }
+            // }
+            //
+            // type: spezifiziert den Namen das Events
+            // data: Objekt, indem alle Daten enthalten sind
+            //
+            this.mjsn = function(t, d)
+            {
+                return JSON.stringify({type: t, data: d});
+            }
+            
+            // Sendet ein ping Event an den Server
+            //
             this.ping = function()
             {
                 var self = this;
-
+                
+                // Kann nur senden, falls verbunden
                 if (this.connected)
                 {
-                    this.ws.send(JSON.stringify({type: "ping", data:{}}));                 
+                    //this.ws.send(JSON.stringify({type: "ping", data:{}}));    
+                    this.ws.send(this.mjson("ping", {}));             
                 }
-
+                
+                // Nächsten schritt nur ausführen, falls tm_tpp == null
                 if (this.tm_pp != null)
                     return;
                 
+                // Dieser Timeout wird ausgelöst, falls nach x Sekunden kein pong Event vom Server zurück kommt
                 this.tm_pp = setTimeout(function()
-                {
+                {   
+                    // Verbindungsstatus erneuern und WebSocke zurücksetzen
                     self.connected = false;
                     self.ws = null;
-
-                    self.events["close"]();
+                    
+                    // Event ausführen und loggen
+                    self.events["close"]("connection-lost");
                     console.log("Connection lost");
-
+                    
+                    // Neuer Verbindungsversuch
                     self.connect(self.loc);
                 }, 1000);
             }
@@ -69,15 +111,19 @@
 
                 if(this.connected)
                     return;
-
+            
+                this.ws = null;
                 this.ws = new WebSocket(location);
 
                 this.ws.onopen = function()
                 {
                     console.log("Connected");
-
-                    self.events["open"]();
+                  
                     self.connected = true;
+                    
+                    if(typeof self.events["open"] != 'undefined')
+                        self.events["open"]("connection-established");
+
                     self.ping();                   
                 }
 
@@ -86,14 +132,17 @@
                     console.log("Disconnected");
 
                     self.connected = false;
-                    self.events["close"]();
+
+                    if(typeof self.events["close"] != 'undefined')
+                        self.events["close"]("connection-closed");
 
                 }
 
                 this.ws.onmessage = function(ev)
                 {             
-                    console.log(ev.data);
                     var json = JSON.parse(ev.data);
+
+                    // TODO: Fehler abfangen
 
                     if(json.type == "pong")
                     {
@@ -101,11 +150,18 @@
                     }
                     else
                     {
-                        self.events[json.type](json);
+                        if(typeof self.events[json.type] != 'undefined')
+                            self.events[json.type](json);
+                        else
+                            console.log("Warning: Event [" + json.type + "] is undefined.");
                     }
                 }
             }
-
+            
+            this.is_connected = function()
+            {
+                return this.connected;
+            }
             
         }
 
@@ -130,7 +186,7 @@
                 t.innerHTML = "Nicht Verbunden";
             });
 
-            wsc.addEventListener("test", function()
+            wsc.addEventListener("test", function(json)
             {
                 t2.innerHTML = parseInt(t2.innerHTML) + 1;
             });
