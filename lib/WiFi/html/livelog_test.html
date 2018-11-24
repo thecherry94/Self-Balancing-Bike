@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <title></title>
+
+        <script>
+        function WebSocketClient()
+        {
+            this.ws = null;
+            this.connected = false;
+            this.tm_pp = null;
+            this.tm_retry = null;
+            this.loc = "";
+            this.events = {};
+
+            this.addEventListener = function(name, func)
+            {
+                this.events[name] = func;
+            }
+
+
+            this.ping = function()
+            {
+                var self = this;
+
+                if (this.connected)
+                {
+                    this.ws.send(JSON.stringify({type: "ping", data:{}}));                 
+                }
+
+                if (this.tm_pp != null)
+                    return;
+                
+                this.tm_pp = setTimeout(function()
+                {
+                    self.connected = false;
+                    self.ws = null;
+
+                    self.events["close"]();
+                    console.log("Connection lost");
+
+                    self.connect(self.loc);
+                }, 1000);
+            }
+
+            this.pong = function()
+            {
+                var self = this;
+
+                clearTimeout(this.tm_pp);
+                this.tm_pp = null;
+
+                setTimeout(function()
+                {
+                    self.ping();
+                }, 1000);
+            }
+
+
+            this.connect = function(location)
+            {
+                var self = this;
+
+                console.log("Connecting...");
+                this.loc = location;
+
+                if(this.connected)
+                    return;
+
+                this.ws = new WebSocket(location);
+
+                this.ws.onopen = function()
+                {
+                    console.log("Connected");
+
+                    self.events["open"]();
+                    self.connected = true;
+                    self.ping();                   
+                }
+
+                this.ws.onclose = function()
+                {
+                    console.log("Disconnected");
+
+                    self.connected = false;
+                    self.events["close"]();
+
+                }
+
+                this.ws.onmessage = function(ev)
+                {             
+                    console.log(ev.data);
+                    var json = JSON.parse(ev.data);
+
+                    if(json.type == "pong")
+                    {
+                        self.pong();
+                    }
+                    else
+                    {
+                        self.events[json.type](json);
+                    }
+                }
+            }
+
+            
+        }
+        
+        var wsc;
+        document.addEventListener("DOMContentLoaded", function(event)
+        {
+            wsc = new WebSocketClient();
+            wsc.connect("ws://192.168.1.0/ws");
+
+            wsc.addEventListener("open", function()
+            {
+
+            });
+
+            wsc.addEventListener("close", function()
+            {
+
+            });
+            
+            wsc.addEventListener("auswuchten_data", function(json)
+            {
+                console.log("Auswuchten data erhalten");
+            });
+
+            wsc.addEventListener("auswuchten_set_client_response", function(json)
+            {
+                //console.log(json);
+            });
+        });
+        </script>
+    </head>
+    <body>
+
+    </body>
+</html>

@@ -26,11 +26,12 @@
 
 //	Gyroansteuerung
 
-#define BoostTo 20
-#define StandardGyroAnlauf 400
-#define maxLeistung 60
+#define BoostTo 22
+#define StandardGyroAnlauf 600
+#define maxLeistung 50
 #define verboteneZahl 6666
 #define GRUNDWERT 1000
+#define WARTREZEIT 3000 //ms für Beep Beep
 
 class cGyroansteuerung
 {
@@ -38,7 +39,7 @@ class cGyroansteuerung
   unsigned int beschleunigung= StandardGyroAnlauf; //Zeit für 1% Schritt in ms
   byte sollLeistung, istLeistung;
   bool motorfreigabe=false; //0=Keine Freigabe
-  long vorigeZeit=millis();
+  long vorigeZeit=millis()+WARTREZEIT; //Warten zu beginn   //geändert 16.11.2018 nutzlos!
   Servo Gyro; 
   //EEPROM von Byte 0 bis 100 //Soll Drehzahl in 1/s Speichern
 

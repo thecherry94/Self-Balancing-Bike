@@ -16,7 +16,7 @@ cLenkersensor::cLenkersensor()
     
     lastLenkwinkel = 0;
     lastLenkgeschwindigkeit = 0;
-    lastZeit = millis();
+    lastZeit = esp_timer_get_time()*1000;
     daten.lenkbeschleunigung = 0;
     daten.lenkgeschwindigkeit = 0;
     daten.lenkwinkel = 0;
@@ -45,9 +45,11 @@ void cLenkersensor::readCounter()
 {
     pcnt_get_counter_value(ENCODER_1, &counter);
     daten.lenkwinkel = 360/511.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
-    daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
-    daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
-    
+    if(millis() != lastZeit)        // Sicherheitsfunktion um eine durch 0 Teilung zu verhindern
+    {
+        daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (esp_timer_get_time()*1000 - lastZeit) * 1000; // [°/s]
+        daten.lenkbeschleunigung = (daten.lenkgeschwindigkeit - lastLenkgeschwindigkeit) / (millis() - lastZeit) * 1000; // [°/s²]
+    }
     lastLenkwinkel = daten.lenkwinkel;
     lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
     lastZeit = millis();

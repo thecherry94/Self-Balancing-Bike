@@ -8,16 +8,21 @@
 *		
 */	
 
+//DO NOT TOUCH !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#define TOTZEIT 80 //in ms  min 20
+#define ANDYFAKTOR 50 //in Prozent
+#define CHANNEL 2
+#define Frequenz 2000
+#define PWM_PIN 32
+#define dir_PIN 14
+#define PREZISION 3 //+-Grad
+#define Boost 5 //in Prozent
+#define MAXSPEED 10000 //in Kp
+#define BREMSWINKEL 85
 
-#define TOTZEIT 20 //in ms
-#define ANDYFAKTOR 30 //in Prozent
-#define CHANNEL 3
-#define Frequenz 1000
-#define PWM_PIN 15 //! Noch klätren.  Sollte man das nicht wo gesammelt machen?
-#define dir_PIN 16
-#define PREZESSION 3 //+-Grad
 
-
+#include <PID_v1.h>
+#include "cLenkersensor.h"
 
 class cLenkermotorV2
 
@@ -28,20 +33,28 @@ public:
 cLenkermotorV2();
 void setLeistung(int psollLeistung);            //-100 bis 100
 int getLeistung();                              //is klar
-bool setMotorfreigabe(bool pMotorfreigabe);     //auf true setzen!!! sonnst geht nix
-bool Drehen(int pWinkel, int pLeistung);         //noch net fertig
-bool running();                                 //Hauptfunktion Zyklisch aufrufen
+void setMotorfreigabe(bool pMotorfreigabe);     //auf true setzen!!! sonnst geht nix
+bool Drehen(int pWinkel, int pLeistung);        //noch net fertig
+bool runLenkermotor();                          //Hauptfunktion Zyklisch aufrufen
+void setLenkerSensor(cLenkersensor* sensor);
+bool musik(int pTon, int pLeistung);
+
+
 
 
 private:
 
-unsigned long Zeit;
+unsigned long Zeit = 0;
 bool dir=0;
 int sollLeistung=0;
 int istLeistung=0;
 bool Motorfreigabe=0;
 void PWMschalten();
-bool dirchange(int sollLeistung);
-
+bool dirchange();
+//byte sign(int Zahl);
+void Bremsen();
+double Setpoint, Input, Output;
+PID Regler;
+cLenkersensor* _lenkerSensor;
 
 };

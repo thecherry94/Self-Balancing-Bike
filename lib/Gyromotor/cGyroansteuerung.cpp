@@ -16,15 +16,16 @@ cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
   pinMode(GyroPWMPin, OUTPUT);
     Gyro.attach(GyroPWMPin);
     Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
+     Serial.print("Gyro auf Pin=");  Serial.println(GyroPWMPin);
 }
  
 
 bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 {
-  if (pSollLeistung<=maxLeistung&&pSollLeistung>=0)
+  if (pSollLeistung<=100&&pSollLeistung>=0)
   {
-    sollLeistung=pSollLeistung;
-     Serial.println(sollLeistung);
+    sollLeistung=pSollLeistung*maxLeistung/100+BoostTo-2; //geändert 16.11.2018
+     //Serial.println(sollLeistung);
     return 0;
   }
   return 1;
@@ -36,7 +37,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
     if(sollLeistung!=istLeistung)
     {
       //magic
-      if(millis()>vorigeZeit+beschleunigung||istLeistung<=GRUNDWERT+BoostTo) //geändert 11.11.2018
+      if(millis()>vorigeZeit+beschleunigung||istLeistung<=BoostTo) //geändert 11.11.2018
       {//Schon 3 instanzen ;D
         vorigeZeit=millis();
         istLeistung=istLeistung+1*((sollLeistung-istLeistung)/abs(sollLeistung-istLeistung));
@@ -48,7 +49,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
 	istLeistung=0;
   //PWM Schalten
   int Lokal=GRUNDWERT+istLeistung; 
-  Serial.println(Lokal-GRUNDWERT);
+  Serial.println(istLeistung);
   Gyro.writeMicroseconds(Lokal);
   return 0;
 }

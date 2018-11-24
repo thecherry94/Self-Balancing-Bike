@@ -27,18 +27,27 @@ namespace WiFiConfig
 {
     // Philipp WLAN
     //
-    static const char*     apSSID = "Cherry";
-    static const char*     apPASS = "4991Pk1994";
+    //static const char*     apSSID = "Cherry";
+    //static const char*     apPASS = "4991Pk1994";
 
     // Walter WLAN
     //
-    //static const char*     apSSID = "HIT-FRITZBOX-7490";
-    //static const char*     apPASS = "63601430989011937932";
+    static const char*     apSSID = "HIT-FRITZBOX-7490";
+    static const char*     apPASS = "63601430989011937932";
 
     // Max Hotspot
     //
     //static const char*     apSSID = "Max WLAN";
     //static const char*     apPASS = "asdfghjkl";
+
+    //Andy WLAN
+    // static const char*     apSSID = "Trandyspot";
+    // static const char*     apPASS = "12345678";
+
+    //Julian WLAN
+    // static const char*     apSSID = "huiasdf";
+    // static const char*     apPASS = "asdfasdf";
+
 
     static const IPAddress softapIP(10, 10, 10, 0);
     static const IPAddress softapMASK(255, 255, 255, 0);
