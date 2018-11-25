@@ -13,6 +13,8 @@ class cInitializationState : public cState
         cLenkersensor* _sensLenker;
         cNeigungssensor* _sensNeigung;
 
+        long _counterWifi;
+
     public:
         cInitializationState(cBike* bike, std::string name);
 

@@ -17,41 +17,16 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	//_bno = Adafruit_BNO055(bno_addr);
 	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
-	if (!_bno.begin())
+	while (!_bno.begin())
 	{
-		Serial.print("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
-		LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
+		Serial.println("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
+		//LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
 
-		while (1);
+		delay(1000);
 	}
 
 	// Versuche, falls vorhanden, Kalibierungsdaten vom EEPROM zu laden
 	//loadCalibrationFromMemory();
-
-	/*
-	// Falls die jeweilige URL aufgerufen wird,
-	// werden die Neigungsdaten in ein JSON-Objekt verpackt und gesendet
-	//
-	WIFI_COM->attachURL("/sensor_data", [&](AsyncWebServerRequest* r) 
-	{
-		sensors_vec_t v;
-		v = getEvent().orientation;
-		std::stringstream ss;
-		ss << "{";
-		ss << "\"x\":" << v.x << ", ";
-		ss << "\"y\":" << v.y << ", ";
-		ss << "\"z\":" << v.z;
-		ss << "}";
-		r->send(200, "text/plain", ss.str().c_str());
-	});
-	*/
-
-	/*
-	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 
-	{
-		r->send(200, "text/html", site);
-	});
-	*/
 }
 
 
