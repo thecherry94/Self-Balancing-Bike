@@ -175,7 +175,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	}
 	else
 	{
-
+		Serial.println("Kalibrierung gefunden");
 		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"Kalibrierungskonfiguration im Speicher gefunden. Kalibrierung wird hergestellt."));*/
@@ -210,12 +210,13 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		"BNO055 Kalibrierungskonfiguration gefunden - Magnetometer wird justiert."));*/
 
 		Serial.println("Sensor leicht bewegen, um Magnetometer zu kalibrieren.");
-		while (!_bno.isFullyCalibrated())
+		/*while (!_bno.isFullyCalibrated())
 		{
 			_bno.getEvent(&event);
 			displayCalStatus();
+			Serial.println("");
 			delay(_refreshRate);
-		}
+		}*/
 	}
 	else
 	{
@@ -265,23 +266,26 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	_bno.getSensorOffsets(newCalib);
 	displaySensorOffsets(newCalib);
 
-	Serial.println("Neue Kalibrierung wird nun gespeichert...");
-	/*LOG->write(cStatusLogEntry(
-		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"Kalibierung wird nun in EEPROM gespeichert."));*/
+	if(!_calibRestored)
+	{
+		Serial.println("Neue Kalibrierung wird nun gespeichert...");
+		/*LOG->write(cStatusLogEntry(
+			EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
+			"Kalibierung wird nun in EEPROM gespeichert."));*/
 
-	eeAddr = 0; //(int)EE_ADDRESS_NEIGUNG;
-	_bno.getSensor(&sensor);
-	bnoID = sensor.sensor_id;
+		eeAddr = 0; //(int)EE_ADDRESS_NEIGUNG;
+		_bno.getSensor(&sensor);
+		bnoID = sensor.sensor_id;
 
-	EEPROM.put(eeAddr, bnoID);
-	EEPROM.commit();
+		EEPROM.put(eeAddr, bnoID);
+		EEPROM.commit();
 
-	eeAddr += sizeof(long);
-	EEPROM.put(eeAddr, newCalib);
-	EEPROM.commit();
-	
-	Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
+		eeAddr += sizeof(long);
+		EEPROM.put(eeAddr, newCalib);
+		EEPROM.commit();
+		
+		Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
+	}
 	//displayCalStatus();
 	//delay(3000);
 
