@@ -101,8 +101,11 @@ void cInitializationState::enter()
 
    _counterWifi = millis();
 
-    if(!create_ap)
-        SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        if(!create_ap)
+            SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
+    }
 }
 
 

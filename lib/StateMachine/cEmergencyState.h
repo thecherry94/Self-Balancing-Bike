@@ -14,7 +14,7 @@ class cEmergencyState : public cState
     public:
         cEmergencyState(cBike* bike, std::string name);
 
-        void enter();
-        void process();
-        void leave();
+        void enter() override;
+        void process() override;
+        void leave() override;
 };

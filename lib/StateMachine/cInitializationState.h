@@ -20,7 +20,7 @@ class cInitializationState : public cState
 
         ~cInitializationState();
 
-        void enter();
-        void process();
-        void leave();
+        void enter() override;
+        void process() override;
+        void leave() override;
 };
