@@ -9,6 +9,7 @@
 #include "global.h"
 #include "cLenkermotorV2.h"
 #include "cLivelog.h"
+//#include <driver/ledc.h>
 
 
 
@@ -44,7 +45,7 @@ class cBike
          */ 
         cGyroansteuerung _gyroL;
         cGyroansteuerung _gyroR;
-        cNeigungssensor _sensorNeigung;
+        cNeigungssensor* _sensorNeigung;
         cLenkermotorV2 _Lenkmotor;
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
 
@@ -91,5 +92,10 @@ class cBike
         cGyroansteuerung* GetGyroR();
         cLenkermotorV2* GetLenkeransteuerung();
         cNeigungssensor* GetSensorNeigung();
+
+        void InitNeigungssensor()
+        {
+            _sensorNeigung = new cNeigungssensor(55);
+        }
 
 };

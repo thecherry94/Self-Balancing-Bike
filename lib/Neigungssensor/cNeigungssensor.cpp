@@ -1,6 +1,7 @@
 #include "cNeigungssensor.h"
 #include "EEPROM.h"
 #include <sstream>
+#include <Wire.h>
 
 #include "cStatusLog.h"
 #include "cWebServer.h"
@@ -12,14 +13,17 @@
 // Konstruktor
 // Hier 
 cNeigungssensor::cNeigungssensor(int bno_addr) 
-	: _bno(Adafruit_BNO055(bno_addr)), _calibRestored(false), _refreshRate(100)
+	: _bno(Adafruit_BNO055(55)), _calibRestored(false), _refreshRate(100)
 {
+	//Wire.begin();
 	Serial.begin(115200);
 	//_bno = Adafruit_BNO055(bno_addr);
 	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
-	while (!_bno.begin())
+	bool check = _bno.begin();
+	while (!check)
 	{
+		check = _bno.begin();
 		Serial.println("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
 		//LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
 
@@ -87,7 +91,7 @@ void cNeigungssensor::displayCalStatus()
 	Serial.print("\t");
 	if (!system)
 	{
-			Serial.print("! ");
+		Serial.print("! ");
 	}
 
 	/* Display the individual values */
@@ -209,6 +213,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		while (!_bno.isFullyCalibrated())
 		{
 			_bno.getEvent(&event);
+			displayCalStatus();
 			delay(_refreshRate);
 		}
 	}
@@ -311,7 +316,7 @@ sensors_event_t cNeigungssensor::getEvent()
 
 bool cNeigungssensor::IsFullyCalibrated()
 {
-	return _bno.isFullyCalibrated();
+	return true; // _bno.isFullyCalibrated();
 }
 
 

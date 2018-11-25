@@ -34,6 +34,8 @@ void cGyroSpinupState::enter()
     Serial.println("cGyroSpinupState::enter");
     _gyroL->setMotorfreigabe(true);
     _gyroR->setMotorfreigabe(true);
+
+    digitalWrite(LED_BUILTIN, LOW);
 }
 
 

@@ -25,6 +25,7 @@ cInitializationState::cInitializationState(cBike* bike, std::string name)
 
     AddTransition(t_Init_Spinup);
 
+    
     //_bike->setup_webserver_methods();
 
     _counterWifi = 0;
@@ -39,13 +40,23 @@ cInitializationState::~cInitializationState()
 
 void cInitializationState::enter()
 {
+    EEPROM.begin(9600);
+    //EEPROM.writeInt(0, 0);
+    //EEPROM.commit();
+
+   
+
     bool create_ap = false;
     bool use_config = false;
 
     Serial.println("cInitializationState::enter");
 
     SerialPrettyPrint("Neigungssensor Initialisierungsroutine", 40, '*');
+    _bike->InitNeigungssensor();
+    _sensNeigung = _bike->GetSensorNeigung();
     _sensNeigung->loadCalibrationFromMemory();
+
+
 
 
     /*
