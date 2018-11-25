@@ -14,7 +14,7 @@ class cGyroSpindownState : public cState
     public:
         cGyroSpindownState(cBike* bike, std::string name);
 
-        void enter();
-        void process();
-        void leave();
+        void enter() override;
+        void process() override;
+        void leave() override;
 };
