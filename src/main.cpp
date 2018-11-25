@@ -36,7 +36,7 @@ cEmergencyState emergencyState(&bike, STATE_EMERGENCY);
 
 void setup()
 {
-    Serial.begin(115200);
+    
     Serial.println("Initialisiere States...");
 
     stateMachine.AddState(&initState);
