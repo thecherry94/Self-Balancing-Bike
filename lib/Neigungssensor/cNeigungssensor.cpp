@@ -3,7 +3,7 @@
 #include <sstream>
 
 #include "cStatusLog.h"
-#include "cWiFiKommunikation.h"
+#include "cWebServer.h"
 
 #define MODULE_NEIGUNG "NEIGUNGSSENSOR"
 
@@ -26,7 +26,7 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	}
 
 	// Versuche, falls vorhanden, Kalibierungsdaten vom EEPROM zu laden
-	loadCalibrationFromMemory();
+	//loadCalibrationFromMemory();
 
 	/*
 	// Falls die jeweilige URL aufgerufen wird,

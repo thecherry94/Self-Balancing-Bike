@@ -19,10 +19,9 @@ cInitializationState::cInitializationState(cBike* bike, std::string name)
     t_Init_Spinup.transitionCondition = [&]() 
     { 
         return _sensLenker->getCalibration() == 0 && 
-               _sensNeigung->IsCalibrated(); //&& 
+               _sensNeigung->IsFullyCalibrated(); //&& 
                //WisFi.status() == WL_CONNECTED;
     };
-    t_Init_Spinup.transitionCondition = []() {};
 
     AddTransition(t_Init_Spinup);
 
@@ -39,6 +38,7 @@ void cInitializationState::enter()
 {
     Serial.println("cInitializationState::enter");
 
+    Serial.println("Neigungssensor Initialisierungsroutine");
     _sensNeigung->loadCalibrationFromMemory();
 }
 

@@ -12,6 +12,9 @@
 
 
 #include <WiFi.h>
+#include <Arduino.h>
+
+#include <string>
 
 /* 
  * Setzt den Modus auf debug.
@@ -71,6 +74,7 @@ namespace WebPages
 
 
 
+void SerialPrettyPrint(std::string txt, uint8_t chars_per_line, char border);
 
 
 
