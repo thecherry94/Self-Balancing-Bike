@@ -38,7 +38,7 @@ void cInitializationState::enter()
 {
     Serial.println("cInitializationState::enter");
 
-    Serial.println("Neigungssensor Initialisierungsroutine");
+    SerialPrettyPrint("Neigungssensor Initialisierungsroutine", 40, '*');
     _sensNeigung->loadCalibrationFromMemory();
 }
 

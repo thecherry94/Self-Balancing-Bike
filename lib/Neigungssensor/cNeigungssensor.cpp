@@ -339,7 +339,7 @@ bool cNeigungssensor::IsFullyCalibrated()
 }
 
 
-imu::Vector<3> cNeigungssensor::getRawData(Adafruit_BNO055::adafruit_vector_type_t)
+imu::Vector<3> cNeigungssensor::getRawData(Adafruit_BNO055::adafruit_vector_type_t type)
 {
 	return _bno.getVector(type);
 }
