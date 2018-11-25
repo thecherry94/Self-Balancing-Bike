@@ -44,7 +44,7 @@ class cBike
          */ 
         cGyroansteuerung _gyroL;
         cGyroansteuerung _gyroR;
-        cNeigungssensor* _sensorNeigung;
+        cNeigungssensor _sensorNeigung;
         cLenkermotorV2 _Lenkmotor;
         cLenkersensor _lenkerSensor;        // Objekt erzeugt von cLenkersensor
 

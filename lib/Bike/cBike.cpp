@@ -20,7 +20,8 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
-    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)       //Hier wird die cGyro initialisiert
+    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts),      //Hier wird die cGyro initialisiert
+      _sensorNeigung(BNO055Config::Address)
 { 
     // Hier eure Klassen initialisieren
     
@@ -249,7 +250,6 @@ void cBike::run()
         }
     });
 
-    //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
     // _Lenkmotor.setBike(this);
 
     
