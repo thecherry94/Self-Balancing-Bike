@@ -285,7 +285,7 @@ cLenkermotorV2* cBike::GetLenkeransteuerung()
 
 cNeigungssensor* cBike::GetSensorNeigung()
 {
-    return _sensorNeigung;
+    return &_sensorNeigung;
 }
 
 
