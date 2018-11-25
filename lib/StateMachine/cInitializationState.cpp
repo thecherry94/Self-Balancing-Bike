@@ -20,12 +20,13 @@ cInitializationState::cInitializationState(cBike* bike, std::string name)
     { 
         return _sensLenker->getCalibration() == 0 && 
                _sensNeigung->IsCalibrated(); //&& 
-               //WiFi.status() == WL_CONNECTED;
+               //WisFi.status() == WL_CONNECTED;
     };
+    t_Init_Spinup.transitionCondition = []() {};
 
     AddTransition(t_Init_Spinup);
 
-    _bike->setup_webserver_methods();
+    //_bike->setup_webserver_methods();
 }
 
 cInitializationState::~cInitializationState()
@@ -37,16 +38,15 @@ cInitializationState::~cInitializationState()
 void cInitializationState::enter()
 {
     Serial.println("cInitializationState::enter");
+
+    _sensNeigung->loadCalibrationFromMemory();
 }
 
 
 
 void cInitializationState::process()
 {
-    if (!_sensNeigung->IsCalibrated())
-    {
-        _sensNeigung->loadCalibrationFromMemory();
-    }
+    
 }
 
 

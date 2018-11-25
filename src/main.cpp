@@ -44,6 +44,7 @@ void setup()
     stateMachine.AddState(&spinupState);
     stateMachine.AddState(&spindownState);
     stateMachine.AddState(&emergencyState);
+    
     Serial.println("States initialisiert.");
 }
 

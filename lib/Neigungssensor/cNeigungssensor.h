@@ -1,13 +1,10 @@
-
-
+#include "Adafruit_Sensor.h"
+#include "Adafruit_BNO055.h"
+#include "Wire.h"
+#include "cWebServer.h"
 
 #ifndef NEIGUNG_H
 #define NEIGUNG_H
-
-#include "Adafruit_BNO055.h"
-#include "Adafruit_Sensor.h"
-#include "Wire.h"
-#include "cWebServer.h"
 
 #define EE_ADDRESS_NEIGUNG 1
 
@@ -22,8 +19,6 @@ class cNeigungssensor
         int _refreshRate;
 
         bool _calibRestored;
-        bool _calibrationRunning;
-        bool _calibSuccess;
 
         // Zusätzliches Variablen
         //
@@ -43,7 +38,7 @@ class cNeigungssensor
         bool loadCalibrationFromMemory();
         void displaySensorOrientation();
 
-        bool IsCalibrated();
+        bool IsFullyCalibrated();
 
 };
 
