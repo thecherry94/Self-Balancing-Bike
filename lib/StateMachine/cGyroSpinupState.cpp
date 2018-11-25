@@ -1,6 +1,8 @@
 #include "cGyroSpinupState.h"
 #include "stdio.h"
 
+#include <Arduino.h>
+
 
 /*
  * TODO:

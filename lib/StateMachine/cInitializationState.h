@@ -16,6 +16,8 @@ class cInitializationState : public cState
     public:
         cInitializationState(cBike* bike, std::string name);
 
+        ~cInitializationState();
+
         void enter();
         void process();
         void leave();

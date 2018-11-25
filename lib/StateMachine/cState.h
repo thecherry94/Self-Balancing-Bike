@@ -24,6 +24,8 @@ class cState
 		virtual void process() = 0;
 		virtual void leave() = 0;
 
+		virtual ~cState();
+
 		void CheckTransitionConditions();
 		void AddTransition(sTransition);
 		void SetStateMachine(cStateMachine* mach);

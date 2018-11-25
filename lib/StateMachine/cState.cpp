@@ -5,6 +5,11 @@ cState::cState(std::string name)
 	_name = name;
 }
 
+cState::~cState()
+{
+
+}
+
 void cState::CheckTransitionConditions()
 {
 	for (int i = 0; i < _transitions.size(); i++)

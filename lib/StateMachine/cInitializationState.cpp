@@ -1,6 +1,8 @@
 #include "cInitializationState.h"
 #include <WiFi.h>
 
+#include <Arduino.h>
+
 
 cInitializationState::cInitializationState(cBike* bike, std::string name)
     : cState(name)
@@ -16,8 +18,7 @@ cInitializationState::cInitializationState(cBike* bike, std::string name)
     t_Init_Spinup.transitionAction = [&]() { Serial.println("Tranistion INIT -> GYROSPINUP"); };
     t_Init_Spinup.transitionCondition = [&]() 
     { 
-        return _sensLenker->getCalibration()
-         == 0 && 
+        return _sensLenker->getCalibration() == 0 && 
                _sensNeigung->IsCalibrated(); //&& 
                //WiFi.status() == WL_CONNECTED;
     };
@@ -25,6 +26,11 @@ cInitializationState::cInitializationState(cBike* bike, std::string name)
     AddTransition(t_Init_Spinup);
 
     _bike->setup_webserver_methods();
+}
+
+cInitializationState::~cInitializationState()
+{
+    
 }
 
 

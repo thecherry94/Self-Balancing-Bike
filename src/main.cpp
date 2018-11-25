@@ -9,11 +9,11 @@
 #include "global.h"
 
 
-#include "states/cInitializationState.h"
-#include "states/cGyroSpinupState.h"
-#include "states/cRunningState.h"
-#include "states/cGyroSpindownState.h"
-#include "states/cEmergencyState.h"
+#include "cInitializationState.h"
+#include "cGyroSpinupState.h"
+#include "cRunningState.h"
+#include "cGyroSpindownState.h"
+#include "cEmergencyState.h"
 
 
 
