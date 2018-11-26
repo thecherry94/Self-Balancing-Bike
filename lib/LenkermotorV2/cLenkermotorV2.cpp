@@ -160,10 +160,10 @@ bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
     }
     //PID...
     
-    //Regler.SetMode(AUTOMATIC);
-    //Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
+    Regler.SetMode(AUTOMATIC);
+    Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
     Serial.print("MRegler regelt:"); Serial.println(Output);
-    //sollLeistung=&Output*pLeistung/100;
+    sollLeistung=Output* pLeistung/100;
     //Loging sollLeistung
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION,"MODULE_LENKERMOTORV2", "Hier soll die Leistung stehen \n"));
     return 1;
@@ -190,7 +190,6 @@ bool cLenkermotorV2::musik(int pTon, int pLeistung)
 {
     if(pTon>=1000&&pTon<=5000&&pLeistung<15&&pLeistung>=0)
     {
-        Serial.println("bin beim Andy");
         setLeistung(pLeistung*-1);
         ledcSetup(CHANNEL, pTon, 8);
         return 0;
