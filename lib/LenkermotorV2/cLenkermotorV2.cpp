@@ -1,7 +1,7 @@
 /*
 * File: LenkermotorV2.cpp
 * Autor: AB
-* Date: 12.11.2018  
+* Date: 26.11.2018  
 * Sources: 
 * Content: Eine Header-Datei um auf alle Konstanten, Variablen und Funktion definieren, die f�r unser Fahrrad ben�tigt werden
 * ToDo: Aufgabe						Bearbeiter		fertig/in Bearbeitung
@@ -139,7 +139,7 @@ void cLenkermotorV2::setLeistung(int psollLeistung)
     if(psollLeistung<=100&&psollLeistung>=-100)
     {   
         sollLeistung=psollLeistung*ANDYFAKTOR/100;
-        //Regler.SetMode(MANUAL);
+        Regler.SetMode(MANUAL);
     }  
     else
         LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Bist du Dumm oder so? gibt ne gescheite Zahl an!!!! \n "));
@@ -159,10 +159,9 @@ bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
         return 0;
     }
     //PID...
-    
+    Serial.print("Input"); Serial.println(pWinkel);
     Regler.SetMode(AUTOMATIC);
-    Regler.SetOutputLimits(-255*ANDYFAKTOR/100, 255*ANDYFAKTOR/100);
-    Serial.print("MRegler regelt:"); Serial.println(Output);
+    Serial.print("MRegler regelt:  "); Serial.println(Output);
     sollLeistung=Output* pLeistung/100;
     //Loging sollLeistung
     LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION,"MODULE_LENKERMOTORV2", "Hier soll die Leistung stehen \n"));
