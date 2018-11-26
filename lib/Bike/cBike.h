@@ -9,6 +9,7 @@
 #include "global.h"
 #include "cLenkermotorV2.h"
 #include "cLivelog.h"
+//#include <driver/ledc.h>
 
 
 
@@ -91,5 +92,10 @@ class cBike
         cGyroansteuerung* GetGyroR();
         cLenkermotorV2* GetLenkeransteuerung();
         cNeigungssensor* GetSensorNeigung();
+
+        void InitNeigungssensor()
+        {
+            _sensorNeigung = new cNeigungssensor(55);
+        }
 
 };

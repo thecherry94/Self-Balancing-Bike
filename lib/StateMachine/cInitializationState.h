@@ -13,12 +13,14 @@ class cInitializationState : public cState
         cLenkersensor* _sensLenker;
         cNeigungssensor* _sensNeigung;
 
+        long _counterWifi;
+
     public:
         cInitializationState(cBike* bike, std::string name);
 
         ~cInitializationState();
 
-        void enter();
-        void process();
-        void leave();
+        void enter() override;
+        void process() override;
+        void leave() override;
 };

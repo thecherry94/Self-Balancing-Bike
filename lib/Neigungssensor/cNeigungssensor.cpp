@@ -1,6 +1,7 @@
 #include "cNeigungssensor.h"
 #include "EEPROM.h"
 #include <sstream>
+#include <Wire.h>
 
 #include "cStatusLog.h"
 #include "cWebServer.h"
@@ -12,46 +13,25 @@
 // Konstruktor
 // Hier 
 cNeigungssensor::cNeigungssensor(int bno_addr) 
-	: _bno(Adafruit_BNO055(bno_addr)), _calibRestored(false), _refreshRate(100)
+	: _bno(Adafruit_BNO055(55)), _calibRestored(false), _refreshRate(100)
 {
+	//Wire.begin();
+	Serial.begin(115200);
 	//_bno = Adafruit_BNO055(bno_addr);
 	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
-	if (!_bno.begin())
+	bool check = _bno.begin();
+	while (!check)
 	{
-		Serial.print("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
-		LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
+		check = _bno.begin();
+		Serial.println("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
+		//LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
 
-		while (1);
+		delay(1000);
 	}
 
 	// Versuche, falls vorhanden, Kalibierungsdaten vom EEPROM zu laden
 	//loadCalibrationFromMemory();
-
-	/*
-	// Falls die jeweilige URL aufgerufen wird,
-	// werden die Neigungsdaten in ein JSON-Objekt verpackt und gesendet
-	//
-	WIFI_COM->attachURL("/sensor_data", [&](AsyncWebServerRequest* r) 
-	{
-		sensors_vec_t v;
-		v = getEvent().orientation;
-		std::stringstream ss;
-		ss << "{";
-		ss << "\"x\":" << v.x << ", ";
-		ss << "\"y\":" << v.y << ", ";
-		ss << "\"z\":" << v.z;
-		ss << "}";
-		r->send(200, "text/plain", ss.str().c_str());
-	});
-	*/
-
-	/*
-	_com.attachEvent("/sensor", [&](AsyncWebServerRequest* r) 
-	{
-		r->send(200, "text/html", site);
-	});
-	*/
 }
 
 
@@ -111,7 +91,7 @@ void cNeigungssensor::displayCalStatus()
 	Serial.print("\t");
 	if (!system)
 	{
-			Serial.print("! ");
+		Serial.print("! ");
 	}
 
 	/* Display the individual values */
@@ -195,7 +175,7 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	}
 	else
 	{
-
+		Serial.println("Kalibrierung gefunden");
 		/*LOG->write(cStatusLogEntry(
 		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
 		"Kalibrierungskonfiguration im Speicher gefunden. Kalibrierung wird hergestellt."));*/
@@ -230,11 +210,13 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 		"BNO055 Kalibrierungskonfiguration gefunden - Magnetometer wird justiert."));*/
 
 		Serial.println("Sensor leicht bewegen, um Magnetometer zu kalibrieren.");
-		while (!_bno.isFullyCalibrated())
+		/*while (!_bno.isFullyCalibrated())
 		{
 			_bno.getEvent(&event);
+			displayCalStatus();
+			Serial.println("");
 			delay(_refreshRate);
-		}
+		}*/
 	}
 	else
 	{
@@ -284,23 +266,26 @@ bool cNeigungssensor::loadCalibrationFromMemory()
 	_bno.getSensorOffsets(newCalib);
 	displaySensorOffsets(newCalib);
 
-	Serial.println("Neue Kalibrierung wird nun gespeichert...");
-	/*LOG->write(cStatusLogEntry(
-		EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
-		"Kalibierung wird nun in EEPROM gespeichert."));*/
+	if(!_calibRestored)
+	{
+		Serial.println("Neue Kalibrierung wird nun gespeichert...");
+		/*LOG->write(cStatusLogEntry(
+			EStatusLogEntryType::NOTIFICATION, MODULE_NEIGUNG,
+			"Kalibierung wird nun in EEPROM gespeichert."));*/
 
-	eeAddr = 0; //(int)EE_ADDRESS_NEIGUNG;
-	_bno.getSensor(&sensor);
-	bnoID = sensor.sensor_id;
+		eeAddr = 0; //(int)EE_ADDRESS_NEIGUNG;
+		_bno.getSensor(&sensor);
+		bnoID = sensor.sensor_id;
 
-	EEPROM.put(eeAddr, bnoID);
-	EEPROM.commit();
+		EEPROM.put(eeAddr, bnoID);
+		EEPROM.commit();
 
-	eeAddr += sizeof(long);
-	EEPROM.put(eeAddr, newCalib);
-	EEPROM.commit();
-	
-	Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
+		eeAddr += sizeof(long);
+		EEPROM.put(eeAddr, newCalib);
+		EEPROM.commit();
+		
+		Serial.println("Neue Kalibierung erfolgreich abgespeichert!");
+	}
 	//displayCalStatus();
 	//delay(3000);
 
@@ -335,7 +320,7 @@ sensors_event_t cNeigungssensor::getEvent()
 
 bool cNeigungssensor::IsFullyCalibrated()
 {
-	return _bno.isFullyCalibrated();
+	return true; // _bno.isFullyCalibrated();
 }
 
 

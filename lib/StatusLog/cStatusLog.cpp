@@ -44,7 +44,6 @@ HTML::Element cStatusLogEntry::exprt()
 	//ss << "<p style=\"color: " << get_color(_type) << ";\">" << "[" << _module << "] " <<  _message << "</p><br />";
 
 	std::string color = get_color(_type);
-	/*
 	
 	CTML::Node node_base("p");
 	CTML::Node node_basic("a");

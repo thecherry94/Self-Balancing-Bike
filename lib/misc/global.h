@@ -62,7 +62,7 @@ namespace WiFiConfig
 
 namespace BNO055Config
 {
-    static const unsigned char Address = 55;
+    static const uint8_t Address = 55;
 }
 
 

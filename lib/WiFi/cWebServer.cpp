@@ -23,14 +23,14 @@ void cWebServer::connectToAP(const char* ssid, const char* pass)
     Serial.print("Connecting to ");
     Serial.println(ssid);
 
-    /*
+    
     while(WiFi.status() != WL_CONNECTED)
     {
         delay(100);
         Serial.print(".");
         digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
     }
-    */
+    
 
     digitalWrite(LED_BUILTIN, HIGH);
     Serial.print("Connection established.\n Local IP: ");

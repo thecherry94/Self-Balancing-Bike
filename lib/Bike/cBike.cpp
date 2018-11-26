@@ -20,7 +20,7 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
-    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)       //Hier wird die cGyro initialisiert
+    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)      //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     
@@ -57,7 +57,7 @@ cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
 void cBike::setup_webserver_methods()
 {
 
-    SERVER->connectToAP(WiFiConfig::apSSID, WiFiConfig::apPASS);
+    
 
     /*
      **********************************************
@@ -232,7 +232,7 @@ void cBike::run()
      _gyroL.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
-    setup_webserver_methods();
+    //setup_webserver_methods();
 
     _livelog = new cLivelog<float>(100, "Zeit[ms]", "Amplitude");
     _livelog->SetSufficientValuesReachedCallback(
@@ -245,7 +245,6 @@ void cBike::run()
         }
     });
 
-    //_sensorNeigung = new cNeigungssensor(BNO055Config::Address);
     // _Lenkmotor.setBike(this);
 
     

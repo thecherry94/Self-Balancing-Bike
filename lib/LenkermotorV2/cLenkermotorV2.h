@@ -11,7 +11,7 @@
 //DO NOT TOUCH !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #define TOTZEIT 80 //in ms  min 20
 #define ANDYFAKTOR 50 //in Prozent
-#define CHANNEL 2
+#define CHANNEL 4 //getestet 2
 #define Frequenz 2000
 #define PWM_PIN 32
 #define dir_PIN 14

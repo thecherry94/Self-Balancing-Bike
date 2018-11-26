@@ -14,7 +14,7 @@
 cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
 {
   pinMode(GyroPWMPin, OUTPUT);
-    Gyro.attach(GyroPWMPin);
+   Gyro.attach(GyroPWMPin);
     Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
      Serial.print("Gyro auf Pin=");  Serial.println(GyroPWMPin);
 }
