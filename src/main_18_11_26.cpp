@@ -24,7 +24,6 @@
 /*
 // 19 = LINKS
 // 15 = RECHTS
-
 cBike bike(19, 15);
 
 cStateMachine stateMachine;
@@ -39,6 +38,7 @@ cEmergencyState emergencyState(&bike, STATE_EMERGENCY);
 
 void setup()
 {
+    Serial.begin(115200);
     Serial.println("Initialisiere States...");
 
     stateMachine.AddState(&initState);
@@ -48,17 +48,6 @@ void setup()
     stateMachine.AddState(&emergencyState);
     
     Serial.println("States initialisiert.");
-    
-
-/*
-   Adafruit_BNO055 bno(55);
-
-   while(!bno.begin())
-   {
-       Serial.println("GEHT NET REEEEEEEEE");
-   }
-   Serial.println("Geht leute");
-   */
 }
 
 

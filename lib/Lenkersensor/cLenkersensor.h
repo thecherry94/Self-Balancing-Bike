@@ -6,9 +6,9 @@
 #include "driver/pcnt.h"
 
 ////////////// Lenkersensor global.h //////////////
-#define ENCODER_INPUT 5             // Pin Counter Input Definition
-#define ENCODER_DIRECTION 18         // Pin Control Input Definition
-#define ENCODER_ZERO 19             // Pin Nulldurchgang Definition
+#define ENCODER_INPUT 15             // Pin Counter Input Definition
+#define ENCODER_DIRECTION 4         // Pin Control Input Definition
+#define ENCODER_ZERO 5             // Pin Nulldurchgang Definition
 struct lenkerDaten  // Struct mit Daten für den Lenker
 {
   float lenkwinkel; // Winkel des Lenkers in °, in der Mitte: 0, nach links: positv, nach rechts: negativ
@@ -23,6 +23,7 @@ struct lenkerDaten  // Struct mit Daten für den Lenker
 #define ENCODER_MAX_VALUE 511       // max Zählerwert vom Counter
 #define ENCODER_MIN_VALUE -511      // min Zählerwert vom Counter
 #define UMRECHNUNGSZAHL 0           // wenn der Nullpunkt nicht in der Mitte ist
+#define GENAUIGKEIT 1               // Nach wie vielen Millisekunden wird die Geschwindigkeit neu berechnet?
 void isr_lenkersensor();            // isr beim Nulldurchgang
 
 class cLenkersensor
