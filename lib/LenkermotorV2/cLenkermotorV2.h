@@ -17,7 +17,7 @@
 #define dir_PIN 14
 #define PREZISION 3 //+-Grad
 #define Boost 5 //in Prozent
-#define MAXSPEED 10000 //in Kp
+#define MAXSPEED 1000 //in °/s
 #define BREMSWINKEL 85
 
 

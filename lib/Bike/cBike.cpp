@@ -34,11 +34,7 @@ cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION, MODULE_BIKE, "Bike starting"));
 
 
-     //Setup Lenkersensor
-    pinMode(ENCODER_INPUT, INPUT);
-    pinMode(ENCODER_DIRECTION, INPUT);
-    pinMode(ENCODER_ZERO, INPUT_PULLUP);
-    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+   
 
     //Objekte ertellen
    
