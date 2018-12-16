@@ -47,7 +47,6 @@ void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 bool cLenkermotorV2::runLenkermotor()
 {
     //Freigabe prüfen
-    Serial.println("runLenkermotor enter");
     if (_lenkerSensor->getLenkerwinkel() == 666) //Abfrage der Winkelklasse
     {
         Motorfreigabe = false;
@@ -57,7 +56,6 @@ bool cLenkermotorV2::runLenkermotor()
         Serial.println("Irgendein Problem beim Lenkersensor, bitte an Julian wenden!!!");
         return 1;
     }
-    Serial.println("1");
     if(Motorfreigabe==false)
     {
         //Abschalten
@@ -66,15 +64,13 @@ bool cLenkermotorV2::runLenkermotor()
         PWMschalten();
         return 1;
     }
-    
-    Serial.println("2");
     //Winkel prüfen
     
-    if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL||abs(_lenkerSensor->getLenkerwinkel())>-BREMSWINKEL||_lenkerSensor->getCalibration()==1)//n.io.
+    if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL||_lenkerSensor->getLenkerwinkel()<BREMSWINKEL_MINUS||_lenkerSensor->getCalibration()==1)//n.io.
     {
-        if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL)
+        if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL)
             Serial.println("ACHTUNG ANSCHLAG LINKS!!!!");
-        else if(abs(_lenkerSensor->getLenkerwinkel())>-BREMSWINKEL)
+        else if(_lenkerSensor->getLenkerwinkel()<-BREMSWINKEL)
             Serial.println("ACHTUNG ANSCHLAG RECHTS!!!!");
         else 
             Serial.println("Nicht Kalibiert!!!");
@@ -107,21 +103,16 @@ bool cLenkermotorV2::runLenkermotor()
     // }
     
     //dirchange prüfen
-    
-    Serial.println("3");
+
     if(dirchange())
     {
-        Serial.println("dirchange anfang");
         //running
         istLeistung=sollLeistung;
         PWMschalten();
-        Regler.Compute(); 
-        Serial.println("dirchange ende");
+        Regler.Compute();
         return 0;
     }
     Regler.Compute(); 
-    
-    Serial.println("4");
     return 1;
     
     

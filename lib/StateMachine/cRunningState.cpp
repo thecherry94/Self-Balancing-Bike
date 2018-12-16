@@ -2,9 +2,9 @@
 #include <stdio.h>
 
 
-#define Motorpoti 27
-pinMode(Motorpoti, INPUT);
-int potiWert = 0;
+
+int Motorwert = 0;
+
 
 
 cRunningState::cRunningState(cBike* bike, std::string name)
@@ -14,7 +14,7 @@ cRunningState::cRunningState(cBike* bike, std::string name)
 
     _gyroL = _bike->GetGyroL();
     _gyroR = _bike->GetGyroR();
-
+    _sensLenker = _bike->GetSensorLenker();
     _lenker = _bike->GetLenkeransteuerung();
 
     _switchSpinup = false;
@@ -47,7 +47,8 @@ void cRunningState::process()
 {
     _gyroL->anlaufen();
     _gyroR->anlaufen();
-
+    _sensLenker->readCounter();
+    _lenker->runLenkermotor();
     if (Serial.available())
     {
         String in = Serial.readStringUntil('\n');
@@ -61,8 +62,7 @@ void cRunningState::process()
             _lenker->setLeistung(p);
         }
     }
-    Motorwert = analogRead(Motorpoti);
-    printf("Der Potiwert ist: %d", Motorwert);
+    Motorwert = analogRead(27);
     Motorwert-=0.5*4095;
     Motorwert/=(40.95/2);
     printf("Der Potiwert ist: %d\n", Motorwert);

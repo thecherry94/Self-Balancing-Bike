@@ -45,11 +45,9 @@ cLenkersensor::cLenkersensor()
 
 void cLenkersensor::readCounter()
 {
-    printf("1 ");
+
     pcnt_get_counter_value(ENCODER_1, &counter);
-     printf("2 ");
     daten.lenkwinkel = 360/511.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
-     printf("3 ");
     if(millis() != lastZeit)        // Sicherheitsfunktion um eine durch 0 Teilung zu verhindern
     {
         daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]

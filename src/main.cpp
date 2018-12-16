@@ -18,11 +18,9 @@
 #include "cEmergencyState.h"
 
 
-
-
-
 // 19 = LINKS
 // 15 = RECHTS
+
 
 cBike bike(19, 18);
 
@@ -48,6 +46,7 @@ void setup()
     stateMachine.AddState(&emergencyState);
 
     Serial.println("States initialisiert."); 
+    pinMode(27, INPUT);
 }
 
 
