@@ -36,7 +36,6 @@ cInitializationState::~cInitializationState()
 void cInitializationState::enter()
 {
     Serial.println("cInitializationState::enter");
-
     //_bike->InitNeigungssensor();
     //_sensNeigung = _bike->GetSensorNeigung();
     //_sensNeigung->loadCalibrationFromMemory();

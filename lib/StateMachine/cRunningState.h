@@ -13,7 +13,6 @@ class cRunningState : public cState
 
         cGyroansteuerung* _gyroL;
         cGyroansteuerung* _gyroR;
-
         cLenkermotorV2* _lenker;
 
         bool _switchSpinup;
