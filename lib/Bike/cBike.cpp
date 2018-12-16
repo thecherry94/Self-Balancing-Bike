@@ -20,7 +20,7 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
-    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)      //Hier wird die cGyro initialisiert
+    : _gyroL(gyroPWMPin_Links, true), _gyroR(gyroPWMPin_Rechts, false)      //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     
@@ -229,7 +229,7 @@ void cBike::setup_webserver_methods()
 
 void cBike::run()
 {
-     _gyroL.setMotorfreigabe(true); //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
+      //das war ich und muss es wieder raus nehmen!!!!! MAX (Hust)
      
     // Anfangsstatus setzen
     //setup_webserver_methods();

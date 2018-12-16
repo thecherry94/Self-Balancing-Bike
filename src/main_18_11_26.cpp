@@ -152,7 +152,7 @@ void setup_web_methods()
 */
 
 
-
+/*
 #include "Noten.h"
 
 const int pPoti = 2; //A2
@@ -516,3 +516,4 @@ void loop()
     }
     
 }
+*/
