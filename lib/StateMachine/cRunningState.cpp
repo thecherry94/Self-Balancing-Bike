@@ -49,7 +49,7 @@ void cRunningState::process()
         {
             int p;
             sscanf(in.c_str(), "p%d", &p);
-
+            
             _lenker->setLeistung(p);
         }
     }

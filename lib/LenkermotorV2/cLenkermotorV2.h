@@ -18,7 +18,7 @@
 #define PREZISION 3 //+-Grad
 #define Boost 5 //in Prozent
 #define MAXSPEED 1000 //in °/s
-#define BREMSWINKEL 85
+#define BREMSWINKEL 80
 
 
 #include <PID_v1.h>
