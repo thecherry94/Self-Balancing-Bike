@@ -113,6 +113,7 @@ void cGyroSpinupState::process()
 void cGyroSpinupState::leave()
 {
     Serial.println("cGyroSpinupState::leave");
+    
     _exit = false;
 }
 
