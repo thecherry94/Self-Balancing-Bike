@@ -34,9 +34,10 @@ cLenkermotorV2::cLenkermotorV2() :
 
 void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 {
+    Serial.println("Motorfreigabe enter");
     Motorfreigabe=pMotorfreigabe;
-        runLenkermotor();
-    Serial.println("freigabe");
+    runLenkermotor();
+    Serial.println("Motorfreigabe");
     //if (Motorfreigabe)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTORV2, "Motor=frei"));
     //else
@@ -46,7 +47,7 @@ void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 bool cLenkermotorV2::runLenkermotor()
 {
     //Freigabe prüfen
-    
+    Serial.println("runLenkermotor enter");
     if (_lenkerSensor->getLenkerwinkel() == 666) //Abfrage der Winkelklasse
     {
         Motorfreigabe = false;
@@ -56,6 +57,7 @@ bool cLenkermotorV2::runLenkermotor()
         Serial.println("Irgendein Problem beim Lenkersensor, bitte an Julian wenden!!!");
         return 1;
     }
+    Serial.println("1");
     if(Motorfreigabe==false)
     {
         //Abschalten
@@ -64,6 +66,8 @@ bool cLenkermotorV2::runLenkermotor()
         PWMschalten();
         return 1;
     }
+    
+    Serial.println("2");
     //Winkel prüfen
     
     if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL||abs(_lenkerSensor->getLenkerwinkel())>-BREMSWINKEL||_lenkerSensor->getCalibration()==1)//n.io.
@@ -103,15 +107,21 @@ bool cLenkermotorV2::runLenkermotor()
     // }
     
     //dirchange prüfen
+    
+    Serial.println("3");
     if(dirchange())
     {
+        Serial.println("dirchange anfang");
         //running
         istLeistung=sollLeistung;
         PWMschalten();
         Regler.Compute(); 
+        Serial.println("dirchange ende");
         return 0;
     }
     Regler.Compute(); 
+    
+    Serial.println("4");
     return 1;
     
     

@@ -26,10 +26,12 @@ cRunningState::cRunningState(cBike* bike, std::string name)
 void cRunningState::enter()
 {
      Serial.println("cRunningState::enter");
-
+     //_sensLenker->readCounter();
+      //Serial.println("set pointer");
+    _lenker->setLenkerSensor(_bike->GetSensorLenker());//cBike->GetSensorLenker());
      // Lenkermotorfreigabe setzen
      // Abfrage, ob Lenker gerade???
-
+    Serial.println("123");
      _lenker->setMotorfreigabe(true);
 }
 
