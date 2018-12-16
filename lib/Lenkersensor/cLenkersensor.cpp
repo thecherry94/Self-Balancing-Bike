@@ -89,11 +89,11 @@ float cLenkersensor::getLenkerwinkel()
 
 float cLenkersensor::getLenkergeschwindigkeit()
 {
-    // if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
-    // {
-    //     return 666;
-    // }
-    // else
+    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    {
+        return 666;
+    }
+    else
     {
         return daten.lenkgeschwindigkeit;
     }
