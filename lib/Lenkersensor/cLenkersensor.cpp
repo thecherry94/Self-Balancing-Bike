@@ -61,6 +61,7 @@ void cLenkersensor::readCounter()
     lastLenkwinkel = daten.lenkwinkel;
     lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
     lastZeit = millis();
+    printf("Aktueller Winkel ist: %f\n", daten.lenkwinkel);
 }
 
 float cLenkersensor::getMotorwinkel()
@@ -71,7 +72,7 @@ float cLenkersensor::getMotorwinkel()
 bool cLenkersensor::getData(lenkerDaten &pdaten)
 {
     pdaten = daten;     // Daten rückgeben
-    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
         return 1;
     else 
         return 0;
@@ -79,7 +80,7 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
 
 float cLenkersensor::getLenkerwinkel()
 {
-    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
     {
         return 666;
     }
@@ -92,7 +93,7 @@ float cLenkersensor::getLenkerwinkel()
 
 float cLenkersensor::getLenkergeschwindigkeit()
 {
-    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
     {
         return 666;
     }
@@ -105,7 +106,7 @@ float cLenkersensor::getLenkergeschwindigkeit()
 float cLenkersensor::getLenkerbeschleunigung()
 {
     
-    if (daten.lenkwinkel >= 100 || daten.lenkwinkel <= -100 || lenkerflag == 1)
+    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
     {
         return 666;
     }
