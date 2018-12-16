@@ -2,6 +2,11 @@
 #include <stdio.h>
 
 
+#define Motorpoti 27
+pinMode(Motorpoti, INPUT);
+int potiWert = 0;
+
+
 cRunningState::cRunningState(cBike* bike, std::string name)
     : cState(name)
 {
@@ -30,7 +35,7 @@ void cRunningState::enter()
      // Lenkermotorfreigabe setzen
      // Abfrage, ob Lenker gerade???
 
-     _lenker->setMotorfreigabe(true);
+    // _lenker->setMotorfreigabe(true);
 }
 
 
@@ -53,6 +58,13 @@ void cRunningState::process()
             _lenker->setLeistung(p);
         }
     }
+    Motorwert = analogRead(Motorpoti);
+    printf("Der Potiwert ist: %d", Motorwert);
+    Motorwert-=0.5*4095;
+    Motorwert/=(40.95/2);
+    printf("Der Potiwert ist: %d\n", Motorwert);
+
+    _lenker->setLeistung(Motorwert);
 }
 
 
