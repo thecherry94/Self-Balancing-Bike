@@ -20,10 +20,8 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 	//_bno = Adafruit_BNO055(bno_addr);
 	
 	// Überprüfen, ob der BNO überhaupt erreichbar ist
-	bool check = _bno.begin();
-	while (!check)
+	while (_bno.begin())
 	{
-		check = _bno.begin();
 		Serial.println("BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?");    
 		//LOG->write(cStatusLogEntry(EStatusLogEntryType::FATAL_ERROR, MODULE_NEIGUNG, "BNO055 nicht erkannt. Verkabelung oder I2C Adresse falsch!?"));
 
@@ -72,7 +70,6 @@ void cNeigungssensor::displaySensorStatus()
 	Serial.print("System Error:  0x");
 	Serial.println(system_error, HEX);
 	Serial.println("");
-	delay(500);
 }
 
 

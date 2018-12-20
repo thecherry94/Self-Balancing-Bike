@@ -11,12 +11,19 @@
 
 #include "cGyroansteuerung.h"
 
-cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
+cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin, bool pPos)
 {
+  Pos=pPos;
   pinMode(GyroPWMPin, OUTPUT);
    Gyro.attach(GyroPWMPin);
+   if(Pos)
     Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
-     Serial.print("Gyro auf Pin=");  Serial.println(GyroPWMPin);
+    else
+    Gyro.writeMicroseconds(1000); //Beep Beep
+
+     Serial.print("Gyro auf Pin=");  
+     Serial.println(GyroPWMPin);
+     
 }
  
 
@@ -24,7 +31,10 @@ bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 {
   if (pSollLeistung<=100&&pSollLeistung>=0)
   {
-    sollLeistung=pSollLeistung*maxLeistung/100+BoostTo-2; //geändert 16.11.2018
+    if (Pos)
+    sollLeistung=pSollLeistung*maxLeistung/100; //geändert 16.11.2018
+    else
+    sollLeistung=pSollLeistung*maxLeistung/100+80; //geändert 16.11.2018
      //Serial.println(sollLeistung);
     return 0;
   }
@@ -32,7 +42,7 @@ bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 }
 bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
 {
-  if(motorfreigabe == true)
+  if(motorfreigabe)
   {
     if(sollLeistung!=istLeistung)
     {

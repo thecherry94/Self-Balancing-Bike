@@ -34,9 +34,10 @@ cLenkermotorV2::cLenkermotorV2() :
 
 void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 {
+    Serial.println("Motorfreigabe enter");
     Motorfreigabe=pMotorfreigabe;
-        runLenkermotor();
-    Serial.println("freigabe");
+    runLenkermotor();
+    Serial.println("Motorfreigabe");
     //if (Motorfreigabe)
     //LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,MODULE_LENKERMOTORV2, "Motor=frei"));
     //else
@@ -46,6 +47,15 @@ void cLenkermotorV2::setMotorfreigabe(bool pMotorfreigabe)
 bool cLenkermotorV2::runLenkermotor()
 {
     //Freigabe prüfen
+    if (_lenkerSensor->getLenkerwinkel() == 666) //Abfrage der Winkelklasse
+    {
+        Motorfreigabe = false;
+        sollLeistung=0;
+        istLeistung = 0;
+        PWMschalten();
+        Serial.println("Irgendein Problem beim Lenkersensor, bitte an Julian wenden!!!");
+        return 1;
+    }
     if(Motorfreigabe==false)
     {
         //Abschalten
@@ -55,23 +65,30 @@ bool cLenkermotorV2::runLenkermotor()
         return 1;
     }
     //Winkel prüfen
-    /*
-    if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL-5||_lenkerSensor->getCalibration()==1)//n.io.
+    
+    if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL||_lenkerSensor->getLenkerwinkel()<BREMSWINKEL_MINUS||_lenkerSensor->getCalibration()==1)//n.io.
     {
-        LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Overshot"));
-        if (abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL)
+        if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL)
+            Serial.println("ACHTUNG ANSCHLAG LINKS!!!!");
+        else if(_lenkerSensor->getLenkerwinkel()<-BREMSWINKEL)
+            Serial.println("ACHTUNG ANSCHLAG RECHTS!!!!");
+        else 
+            Serial.println("Nicht Kalibiert!!!");
+        
+        sollLeistung=0;
+        istLeistung=0;
+        PWMschalten();
+        /*if (abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL)
         {
-        Drehen(BREMSWINKEL,ANDYFAKTOR);
-        LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Powerbreak"));
+            Drehen(BREMSWINKEL,ANDYFAKTOR);
         }
         else
         {
             sollLeistung=0;
             istLeistung=0;
-        }
-        
+            PWMschalten();
+        }*/
     }
-   */
     //Geschwindigkeit Prüfen
     // if(abs(_lenkerSensor->getLenkergeschwindigkeit())>MAXSPEED)//n.io.
     // {
@@ -86,12 +103,13 @@ bool cLenkermotorV2::runLenkermotor()
     // }
     
     //dirchange prüfen
+
     if(dirchange())
     {
         //running
         istLeistung=sollLeistung;
         PWMschalten();
-        Regler.Compute(); 
+        Regler.Compute();
         return 0;
     }
     Regler.Compute(); 
@@ -150,7 +168,6 @@ bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
 {
     if(pLeistung<=-100&&pLeistung>=100)
     {
-        LOG->write(cStatusLogEntry(EStatusLogEntryType::WARNING,"MODULE_LENKERMOTORV2", "Bist du Dumm oder so? gibt ne gescheite Zahl an!!!! \n "));
         return 1;
     }
    
@@ -164,7 +181,7 @@ bool cLenkermotorV2::Drehen(int pWinkel, int pLeistung)
     Serial.print("MRegler regelt:  "); Serial.println(Output);
     sollLeistung=Output* pLeistung/100;
     //Loging sollLeistung
-    LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION,"MODULE_LENKERMOTORV2", "Hier soll die Leistung stehen \n"));
+    //LOG->write(cStatusLogEntry(EStatusLogEntryType::NOTIFICATION,"MODULE_LENKERMOTORV2", "Hier soll die Leistung stehen \n"));
     return 1;
 }
 

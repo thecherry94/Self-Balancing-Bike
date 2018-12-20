@@ -9,7 +9,7 @@
 #include "global.h"
 
 
-/*
+
 
 #include "cInitializationState.h"
 #include "cGyroSpinupState.h"
@@ -18,14 +18,11 @@
 #include "cEmergencyState.h"
 
 
-*/
-
-
-/*
 // 19 = LINKS
 // 15 = RECHTS
 
-cBike bike(19, 15);
+
+cBike bike(19, 18);
 
 cStateMachine stateMachine;
 
@@ -39,6 +36,7 @@ cEmergencyState emergencyState(&bike, STATE_EMERGENCY);
 
 void setup()
 {
+    Serial.begin(115200);
     Serial.println("Initialisiere States...");
 
     stateMachine.AddState(&initState);
@@ -46,19 +44,9 @@ void setup()
     stateMachine.AddState(&spinupState);
     stateMachine.AddState(&spindownState);
     stateMachine.AddState(&emergencyState);
-    
-    Serial.println("States initialisiert.");
-    
 
-/*
-   Adafruit_BNO055 bno(55);
-
-   while(!bno.begin())
-   {
-       Serial.println("GEHT NET REEEEEEEEE");
-   }
-   Serial.println("Geht leute");
-   */
+    Serial.println("States initialisiert."); 
+    pinMode(27, INPUT);
 }
 
 
@@ -67,7 +55,7 @@ void loop()
 {
     stateMachine.Update();
 }
-*/
+
 
 
 
@@ -162,7 +150,7 @@ void setup_web_methods()
 
 */
 
-
+/*
 
 #include "Noten.h"
 
@@ -527,3 +515,4 @@ void loop()
     }
     
 }
+*/
