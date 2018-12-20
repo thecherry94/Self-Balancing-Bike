@@ -25,6 +25,7 @@ cRunningState::cRunningState(cBike* bike, std::string name)
     t_Running_Spinup.stateTo = STATE_GYROSPINUP;
     t_Running_Spinup.transitionCondition = [&]() { return _switchSpinup; };
     t_Running_Spinup.transitionAction = [&]() {};
+    AddTransition(t_Running_Spinup);
 }
 
 
@@ -41,7 +42,8 @@ void cRunningState::enter()
      _lenker->setMotorfreigabe(true);
 }
 
-
+int zaehler = 0;
+int Motorwerte[100];
 
 void cRunningState::process()
 {
@@ -62,12 +64,30 @@ void cRunningState::process()
             _lenker->setLeistung(p);
         }
     }
+    
     Motorwert = analogRead(27);
     Motorwert-=0.5*4095;
     Motorwert/=(40.95/2);
-    printf("Der Potiwert ist: %d\n", Motorwert);
-
-    _lenker->setLeistung(Motorwert);
+    Motorwerte[zaehler] = Motorwert;
+    //printf("Der Potiwert ist: %d\n", Motorwert);
+    if(zaehler > 99)
+    {
+        Motorwert = 0;
+        for(int i = 0; i < zaehler; i++)
+        {
+            Motorwert =  Motorwert + Motorwerte[i];
+        }
+        Motorwert = Motorwert / zaehler;
+        if(Motorwert < 10 && Motorwert > -10)
+        {
+            _lenker->setLeistung(0);
+        }
+        else
+            _lenker->setLeistung(Motorwert);
+        printf("Der Motorwert ist: %d\n", Motorwert);
+        zaehler = 0;    
+    }
+    zaehler++;
 }
 
 
