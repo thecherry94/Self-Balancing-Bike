@@ -118,7 +118,7 @@ void cGyroSpinupState::process()
         }
     }
     if (Flag_anlaufen_rechts == false&&Flag_anlaufen_links == true)
-        automaticSpinup_Links(_gyroR, &Flag_anlaufen_links,&Anlauf_case);
+        automaticSpinup_Links(_gyroL, &Flag_anlaufen_links,&Anlauf_case);
     if (Flag_anlaufen_rechts == true&&Flag_anlaufen_links == false)
         automaticSpinup_Rechts(_gyroR,&Flag_anlaufen_rechts, &Anlauf_case);
     _gyroL->anlaufen();
