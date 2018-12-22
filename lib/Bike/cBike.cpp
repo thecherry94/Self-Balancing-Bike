@@ -20,7 +20,7 @@ cLenkersensor Lenkersensor;
 lenkerDaten Sensordaten;
 
 cBike::cBike(byte gyroPWMPin_Links, byte gyroPWMPin_Rechts)
-    : _gyroL(gyroPWMPin_Links, true), _gyroR(gyroPWMPin_Rechts, false)      //Hier wird die cGyro initialisiert
+    : _gyroL(gyroPWMPin_Links), _gyroR(gyroPWMPin_Rechts)      //Hier wird die cGyro initialisiert
 { 
     // Hier eure Klassen initialisieren
     
@@ -176,7 +176,7 @@ void cBike::setup_webserver_methods()
         }
 
         char buf[3];
-        sprintf(buf, "%d", _gyroL.getLeistung(false));
+        sprintf(buf, "%d", _gyroL.getLeistung());
         req->send(200, "text/plain", buf);
     }, HTTP_GET);
 

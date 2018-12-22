@@ -11,30 +11,23 @@
 
 #include "cGyroansteuerung.h"
 
-cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin, bool pPos)
+cGyroansteuerung::cGyroansteuerung(byte GyroPWMPin)
 {
-  Pos=pPos;
   pinMode(GyroPWMPin, OUTPUT);
-   Gyro.attach(GyroPWMPin);
-   if(Pos)
-    Gyro.writeMicroseconds(GRUNDWERT); //Beep Beep
-    else
-    Gyro.writeMicroseconds(1000); //Beep Beep
+  Gyro.attach(GyroPWMPin);
+  Gyro.writeMicroseconds(GRUNDWERT_LINKS); //Beep Beep
 
-     Serial.print("Gyro auf Pin=");  
-     Serial.println(GyroPWMPin);
-     
+  Serial.print("Gyro auf Pin=");  
+  Serial.println(GyroPWMPin);
+  
 }
  
 
 bool cGyroansteuerung::setLeistung(byte pSollLeistung)
 {
-  if (pSollLeistung<=100&&pSollLeistung>=0)
+  if (pSollLeistung<=200&&pSollLeistung>=0)
   {
-    if (Pos)
-    sollLeistung=pSollLeistung*maxLeistung/100; //geändert 16.11.2018
-    else
-    sollLeistung=pSollLeistung*maxLeistung/100+80; //geändert 16.11.2018
+      sollLeistung=pSollLeistung*maxLeistung/100; //geändert 16.11.2018
      //Serial.println(sollLeistung);
     return 0;
   }
@@ -58,7 +51,7 @@ bool cGyroansteuerung::anlaufen() //main aufruf jeden Zyklus
   else 
 	istLeistung=0;
   //PWM Schalten
-  int Lokal=GRUNDWERT+istLeistung; 
+  int Lokal=GRUNDWERT_LINKS+istLeistung; 
   Serial.println(istLeistung);
   Gyro.writeMicroseconds(Lokal);
   return 0;
@@ -78,9 +71,9 @@ void cGyroansteuerung::setMotorfreigabe(bool pMotorfreigabe)
    anlaufen();
 }
 
-int cGyroansteuerung::getLeistung(bool ist = true)
+int cGyroansteuerung::getLeistung()
 {
-  return ist ? istLeistung : sollLeistung;
+  return istLeistung;
 }
 
 

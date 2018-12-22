@@ -10,7 +10,6 @@ class cRunningState : public cState
 {
     private:
         cBike* _bike;
-
         cGyroansteuerung* _gyroL;
         cGyroansteuerung* _gyroR;
         cLenkermotorV2* _lenker;

@@ -70,16 +70,30 @@ void cGyroSpinupState::process()
                     _gyroR->setLeistung(p);
                     Serial.printf("Rechte Gyroleistung auf %d%% gesetzt.", p);
                 }
-                else if (dir == 'a')
+                else if (dir == 'a') //Links hochfahren
                 {
-                    _blockInput = true;
+                    /*_blockInput = true;
                     sAutomaticSpinParameters params;
                     params.l = _gyroL;
                     params.r = _gyroR;
                     params.blockInput = &_blockInput;
                     params.taskHandle = &_automaticSpinupTaskHandle;
 
-                    xTaskCreate(&automaticSpinupMain, "automSpinup", 10000, &params, 1, &_automaticSpinupTaskHandle);
+                    xTaskCreate(&automaticSpinupMain, "automSpinup", 10000, &params, 1, &_automaticSpinupTaskHandle);*/
+                    /******* Anlaufen Gyro Links *********************/
+                    Flag_anlaufen_links = true;
+                    if(Flag_anlaufen_rechts == false&&Flag_anlaufen_links == true) 
+                        automaticSpinup_Links(_gyroL, &Flag_anlaufen_links, &Anlauf_case);
+                }
+                else if (dir == 'b') //Rechts Hochfahren
+                {
+                    Flag_anlaufen_rechts = true;
+                    if (Flag_anlaufen_rechts == true&&Flag_anlaufen_links == false) 
+                        automaticSpinup_Rechts(_gyroR, &Flag_anlaufen_rechts, &Anlauf_case);
+                }
+                else if (dir == 'c') //Beide runterfahren
+                {
+                    
                 }
                 else if (dir == 's')
                 {
@@ -103,7 +117,10 @@ void cGyroSpinupState::process()
             Serial.println("Automatic spin up/down is running. User input blocked");
         }
     }
-
+    if (Flag_anlaufen_rechts == false&&Flag_anlaufen_links == true)
+        automaticSpinup_Links(_gyroL, &Flag_anlaufen_links,&Anlauf_case);
+    if (Flag_anlaufen_rechts == true&&Flag_anlaufen_links == false)
+        automaticSpinup_Rechts(_gyroR,&Flag_anlaufen_rechts, &Anlauf_case);
     _gyroL->anlaufen();
     _gyroR->anlaufen();
 }
@@ -123,21 +140,131 @@ void automaticSpinupMain(void* p)
 {
     sAutomaticSpinParameters* params = (sAutomaticSpinParameters*)p;
 
-    automaticSpinup(params->l);
-    automaticSpinup(params->r);
+   // automaticSpinup(params->l, );
+    //automaticSpinup(params->r, );
 
     *params->blockInput = false;
     vTaskDelete(*params->taskHandle);
 }
 
-void automaticSpinup(cGyroansteuerung* g)
+void automaticSpinup_Links(cGyroansteuerung* g,bool* flag, byte* case_state)
 {
-    g->setLeistung(25);
+   /* g->setLeistung(25);
     vTaskDelay(500 / portTICK_PERIOD_MS);
     g->setLeistung(40);
     vTaskDelay(5000 / portTICK_PERIOD_MS);
     g->setLeistung(30);
-    vTaskDelay(500 / portTICK_PERIOD_MS);
+    vTaskDelay(500 / portTICK_PERIOD_MS);*/
+    
+        //Anlauframpe Links
+        switch (*case_state)
+        {
+            case 0:
+                g->setBeschleunigung(8);
+                g->setLeistung(50);
+                if(g->getLeistung() == 50)
+                    *case_state = 1;
+            break;
+            case 1:
+                g->setBeschleunigung(30);
+                g->setLeistung(24);
+                if(g->getLeistung() == 24)
+                    *case_state = 2;
+            break;
+            case 2:
+                g->setBeschleunigung(100);
+                g->setLeistung(30);
+                if(g->getLeistung() == 30)
+                    *case_state = 3;
+            break;
+            default:
+                *flag =false;
+                *case_state = 0;
+                break;
+        }
+}
+//Anlauframpe Rechts
+void automaticSpinup_Rechts(cGyroansteuerung* g, bool* flag, byte* case_state)
+{
+        switch (*case_state)
+        {
+            case 0:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                if(g->getLeistung() == 180)
+                    *case_state = 1;
+            break;
+            case 1:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                delay(2000);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+
+            case 2:
+                g->setBeschleunigung(1);
+                g->setLeistung(80);
+                if(g->getLeistung() == 80)
+                    *case_state+=1;
+            break;
+            case 3:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+            case 4:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                delay(2000);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+
+            case 5:
+                g->setBeschleunigung(1);
+                g->setLeistung(80);
+                if(g->getLeistung() == 80)
+                    *case_state+=1;
+            break;
+            case 6:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+            case 7:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                delay(2000);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+            
+            case 8:
+                g->setBeschleunigung(1);
+                g->setLeistung(80);
+                if(g->getLeistung() == 80)
+                    *case_state+=1;
+            break;
+            case 9:
+                g->setBeschleunigung(1);
+                g->setLeistung(180);
+                if(g->getLeistung() == 180)
+                    *case_state+=1;
+            break;
+            case 10:
+                g->setBeschleunigung(1);
+                g->setLeistung(130);
+                if(g->getLeistung() == 130)
+                    *case_state+=1;
+            break;
+            default:
+                *flag =false;
+                *case_state = 0;
+            break;
+        }    
 }
 
 
@@ -146,8 +273,8 @@ void automaticSpindownMain(void* p)
 {
     sAutomaticSpinParameters* params = (sAutomaticSpinParameters*)p;
 
-    automaticSpinup(params->l);
-    automaticSpinup(params->r);
+    //automaticSpinup(params->l);
+    //automaticSpinup(params->r);
 
     *params->blockInput = false;
     vTaskDelete(*params->taskHandle);
