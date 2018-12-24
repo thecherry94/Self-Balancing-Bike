@@ -18,8 +18,12 @@
 #define PREZISION 3 //+-Grad
 #define Boost 5 //in Prozent
 #define MAXSPEED 1000 //in °/s
-#define BREMSWINKEL 60
-#define BREMSWINKEL_MINUS -60
+#define ANSCHLAG 60
+#define BREMSWINKEL_START 70
+#define BREMSWINKEL_STOP 80
+#define BREMSKRAFT 12 //%
+
+
 
 
 #include <PID_v1.h>

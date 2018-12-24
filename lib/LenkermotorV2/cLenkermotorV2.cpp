@@ -66,28 +66,28 @@ bool cLenkermotorV2::runLenkermotor()
     }
     //Winkel prüfen
     
-    if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL||_lenkerSensor->getLenkerwinkel()<BREMSWINKEL_MINUS||_lenkerSensor->getCalibration()==1)//n.io.
+    if(_lenkerSensor->getLenkerwinkel()>ANSCHLAG||_lenkerSensor->getLenkerwinkel()<(ANSCHLAG*-1)||_lenkerSensor->getCalibration()==1)//???
     {
-        if(_lenkerSensor->getLenkerwinkel()>BREMSWINKEL)
+        if(_lenkerSensor->getLenkerwinkel()>ANSCHLAG)
             Serial.println("ACHTUNG ANSCHLAG LINKS!!!!");
-        else if(_lenkerSensor->getLenkerwinkel()<-BREMSWINKEL)
+        else if(_lenkerSensor->getLenkerwinkel()<(ANSCHLAG*-1))
             Serial.println("ACHTUNG ANSCHLAG RECHTS!!!!");
         else 
             Serial.println("Nicht Kalibiert!!!");
         
         sollLeistung=0;
-        istLeistung=0;
-        PWMschalten();
-        /*if (abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL)
+
+        //Regler abschalten hier.
+
+        //Schubumker======================
+    if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL_START&&abs(_lenkerSensor->getLenkerwinkel())<BREMSWINKEL_STOP&&Motorfreigabe)//???
         {
-            Drehen(BREMSWINKEL,ANDYFAKTOR);
+            //Drehen(ANSCHLAG,ANDYFAKTOR);
+            int x=_lenkerSensor->getLenkerwinkel();
+            sollLeistung=BREMSKRAFT*sgn(x)*-1; //Noch TESTEN !!!
+            Serial.println("Schubumker");
         }
-        else
-        {
-            sollLeistung=0;
-            istLeistung=0;
-            PWMschalten();
-        }*/
+      
     }
     //Geschwindigkeit Prüfen
     // if(abs(_lenkerSensor->getLenkergeschwindigkeit())>MAXSPEED)//n.io.
@@ -102,7 +102,7 @@ bool cLenkermotorV2::runLenkermotor()
     //     //Fehler
     // }
     
-    //dirchange prüfen
+    //dirchange prüfen==================================
 
     if(dirchange())
     {
@@ -156,6 +156,7 @@ void cLenkermotorV2::setLeistung(int psollLeistung)
     
     if(psollLeistung<=100&&psollLeistung>=-100)
     {   
+        if(abs(psollLeistung)<=Boost) psollLeistung=0; //Boost neu 24.12
         sollLeistung=psollLeistung*ANDYFAKTOR/100;
         Regler.SetMode(MANUAL);
     }  
