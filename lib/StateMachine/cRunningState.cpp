@@ -65,11 +65,13 @@ void cRunningState::process()
         }
     }
     
+
+    //Verfahren mit Poti
     Motorwert = analogRead(27);
     Motorwert-=0.5*4095;
     Motorwert/=(40.95/2);
     Motorwerte[zaehler] = Motorwert;
-    //printf("Der Potiwert ist: %d\n", Motorwert);
+    printf("Der Potiwert ist: %d\n", Motorwert);
     if(zaehler > 99)
     {
         Motorwert = 0;
@@ -88,6 +90,9 @@ void cRunningState::process()
         zaehler = 0;    
     }
     zaehler++;
+
+    //Regler Aufruf==========================0
+    //Regler_Interface(cBike* bike)
 }
 
 
