@@ -84,7 +84,7 @@ void cRunningState::process()
         }
         else
             _lenker->setLeistung(Motorwert);
-        printf("Der Motorwert ist: %d\n", Motorwert);
+        printf("Der Motorwert ist: %d;", Motorwert);
         zaehler = 0;    
     }
     zaehler++;

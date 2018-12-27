@@ -45,6 +45,15 @@ void setup()
     stateMachine.AddState(&spindownState);
     stateMachine.AddState(&emergencyState);
 
+
+    uint16_t val = 1023;
+    pcnt_filter_enable(ENCODER_1);
+    pcnt_set_filter_value(ENCODER_1, val);
+
+    val = 0;
+    pcnt_get_filter_value(ENCODER_1, &val);
+    Serial.printf("Filterwert: %u\n", val);
+
     Serial.println("States initialisiert."); 
     pinMode(27, INPUT);
 }
