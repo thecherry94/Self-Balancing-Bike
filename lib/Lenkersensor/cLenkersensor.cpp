@@ -41,6 +41,7 @@ cLenkersensor::cLenkersensor()
     config_pcnt.counter_h_lim = ENCODER_MAX_VALUE;
     config_pcnt.counter_l_lim = ENCODER_MIN_VALUE;
     
+
     pcnt_unit_config(&config_pcnt);
     pcnt_counter_pause(ENCODER_1);
     pcnt_counter_clear(ENCODER_1);
@@ -64,7 +65,6 @@ void cLenkersensor::readCounter()
     }
     if(zaehler2 > 99)
     {
-        
          printf("%lu;%f; Der Dir-Pin ist: %d \n", millis(), daten.lenkwinkel,digitalRead(ENCODER_DIRECTION));
          zaehler2 = 0;
     }
@@ -72,9 +72,6 @@ void cLenkersensor::readCounter()
     lastLenkgeschwindigkeit = daten.lenkgeschwindigkeit;
     lastZeit = millis();
     zaehler2++;
-    
-
-   
 }
 
 float cLenkersensor::getMotorwinkel()
@@ -85,7 +82,7 @@ float cLenkersensor::getMotorwinkel()
 bool cLenkersensor::getData(lenkerDaten &pdaten)
 {
     pdaten = daten;     // Daten rückgeben
-    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
+    if (daten.lenkwinkel >= TOTWINKEL || daten.lenkwinkel <= -TOTWINKEL || lenkerflag == 1)
         return 1;
     else 
         return 0;
@@ -93,7 +90,7 @@ bool cLenkersensor::getData(lenkerDaten &pdaten)
 
 float cLenkersensor::getLenkerwinkel()
 {
-    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
+    if (daten.lenkwinkel >= TOTWINKEL || daten.lenkwinkel <= -TOTWINKEL || lenkerflag == 1)
     {
         return 666;
     }
@@ -106,7 +103,7 @@ float cLenkersensor::getLenkerwinkel()
 
 float cLenkersensor::getLenkergeschwindigkeit()
 {
-    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
+    if (daten.lenkwinkel >= TOTWINKEL || daten.lenkwinkel <= -TOTWINKEL || lenkerflag == 1)
     {
         return 666;
     }
@@ -119,7 +116,7 @@ float cLenkersensor::getLenkergeschwindigkeit()
 float cLenkersensor::getLenkerbeschleunigung()
 {
     
-    if (daten.lenkwinkel >= 90 || daten.lenkwinkel <= -90 || lenkerflag == 1)
+    if (daten.lenkwinkel >= TOTWINKEL || daten.lenkwinkel <= -TOTWINKEL || lenkerflag == 1)
     {
         return 666;
     }

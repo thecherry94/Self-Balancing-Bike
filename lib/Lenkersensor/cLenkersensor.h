@@ -18,15 +18,17 @@ struct lenkerDaten  // Struct mit Daten für den Lenker
 ////////////////////////////////////////////////////
 
 ///////// cLenkersensor.h /////////////////
-
 #define ENCODER_1 PCNT_UNIT_0       // Name vom ENCODER_1
 #define ENCODER_MAX_VALUE 511       // max Zählerwert vom Counter
 #define ENCODER_MIN_VALUE -511      // min Zählerwert vom Counter
 #define UMRECHNUNGSZAHL -10           // wenn der Nullpunkt nicht in der Mitte ist
 #define GENAUIGKEIT 1               // Nach wie vielen Millisekunden wird die Geschwindigkeit neu berechnet?
+
 void isr_zero();            // isr beim Nulldurchgang
 void isr_dir();
 void isr_input();
+
+#define TOTWINKEL 100
 
 class cLenkersensor
 {
