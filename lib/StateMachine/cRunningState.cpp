@@ -4,7 +4,8 @@
 
 
 int Motorwert = 0;
-
+int zaehler = 0;
+int Motorwerte[101];
 
 
 cRunningState::cRunningState(cBike* bike, std::string name)
@@ -42,8 +43,7 @@ void cRunningState::enter()
      _lenker->setMotorfreigabe(true);
 }
 
-int zaehler = 0;
-int Motorwerte[100];
+
 
 void cRunningState::process()
 {
@@ -67,11 +67,11 @@ void cRunningState::process()
     
 
     //Verfahren mit Poti
-    Motorwert = analogRead(27);
+    Motorwert = analogRead(26);
     Motorwert-=0.5*4095;
     Motorwert/=(40.95/2);
     Motorwerte[zaehler] = Motorwert;
-    printf("Der Potiwert ist: %d\n", Motorwert);
+    //printf("Der Potiwert ist: %d\n", Motorwert);
     if(zaehler > 99)
     {
         Motorwert = 0;
@@ -86,10 +86,13 @@ void cRunningState::process()
         }
         else
             _lenker->setLeistung(Motorwert);
-        printf("Der Motorwert ist: %d;", Motorwert);
+        Serial.print("Der Motorwert ist:");
+        Serial.println(Motorwert);
         zaehler = 0;    
     }
     zaehler++;
+    Serial.print("Lenkerwinkel: ");
+    Serial.println(_sensLenker->getLenkerwinkel());
 
     //Regler Aufruf==========================0
     //Regler_Interface(cBike* bike)
