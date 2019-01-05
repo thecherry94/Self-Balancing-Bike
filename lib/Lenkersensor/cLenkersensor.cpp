@@ -10,11 +10,13 @@ cLenkersensor::cLenkersensor()
 {
     
     //abs(7);
-      //Setup Lenkersensor
+    //Setup Lenkersensor
     pinMode(ENCODER_INPUT, INPUT);
     pinMode(ENCODER_DIRECTION, INPUT);
     pinMode(ENCODER_ZERO, INPUT);
-    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_lenkersensor, RISING);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_INPUT), isr_input, RISING);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_DIRECTION), isr_dir, RISING);
+    attachInterrupt(digitalPinToInterrupt(ENCODER_ZERO), isr_zero, RISING);
     
     lastLenkwinkel = 0;
     lastLenkgeschwindigkeit = 0;
@@ -22,7 +24,8 @@ cLenkersensor::cLenkersensor()
     daten.lenkbeschleunigung = 0;
     daten.lenkgeschwindigkeit = 0;
     daten.lenkwinkel = 0;
-    
+
+    /*
     // Set PCNT input signal and control GPIOs
     config_pcnt.pulse_gpio_num = ENCODER_INPUT;
     config_pcnt.ctrl_gpio_num = ENCODER_DIRECTION;
@@ -41,13 +44,16 @@ cLenkersensor::cLenkersensor()
     pcnt_unit_config(&config_pcnt);
     pcnt_counter_pause(ENCODER_1);
     pcnt_counter_clear(ENCODER_1);
+
+    */
 }
 int zaehler2 = 0;
 void cLenkersensor::readCounter()
 {
 
-    pcnt_get_counter_value(ENCODER_1, &counter);
-    daten.lenkwinkel = 2*360/511.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
+    //pcnt_get_counter_value(ENCODER_1, &counter);
+    daten.lenkwinkel = 360/256.0*counter*9/28.0+UMRECHNUNGSZAHL;  // Für Lenkwinkel des Lenkers
+    //daten.lenkwinkel = counter;
     if(millis() != lastZeit)        // Sicherheitsfunktion um eine durch 0 Teilung zu verhindern
     {
         daten.lenkgeschwindigkeit = (daten.lenkwinkel - lastLenkwinkel) / (millis() - lastZeit) * 1000; // [°/s]
@@ -59,7 +65,7 @@ void cLenkersensor::readCounter()
     if(zaehler2 > 99)
     {
         
-         printf("%lu;%f;", millis(), daten.lenkwinkel);
+         printf("%lu;%f; Der Dir-Pin ist: %d \n", millis(), daten.lenkwinkel,digitalRead(ENCODER_DIRECTION));
          zaehler2 = 0;
     }
     lastLenkwinkel = daten.lenkwinkel;
@@ -133,7 +139,23 @@ bool cLenkersensor::getCalibration()
         return 0;
 }
 
-void isr_lenkersensor()
+void isr_input()
+{
+    if(digitalRead(ENCODER_DIRECTION))
+    {
+        counter--;
+    }
+    else
+        counter++;
+    detachInterrupt(ENCODER_INPUT);
+    //detachInterrupt(ENCODER_ZERO);
+}
+void isr_dir()
+{
+   attachInterrupt(digitalPinToInterrupt(ENCODER_INPUT), isr_input, RISING);
+    //detachInterrupt(ENCODER_ZERO);
+}
+void isr_zero()
 {
     lenkerflag = 0;
     pcnt_counter_resume(ENCODER_1);

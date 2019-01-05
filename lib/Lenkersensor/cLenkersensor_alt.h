@@ -1,6 +1,6 @@
 /*  Autor: Julian Schweizerhof (Till Gostner)
     Name: cLenksensor.h */
-
+/*
 #ifndef LENKERSENSOR__H
 #define LENKERSENSOR__H
 #include "driver/pcnt.h"
@@ -63,4 +63,4 @@ void loop() {
     Serial.printf("%f;%f;%f\n", lDaten.lenkwinkel, lDaten.lenkgeschwindigkeit, lDaten.lenkbeschleunigung); 
 }
 */
-#endif
+//#endif

@@ -1,4 +1,4 @@
-#include <Arduino.h>                // damit millis und analogWrite geht.
+/*#include <Arduino.h>                // damit millis und analogWrite geht.
 #include "cLenkersensor.h"
 
 
@@ -140,3 +140,5 @@ void isr_lenkersensor()
     pcnt_counter_clear(ENCODER_1);
     //detachInterrupt(ENCODER_ZERO);
 }
+
+*/
