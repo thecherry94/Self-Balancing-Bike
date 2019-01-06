@@ -30,6 +30,9 @@ cNeigungssensor::cNeigungssensor(int bno_addr)
 
 	// Versuche, falls vorhanden, Kalibierungsdaten vom EEPROM zu laden
 	//loadCalibrationFromMemory();
+
+	_neigungsBufferIndex = 0;
+	_neigungsGeschwindigkeit = 0;
 }
 
 
@@ -323,5 +326,21 @@ bool cNeigungssensor::IsFullyCalibrated()
 
 imu::Vector<3> cNeigungssensor::getRawData(Adafruit_BNO055::adafruit_vector_type_t type)
 {
+	_neigungsBuffer[_neigungsBufferIndex++] = _bno.getVector(type);
+
+	if (_neigungsBufferIndex >= 9)
+	{
+		_neigungsBufferIndex = 0;
+		for (int i = 0; i < 10; i++)
+			_neigungsGeschwindigkeit += _neigungsBuffer[i];
+		
+		_neigungsGeschwindigkeit /= 10.0f;
+	}
+
 	return _bno.getVector(type);
+}
+
+float cNeigungssensor::GetNeigungswinkelgeschwindigkeitZ()
+{
+	return _neigungsGeschwindigkeit;
 }

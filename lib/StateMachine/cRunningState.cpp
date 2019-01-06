@@ -1,10 +1,59 @@
 #include "cRunningState.h"
 #include <stdio.h>
 
+#include <stddef.h>
+#include <stdio.h>                     // This ert_main.c example uses printf/fflush 
+#include "InputOutput_Test.h"          // Model's header file
+#include "rtwtypes.h"
+
+
+#include <iostream>
+
+
+
 
 
 int Motorwert = 0;
 
+
+
+void cRunningState::rt_OneStep(void)
+{
+	static boolean_T OverrunFlag = false;
+
+	// Disable interrupts here
+
+	// Check for overrun
+	if (OverrunFlag) {
+		rtmSetErrorStatus(rtObj.getRTM(), "Overrun");
+		return;
+	}
+
+	OverrunFlag = true;
+
+	// Save FPU context here (if necessary)
+	// Re-enable timer or interrupt here
+	// Set model inputs here
+
+	rtObj.rtU.e1 = _sensLenker->getLenkerwinkel()/95.0f;
+	rtObj.rtU.e2 = _sensLenker->getLenkergeschwindigkeit()/500.0f;
+	rtObj.rtU.e3 = _sensNeigung->getRawData().z()/15.0f;
+	rtObj.rtU.e4 = _sensNeigung->GetNeigungswinkelgeschwindigkeitZ() / 20.0f;
+
+
+	// Step the model
+	rtObj.step();
+
+	// Get model outputs here
+	cout << "Der Reglerausgang: " << rtObj.rtY.reglerausgang << endl;
+    _lenker->setLeistung(rtObj.rtY.reglerausgang*100);
+	// Indicate task complete
+	OverrunFlag = false;
+
+	// Disable interrupts here
+	// Restore FPU context here (if necessary)
+	// Enable interrupts here
+}
 
 
 cRunningState::cRunningState(cBike* bike, std::string name)
@@ -15,6 +64,7 @@ cRunningState::cRunningState(cBike* bike, std::string name)
     _gyroL = _bike->GetGyroL();
     _gyroR = _bike->GetGyroR();
     _sensLenker = _bike->GetSensorLenker();
+    _sensNeigung = _bike->GetSensorNeigung();
     _lenker = _bike->GetLenkeransteuerung();
 
     _switchSpinup = false;
@@ -40,6 +90,8 @@ void cRunningState::enter()
 
     Serial.println("123");
      _lenker->setMotorfreigabe(true);
+
+    rtObj.initialize();
 }
 
 int zaehler = 0;
@@ -51,6 +103,7 @@ void cRunningState::process()
     _gyroR->anlaufen();
     _sensLenker->readCounter();
     _lenker->runLenkermotor();
+
     if (Serial.available())
     {
         String in = Serial.readStringUntil('\n');
@@ -93,6 +146,8 @@ void cRunningState::process()
 
     //Regler Aufruf==========================0
     //Regler_Interface(cBike* bike)
+
+    rt_OneStep()
 }
 
 

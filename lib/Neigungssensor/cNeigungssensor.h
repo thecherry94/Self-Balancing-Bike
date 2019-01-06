@@ -24,6 +24,10 @@ class cNeigungssensor
         //
         Adafruit_BNO055 _bno;
 
+        float _neigungsBuffer[10];
+        float _neigungsGeschwindigkeit;
+        int _neigungsBufferIndex;
+
     public:
         cNeigungssensor(int bno_addr);
         
@@ -34,6 +38,8 @@ class cNeigungssensor
 
         sensors_event_t getEvent();
         imu::Vector<3> getRawData(Adafruit_BNO055::adafruit_vector_type_t);
+        
+        float GetNeigungswinkelgeschwindigkeitZ();
 
         bool loadCalibrationFromMemory();
         void displaySensorOrientation();
