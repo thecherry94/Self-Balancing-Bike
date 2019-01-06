@@ -79,13 +79,13 @@ bool cLenkermotorV2::runLenkermotor()
 
         //Regler abschalten hier.
 
-        //Schubumker======================
+        //Schubumkehr======================
     if(abs(_lenkerSensor->getLenkerwinkel())>BREMSWINKEL_START&&abs(_lenkerSensor->getLenkerwinkel())<BREMSWINKEL_STOP&&Motorfreigabe)//???
         {
             //Drehen(ANSCHLAG,ANDYFAKTOR);
             int x=_lenkerSensor->getLenkerwinkel();
-            sollLeistung=BREMSKRAFT*sgn(x)*-1; //Noch TESTEN !!!
-            Serial.println("Schubumker");
+            sollLeistung=BREMSKRAFT*sgn(x); //Noch TESTEN !!!
+            Serial.println("Schubumkehr");
         }
       
     }
