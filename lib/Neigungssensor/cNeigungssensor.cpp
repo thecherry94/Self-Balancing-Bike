@@ -326,7 +326,8 @@ bool cNeigungssensor::IsFullyCalibrated()
 
 imu::Vector<3> cNeigungssensor::getRawData(Adafruit_BNO055::adafruit_vector_type_t type)
 {
-	_neigungsBuffer[_neigungsBufferIndex++] = _bno.getVector(type);
+//	_neigungsBuffer[_neigungsBufferIndex++] = _bno.getVector(type);
+	_neigungsBuffer[_neigungsBufferIndex++] = 5; // Julian
 
 	if (_neigungsBufferIndex >= 9)
 	{

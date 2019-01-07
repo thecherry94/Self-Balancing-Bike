@@ -65,7 +65,7 @@ void cLenkersensor::readCounter()
     }
     if(zaehler2 > 99)
     {
-         printf("%lu;%f; Der Dir-Pin ist: %d \n", millis(), daten.lenkwinkel,digitalRead(ENCODER_DIRECTION));
+         printf("aktuelle Zeit: %lu aktueller Winkel: %f;\n", millis(), daten.lenkwinkel);
          zaehler2 = 0;
     }
     lastLenkwinkel = daten.lenkwinkel;

@@ -8,7 +8,7 @@
 
 
 #include <iostream>
-
+using namespace std;
 
 
 
@@ -38,12 +38,12 @@ void cRunningState::rt_OneStep(void)
 
 	rtObj.rtU.e1 = _sensLenker->getLenkerwinkel()/95.0f;
 	rtObj.rtU.e2 = _sensLenker->getLenkergeschwindigkeit()/500.0f;
-	rtObj.rtU.e3 = _sensNeigung->getRawData().z()/15.0f;
+	rtObj.rtU.e3 = 5;
 	rtObj.rtU.e4 = _sensNeigung->GetNeigungswinkelgeschwindigkeitZ() / 20.0f;
 
 
 	// Step the model
-	rtObj.step();
+//	rtObj.step();
 
 	// Get model outputs here
 	cout << "Der Reglerausgang: " << rtObj.rtY.reglerausgang << endl;
@@ -139,18 +139,19 @@ void cRunningState::process()
         }
         else
             _lenker->setLeistung(Motorwert);
-        Serial.print("Der Motorwert ist:");
-        Serial.println(Motorwert);
+        Serial.printf("Der Motorwert ist: %d und der Lenkerwinkel ist: %f",Motorwert,_sensLenker->getLenkerwinkel());
+        // Serial.print("Der Motorwert ist:");
+        // Serial.println(Motorwert);
+        // Serial.print("Lenkerwinkel: ");
+        // Serial.println(_sensLenker->getLenkerwinkel());
         zaehler = 0;    
     }
     zaehler++;
-    Serial.print("Lenkerwinkel: ");
-    Serial.println(_sensLenker->getLenkerwinkel());
 
     //Regler Aufruf==========================0
     //Regler_Interface(cBike* bike)
 
-    rt_OneStep()
+//    rt_OneStep();
 }
 
 
